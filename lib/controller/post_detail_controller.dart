@@ -16,7 +16,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PostingDetailController extends GetxController {
   PostingDetailController(
-      {required this.postid, this.post, this.autoFocus = false});
+      {required this.postid, required this.post, this.autoFocus = false});
   RxBool isPostUpdateLoading = false.obs;
   RxBool isCommentLoading = false.obs;
   Rx<ScreenState> postscreenstate = ScreenState.loading.obs;
@@ -30,10 +30,7 @@ class PostingDetailController extends GetxController {
 
   int postid;
 
-  Rx<Post>? post;
-
-  late int lastIsLiked;
-  late int lastIsMarked;
+  Rx<Post> post;
 
   GlobalKey commentListKey = GlobalKey();
   bool autoFocus;
@@ -60,17 +57,8 @@ class PostingDetailController extends GetxController {
     // }
     await getposting(postid).then((value) async {
       if (value.isError == false) {
-        if (post != null) {
-          post!.value.copywith(value.data);
-        } else {
-          post = Post.fromJson(value.data).obs;
-        }
+        post.value.copywith(value.data);
 
-        lastIsLiked = post!.value.isLiked.value;
-        lastIsMarked = post!.value.isMarked.value;
-        // if (post!.value.comments.isEmpty) {
-        //   refreshController.loadNoData();
-        // }
         postscreenstate(ScreenState.success);
       } else {
         errorSituation(value, screenState: postscreenstate);
@@ -88,10 +76,10 @@ class PostingDetailController extends GetxController {
   @override
   void onReady() {
     // TODO: implement onReady
-    if (autoFocus) {
-      Scrollable.ensureVisible(commentListKey.currentContext!,
-          curve: Curves.ease, duration: const Duration(milliseconds: 500));
-    }
+    // if (autoFocus) {
+    //   Scrollable.ensureVisible(commentListKey.currentContext!,
+    //       curve: Curves.ease, duration: const Duration(milliseconds: 500));
+    // }
 
     super.onReady();
   }

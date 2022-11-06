@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/retry.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scout_report_controller.dart';
@@ -58,25 +59,14 @@ class ScoutScreen extends StatelessWidget {
               ),
               Scaffold(
                 appBar: AppBar(
-                  systemOverlayStyle: Platform.isAndroid
-                      ? SystemUiOverlayStyle(
-                          statusBarColor: _scontroller.colors.isNotEmpty
-                              ? _scontroller
-                                  .colors[_scontroller.curRcmdCompIndex.value]
-                                  .color
-                              : mainblue,
-                          statusBarIconBrightness: Brightness.light,
-                          statusBarBrightness: Brightness.light,
-                        )
-                      : SystemUiOverlayStyle(
-                          statusBarColor: _scontroller.colors.isNotEmpty
-                              ? _scontroller
-                                  .colors[_scontroller.curRcmdCompIndex.value]
-                                  .color
-                              : mainblue,
-                          statusBarIconBrightness: Brightness.dark,
-                          statusBarBrightness: Brightness.dark,
-                        ),
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarColor: _scontroller.colors.isNotEmpty
+                        ? _scontroller
+                            .colors[_scontroller.curRcmdCompIndex.value].color
+                        : mainblue,
+                    statusBarIconBrightness: Brightness.light,
+                    statusBarBrightness: Brightness.dark,
+                  ),
                   elevation: 0,
                   centerTitle: false,
                   titleSpacing: 16,
@@ -99,7 +89,7 @@ class ScoutScreen extends StatelessWidget {
                               onPressed: () {
                                 showPopUpDialog(
                                   '스카우트 중인 기업',
-                                  '채용을 진행중이거나\n루프어스에서 활동중인 기업 정보를 보여줘요\n수많은 기업의 정보를 확인하고,\n본인만의 커리어를 통해\n채용의 기회를 얻어보세요',
+                                  '채용을 진행중이거나\n루프어스에서 활동중인 기업 정보를 보여줘요\n수많은 기업의 정보를 확인하고,\n본인만의 커리어를 통해\n스카우트 채용의 기회를 얻어보세요',
                                 );
                               },
                               icon: SvgPicture.asset(
@@ -310,13 +300,11 @@ class ScoutScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Obx(
-              () => Text(
-                  _scontroller.isCorp.value == 1
-                      ? "회원님의 기업과 유사한 기업"
-                      : "당신에게 '집중'하고 있는 추천 기업",
-                  style: kmainbold.copyWith(color: mainWhite)),
-            ),
+            child: Text(
+                AppController.to.userType == UserType.company
+                    ? "회원님의 기업과 유사한 기업"
+                    : "당신에게 '집중'하고 있는 추천 기업",
+                style: kmainbold.copyWith(color: mainWhite)),
           ),
           const SizedBox(height: 8),
           Padding(

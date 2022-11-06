@@ -46,17 +46,11 @@ class CareerBoardScreen extends StatelessWidget {
     print(_controller.careerFieldList);
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: Platform.isAndroid
-            ? SystemUiOverlayStyle(
-                statusBarColor: mainWhite,
-                statusBarIconBrightness: Brightness.dark,
-                statusBarBrightness: Brightness.dark,
-              )
-            : SystemUiOverlayStyle(
-                statusBarColor: mainWhite,
-                statusBarIconBrightness: Brightness.light,
-                statusBarBrightness: Brightness.light,
-              ),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: mainWhite,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
         elevation: 0,
         centerTitle: false,
         titleSpacing: 16,

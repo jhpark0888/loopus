@@ -28,7 +28,7 @@ enum RouteName {
   careerboard,
 }
 
-class AppController extends GetxService {
+class AppController extends GetxController {
   static AppController get to => Get.find();
   final LocalDataController _localDataController =
       Get.put(LocalDataController());

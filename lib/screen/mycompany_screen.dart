@@ -45,17 +45,11 @@ class MyCompanyScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: mainblack,
       appBar: AppBar(
-        systemOverlayStyle: Platform.isAndroid
-            ? SystemUiOverlayStyle(
-                statusBarColor: mainWhite,
-                statusBarIconBrightness: Brightness.dark,
-                statusBarBrightness: Brightness.dark,
-              )
-            : SystemUiOverlayStyle(
-                statusBarColor: mainWhite,
-                statusBarIconBrightness: Brightness.light,
-                statusBarBrightness: Brightness.light,
-              ),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: mainblack,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
         backgroundColor: mainblack,
         elevation: 0,
         centerTitle: false,

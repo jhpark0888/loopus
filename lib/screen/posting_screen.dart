@@ -50,7 +50,7 @@ class PostingScreen extends StatelessWidget {
   late PostingDetailController controller = Get.put(
       PostingDetailController(
           postid: postid,
-          post: post != null ? post!.obs : null,
+          post: post != null ? post!.obs : Post.defaultPost().obs,
           autoFocus: autofocus),
       tag: postid.toString());
 
@@ -59,8 +59,6 @@ class PostingScreen extends StatelessWidget {
   bool autofocus;
   PageController pageController = PageController();
   RefreshController refreshController = RefreshController();
-
-  final Debouncer _debouncer = Debouncer();
 
   void _commentSubmitted(String text) async {
     if (controller.isCommentLoading.value == false) {
@@ -76,7 +74,7 @@ class PostingScreen extends StatelessWidget {
               controller.commentController.clear();
               controller.commentFocus.unfocus();
               Comment comment = Comment.fromJson(value.data);
-              controller.post!.value.comments.insert(0, comment);
+              controller.post.value.comments.insert(0, comment);
               // controller.commentToList();
             } else {
               showCustomDialog('댓글 작성에 실패하였습니다', 1400);
@@ -95,7 +93,7 @@ class PostingScreen extends StatelessWidget {
               controller.commentController.clear();
               controller.commentFocus.unfocus();
               Reply reply = Reply.fromJson(value.data, commentId);
-              controller.post!.value.comments
+              controller.post.value.comments
                   .where((comment) => comment.id == commentId)
                   .first
                   .replyList
@@ -221,16 +219,16 @@ class PostingScreen extends StatelessWidget {
   }
 
   Future commentListLoad() async {
-    if (controller.post!.value.comments.isNotEmpty) {
+    if (controller.post.value.comments.isNotEmpty) {
       await commentListGet(postid, contentType.comment,
-              controller.post!.value.comments.last.id)
+              controller.post.value.comments.last.id)
           .then((value) {
         if (value.isError == false) {
           List<Comment> commentList = List.from(value.data)
               .map((comment) => Comment.fromJson(comment))
               .toList();
 
-          controller.post!.value.comments.addAll(commentList);
+          controller.post.value.comments.addAll(commentList);
 
           if (commentList.length < 10) {
             refreshController.loadNoData();
@@ -277,11 +275,11 @@ class PostingScreen extends StatelessWidget {
                               title: '포스트',
                               actions: [
                                 GestureDetector(
-                                  onTap: controller.post!.value.isuser == 1
+                                  onTap: controller.post.value.isuser == 1
                                       ? () {
                                           showBottomdialog(context, func1: () {
                                             Get.to(() => PostUpdateScreen(
-                                                  post: controller.post!.value,
+                                                  post: controller.post.value,
                                                 ));
                                           }, func2: () {
                                             Get.back();
@@ -303,8 +301,8 @@ class PostingScreen extends StatelessWidget {
                                                   // });
                                                   deleteposting(
                                                           controller
-                                                              .post!.value.id,
-                                                          controller.post!.value
+                                                              .post.value.id,
+                                                          controller.post.value
                                                               .project!.id)
                                                       .then((value) {
                                                     Get.back();
@@ -334,7 +332,7 @@ class PostingScreen extends StatelessWidget {
                                                                 .where((career) =>
                                                                     career.id ==
                                                                     controller
-                                                                        .post!
+                                                                        .post
                                                                         .value
                                                                         .project!
                                                                         .id)
@@ -344,19 +342,23 @@ class PostingScreen extends StatelessWidget {
                                                                 (post) =>
                                                                     post.id ==
                                                                     controller
-                                                                        .post!
+                                                                        .post
                                                                         .value
                                                                         .id);
-                                                        project.post_count!.value -= 1;
-                                                        if(project.post_count!.value ==0){
-                                                          project.thumbnail = '';
-                                                        }else{
+                                                        project.post_count!
+                                                            .value -= 1;
+                                                        if (project.post_count!
+                                                                .value ==
+                                                            0) {
+                                                          project.thumbnail =
+                                                              '';
+                                                        } else {
                                                           // project.thumbnail = project.thumbnail.
                                                         }
                                                       }
                                                       HomeController.to
                                                           .postingRemove(
-                                                              controller.post!
+                                                              controller.post
                                                                   .value.id);
 
                                                       showCustomDialog(
@@ -400,7 +402,7 @@ class PostingScreen extends StatelessWidget {
                                                 rightFunction: () {
                                                   contentreport(
                                                           controller
-                                                              .post!.value.id,
+                                                              .post.value.id,
                                                           contentType.post)
                                                       .then((value) {
                                                     if (value.isError ==
@@ -437,50 +439,47 @@ class PostingScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      child: SmartRefresher(
-                                        controller: refreshController,
-                                        enablePullUp: true,
-                                        enablePullDown: false,
-                                        footer: const MyCustomFooter(),
-                                        onLoading: commentListLoad,
-                                        child: SingleChildScrollView(
-                                          child: Column(children: [
-                                            PostingWidget(
-                                              item: controller.post!.value,
+                                    child: SmartRefresher(
+                                      controller: refreshController,
+                                      enablePullUp: true,
+                                      enablePullDown: false,
+                                      footer: const MyCustomFooter(),
+                                      onLoading: commentListLoad,
+                                      child: SingleChildScrollView(
+                                        child: Column(children: [
+                                          Obx(
+                                            () => PostingWidget(
+                                              item: controller.post.value,
                                               type: PostingWidgetType.detail,
                                             ),
-                                            const SizedBox(height: 16),
-                                            Obx(
-                                              () => ListView.separated(
-                                                key: controller.commentListKey,
-                                                primary: false,
-                                                shrinkWrap: true,
-                                                itemBuilder: (context, index) {
-                                                  return PostCommentWidget(
-                                                    comment: controller.post!
-                                                        .value.comments[index],
-                                                    postid: postid,
-                                                  );
-                                                },
-                                                separatorBuilder:
-                                                    (context, index) {
-                                                  return const SizedBox(
-                                                    height: 16,
-                                                  );
-                                                },
-                                                itemCount: controller.post!
-                                                    .value.comments.length,
-                                              ),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Obx(
+                                            () => ListView.separated(
+                                              // key: controller.commentListKey,
+                                              primary: false,
+                                              shrinkWrap: true,
+                                              itemBuilder: (context, index) {
+                                                return PostCommentWidget(
+                                                  comment: controller.post.value
+                                                      .comments[index],
+                                                  postid: postid,
+                                                );
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return const SizedBox(
+                                                  height: 16,
+                                                );
+                                              },
+                                              itemCount: controller
+                                                  .post.value.comments.length,
                                             ),
-                                            const SizedBox(
-                                              height: 10,
-                                            )
-                                          ]),
-                                        ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          )
+                                        ]),
                                       ),
                                     ),
                                   ),
@@ -492,71 +491,20 @@ class PostingScreen extends StatelessWidget {
     );
   }
 
-  void tapBookmark() {
-    if (controller.post!.value.isMarked.value == 0) {
-      controller.post!.value.isMarked(1);
-    } else {
-      controller.post!.value.isMarked(0);
-    }
-
-    _debouncer.run(() {
-      if (controller.lastIsMarked != controller.post!.value.isMarked.value) {
-        bookmarkpost(controller.post!.value.id).then((value) {
-          if (value.isError == false) {
-            controller.lastIsMarked = controller.post!.value.isMarked.value;
-
-            if (controller.post!.value.isMarked.value == 1) {
-              HomeController.to.tapBookmark(controller.post!.value.id);
-              showCustomDialog("북마크에 추가되었습니다", 1000);
-            } else {
-              HomeController.to.tapunBookmark(controller.post!.value.id);
-            }
-          } else {
-            errorSituation(value);
-            controller.post!.value.isMarked(controller.lastIsMarked);
-          }
-        });
-      }
-    });
-  }
-
-  void tapLike() {
-    if (controller.post!.value.isLiked.value == 0) {
-      controller.post!.value.isLiked(1);
-      // likepost(controller.post!.value.id, 'post');
-      controller.post!.value.likeCount += 1;
-      HomeController.to.tapLike(
-          controller.post!.value.id, controller.post!.value.likeCount.value);
-    } else {
-      controller.post!.value.isLiked(0);
-      // likepost(controller.post!.value.id, 'post');
-      controller.post!.value.likeCount -= 1;
-      HomeController.to.tapunLike(
-          controller.post!.value.id, controller.post!.value.likeCount.value);
-    }
-
-    _debouncer.run(() {
-      if (controller.lastIsLiked != controller.post!.value.isLiked.value) {
-        likepost(controller.post!.value.id, contentType.post);
-        controller.lastIsLiked = controller.post!.value.isLiked.value;
-      }
-    });
-  }
-
   void tapProfile() {
-    if (controller.post!.value.user.userType == UserType.student) {
+    if (controller.post.value.user.userType == UserType.student) {
       Get.to(
           () => OtherProfileScreen(
-              user: (controller.post!.value.user as Person),
-              userid: controller.post!.value.user.userId,
-              realname: controller.post!.value.user.name),
+              user: (controller.post.value.user as Person),
+              userid: controller.post.value.user.userId,
+              realname: controller.post.value.user.name),
           preventDuplicates: false);
     } else {
       Get.to(
           () => OtherCompanyScreen(
-                companyId: controller.post!.value.user.userId,
-                companyName: controller.post!.value.user.name,
-                company: (controller.post!.value.user as Company),
+                companyId: controller.post.value.user.userId,
+                companyName: controller.post.value.user.name,
+                company: (controller.post.value.user as Company),
               ),
           preventDuplicates: false);
     }

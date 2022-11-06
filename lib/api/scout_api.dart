@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
@@ -42,17 +43,19 @@ Future<HTTPResponse> getScoutCompanySearch({
 }
 
 // student: 0 , corp: 1
-Future<HTTPResponse> getRecommandCompanys(int isCorp) async {
+Future<HTTPResponse> getRecommandCompanys() async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
+    int isCorp = AppController.to.userType == UserType.company ? 1 : 0;
 
     // final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
     final _url =
         Uri.parse("$serverUri/scout_api/recommendation_company?type=$isCorp");
+    print(_url);
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(_url, headers: {
         "Authorization": "Token $token"

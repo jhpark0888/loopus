@@ -121,7 +121,7 @@ class ReplyWidget extends StatelessWidget {
                                               .then((value) {
                                             if (value.isError == false) {
                                               Comment? comment = postController
-                                                  .post!.value.comments
+                                                  .post.value.comments
                                                   .firstWhereOrNull((element) =>
                                                       element.id ==
                                                       reply.commentId);

@@ -202,7 +202,7 @@ class LinkWidget extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 errorWidget: (context, string, widget) {
                                   return Image.asset(
-                                    "assets/illustrations/link_noimage.png",
+                                    "assets/illustrations/nolinkImage.png",
                                     height: 200,
                                     fit: BoxFit.cover,
                                   );
@@ -210,7 +210,7 @@ class LinkWidget extends StatelessWidget {
                               )
                             else
                               Image.asset(
-                                "assets/illustrations/link_noimage.png",
+                                "assets/illustrations/nolinkImage.png",
                                 height: 200,
                                 fit: BoxFit.cover,
                               ),
@@ -316,7 +316,7 @@ class LinkSmallWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorWidget: (context, string, widget) {
                               return Image.asset(
-                                "assets/illustrations/link_noimage.png",
+                                "assets/illustrations/nolinkImage.png",
                                 height: 120,
                                 width: width,
                                 fit: BoxFit.cover,
@@ -325,7 +325,7 @@ class LinkSmallWidget extends StatelessWidget {
                           )
                         else
                           Image.asset(
-                            "assets/illustrations/link_noimage.png",
+                            "assets/illustrations/nolinkImage.png",
                             height: 120,
                             width: width,
                             fit: BoxFit.cover,

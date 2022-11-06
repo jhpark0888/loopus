@@ -62,7 +62,11 @@ class UserImageWidget extends StatelessWidget {
                   );
                 },
                 errorWidget: (context, string, widget) {
-                  return Container(color: maingray);
+                  return Image.asset(
+                    userType == UserType.student
+                        ? "assets/illustrations/default_profile.png"
+                        : "assets/illustrations/default_company.png",
+                  );
                 },
               ));
   }

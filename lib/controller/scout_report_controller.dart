@@ -74,18 +74,12 @@ class ScoutReportController extends GetxController
   RxInt curRcmdCompIndex = 0.obs;
 
   Rx<ScreenState> screenState = ScreenState.loading.obs;
-  RxInt isCorp = 0.obs;
 
   Timer? timer;
 
   @override
   void onInit() async {
     screenState(ScreenState.loading);
-    if (AppController.to.userType == UserType.company) {
-      isCorp.value = 1;
-    } else {
-      isCorp.value = 0;
-    }
 
     getCompanyList("main");
     await getRecommandCompanyList();
@@ -159,7 +153,7 @@ class ScoutReportController extends GetxController
   }
 
   Future getRecommandCompanyList() async {
-    await getRecommandCompanys(isCorp.value).then((value) async {
+    await getRecommandCompanys().then((value) async {
       if (value.isError == false) {
         List<Company> companyList = List.from(value.data)
             .map((company) => Company.fromJson(company))

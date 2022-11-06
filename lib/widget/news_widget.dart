@@ -283,7 +283,7 @@ class NewsWidget extends StatelessWidget {
                               return Container(color: maingray);
                             })
                         : Image.asset(
-                            "assets/illustrations/link_noimage.png",
+                            "assets/illustrations/nolinkImage.png",
                             height: 170,
                             width: 270,
                             fit: BoxFit.cover,

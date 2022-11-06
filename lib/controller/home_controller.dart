@@ -98,7 +98,8 @@ class HomeController extends GetxController
     // onPostingRefresh();
     // onQuestionRefresh();
     // onLoopRefresh();
-
+    Map<String, String> allValues = await FlutterSecureStorage().readAll();
+    print("기기 저장 변수들 $allValues");
     getUserProfile();
 
     _dataStreamSubscription =
@@ -259,41 +260,41 @@ class HomeController extends GetxController
     });
   }
 
-  void tapBookmark(int postid) {
-    if (posts.where((post) => post.id == postid).isNotEmpty) {
-      Post post = posts.where((post) => post.id == postid).first;
-      post.isMarked(1);
-    }
-  }
+  // void tapBookmark(int postid) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isMarked(1);
+  //   }
+  // }
 
-  void tapunBookmark(int postid) {
-    if (posts.where((post) => post.id == postid).isNotEmpty) {
-      Post post = posts.where((post) => post.id == postid).first;
-      post.isMarked(0);
-    }
-  }
+  // void tapunBookmark(int postid) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isMarked(0);
+  //   }
+  // }
 
-  void tapLike(int postid, int likecount) {
-    if (posts.where((post) => post.id == postid).isNotEmpty) {
-      Post post = posts.where((post) => post.id == postid).first;
-      post.isLiked(1);
-      post.likeCount(likecount);
-    }
-    if (Get.isRegistered<BookmarkController>()) {
-      BookmarkController.to.tapLike(postid, likecount);
-    }
-  }
+  // void tapLike(int postid, int likecount) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isLiked(1);
+  //     post.likeCount(likecount);
+  //   }
+  //   if (Get.isRegistered<BookmarkController>()) {
+  //     BookmarkController.to.tapLike(postid, likecount);
+  //   }
+  // }
 
-  void tapunLike(int postid, int likecount) {
-    if (posts.where((post) => post.id == postid).isNotEmpty) {
-      Post post = posts.where((post) => post.id == postid).first;
-      post.isLiked(0);
-      post.likeCount(likecount);
-    }
-    if (Get.isRegistered<BookmarkController>()) {
-      BookmarkController.to.tapunLike(postid, likecount);
-    }
-  }
+  // void tapunLike(int postid, int likecount) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isLiked(0);
+  //     post.likeCount(likecount);
+  //   }
+  //   if (Get.isRegistered<BookmarkController>()) {
+  //     BookmarkController.to.tapunLike(postid, likecount);
+  //   }
+  // }
 
   void goMyProfile() {
     if (HomeController.to.myProfile.value.userType == UserType.student) {
