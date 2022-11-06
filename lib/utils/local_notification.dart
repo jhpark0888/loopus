@@ -52,7 +52,7 @@ class LocalNotificaition {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(alert: true, badge: true, sound: true);
+        ?.requestPermissions(alert: true, badge: true, sound: true,critical: true);
   }
 
   void onSelectNotification(NotificationResponse? payload) {
