@@ -71,9 +71,9 @@ class MyProfileScreen extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(44),
         child: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: mainWhite,
-            statusBarIconBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),
           titleSpacing: 0,

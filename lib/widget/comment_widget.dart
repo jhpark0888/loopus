@@ -8,8 +8,11 @@ import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/comment_model.dart';
+import 'package:loopus/model/company_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
@@ -260,12 +263,21 @@ class CommentWidget extends StatelessWidget {
   }
 
   void tapProfile() {
-    Get.to(
-        () => OtherProfileScreen(
-            user: comment.user,
-            userid: comment.user.userId,
-            realname: comment.user.name),
-        preventDuplicates: false);
+    if (comment.user.userType == UserType.student) {
+      Get.to(
+          () => OtherProfileScreen(
+              user: comment.user as Person,
+              userid: comment.user.userId,
+              realname: comment.user.name),
+          preventDuplicates: false);
+    } else {
+      Get.to(
+          () => OtherCompanyScreen(
+              company: comment.user as Company,
+              companyId: comment.user.userId,
+              companyName: comment.user.name),
+          preventDuplicates: false);
+    }
   }
 
   void tapLike() {

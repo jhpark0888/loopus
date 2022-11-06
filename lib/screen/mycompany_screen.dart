@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
@@ -44,11 +46,10 @@ class MyCompanyScreen extends StatelessWidget {
       backgroundColor: mainblack,
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: mainblack,
-            statusBarIconBrightness:
-                Brightness.light, // For Android (dark icons)
-            statusBarBrightness: Brightness.light // For iOS (dark icons),
-            ),
+          statusBarColor: mainblack,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
         backgroundColor: mainblack,
         elevation: 0,
         centerTitle: false,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
@@ -63,7 +64,7 @@ class ScoutScreen extends StatelessWidget {
                         ? _scontroller
                             .colors[_scontroller.curRcmdCompIndex.value].color
                         : mainblue,
-                    statusBarIconBrightness: Brightness.dark,
+                    statusBarIconBrightness: Brightness.light,
                     statusBarBrightness: Brightness.dark,
                   ),
                   elevation: 0,

@@ -45,10 +45,10 @@ class SearchScreen extends StatelessWidget {
       child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
-            systemOverlayStyle: SystemUiOverlayStyle(
+            systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: mainWhite,
               statusBarIconBrightness: Brightness.dark,
-              statusBarBrightness: Brightness.dark,
+              statusBarBrightness: Brightness.light,
             ),
             automaticallyImplyLeading: false,
             toolbarHeight: 50,

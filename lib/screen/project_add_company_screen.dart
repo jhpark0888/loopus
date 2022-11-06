@@ -88,30 +88,30 @@ class ProjectAddCompanyScreen extends StatelessWidget {
                                               const SizedBox(
                                                 height: 16,
                                               ),
-                                              Obx(() => _controller
-                                                      .onRegisterButton.value
-                                                  ? Center(
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          _controller.selectCompany(
-                                                              Company.defaultCompany(
-                                                                  name: _controller
-                                                                      .companyController
-                                                                      .text
-                                                                      .trim()));
-                                                          _controller
-                                                              .companyController
-                                                              .clear();
-                                                          Get.back();
-                                                        },
-                                                        child: Text(
-                                                            "입력한 기업으로 등록하기",
-                                                            style: kmain.copyWith(
-                                                                color:
-                                                                    mainblue)),
-                                                      ),
-                                                    )
-                                                  : Container())
+                                              // Obx(() => _controller
+                                              //         .onRegisterButton.value
+                                              //     ? Center(
+                                              //         child: GestureDetector(
+                                              //           onTap: () {
+                                              //             _controller.selectCompany(
+                                              //                 Company.defaultCompany(
+                                              //                     name: _controller
+                                              //                         .companyController
+                                              //                         .text
+                                              //                         .trim()));
+                                              //             _controller
+                                              //                 .companyController
+                                              //                 .clear();
+                                              //             Get.back();
+                                              //           },
+                                              //           child: Text(
+                                              //               "입력한 기업으로 등록하기",
+                                              //               style: kmain.copyWith(
+                                              //                   color:
+                                              //                       mainblue)),
+                                              //         ),
+                                              //       )
+                                              //     : Container())
                                             ],
                                           )
                                         : SmartRefresher(

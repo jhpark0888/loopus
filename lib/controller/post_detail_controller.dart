@@ -26,7 +26,7 @@ class PostingDetailController extends GetxController {
   TextEditingController commentController = TextEditingController();
   FocusNode commentFocus = FocusNode();
   RxInt selectedCommentId = 0.obs;
-  Rx<Person> tagUser = Person.defaultuser().obs;
+  Rx<User> tagUser = User.defaultuser().obs;
 
   int postid;
 
@@ -85,7 +85,7 @@ class PostingDetailController extends GetxController {
   }
 
   void tagdelete() {
-    tagUser(Person.defaultuser());
+    tagUser(User.defaultuser());
     selectedCommentId(0);
   }
 

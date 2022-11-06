@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,7 +52,7 @@ class HomeScreen extends StatelessWidget {
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: mainWhite,
             statusBarIconBrightness: Brightness.dark,
-            statusBarBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
           ),
           toolbarHeight: 58,
           elevation: 0,
