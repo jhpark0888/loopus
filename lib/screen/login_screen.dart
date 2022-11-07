@@ -221,10 +221,6 @@ void login(
       storage.write(key: 'type', value: UserType.values[isStudent].name);
 
       await FirebaseMessaging.instance.subscribeToTopic(userid);
-      await FirebaseMessaging.instance.subscribeToTopic(userid);
-      await FirebaseMessaging.instance.subscribeToTopic(userid);
-      await FirebaseMessaging.instance.subscribeToTopic(userid);
-      await FirebaseMessaging.instance.subscribeToTopic(userid);
 
       Get.offAll(() => App());
     } else {
