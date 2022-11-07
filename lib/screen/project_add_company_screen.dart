@@ -178,12 +178,6 @@ class ProjectAddCompanyScreen extends StatelessWidget {
                                                 height: 24,
                                               ),
                                               itemCount: _controller
-                                                      .onRegisterButton.value
-                                                  ? _controller
-                                                          .searchCompanyList
-                                                          .length +
-                                                      1
-                                                  : _controller
                                                       .searchCompanyList.length,
                                             ),
                                           ),

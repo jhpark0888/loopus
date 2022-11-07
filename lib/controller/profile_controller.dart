@@ -61,6 +61,7 @@ class ProfileController extends GetxController
     postPageNum = 1;
     companyPageNum = 1;
     allPostList.clear();
+    interestedCompanies.clear();
     loadmyProfile();
     profilerefreshController.refreshCompleted();
   }
@@ -126,13 +127,15 @@ class ProfileController extends GetxController
       }
     });
   }
-  void _getinterestedCompany(int userId)async{
-    await getInterestedCompany(userId, companyPageNum).then((value){
-      if(value.isError != true){
-        List<Company> temp = List.from(value.data).map((e) => Company.fromJson(e)).toList();
+
+  void _getinterestedCompany(int userId) async {
+    await getInterestedCompany(userId, companyPageNum).then((value) {
+      if (value.isError != true) {
+        List<Company> temp =
+            List.from(value.data).map((e) => Company.fromJson(e)).toList();
         companyPageNum += 1;
         interestedCompanies.addAll(temp);
-      }else{
+      } else {
         errorSituation(value, screenState: myprofilescreenstate);
       }
     });
