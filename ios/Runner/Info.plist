@@ -46,9 +46,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>루프어스 앱 내에 사진을 첨부하기 위해 동의가 필요합니다.</string>
+	<string>"루프어스"가 포스트에 사진을 첨부, 내 프로필 사진을 등록하는 기능을 사용하기 위해 사진 라이브러리에 접근하도록 동의를 구합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To upload photos, please allow permission to access your photo library.</string>
+	<string>To use the ability to attach a picture to a post and register my profile picture, please allow permission to access your photo libarary.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
