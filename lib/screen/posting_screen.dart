@@ -177,7 +177,7 @@ class PostingScreen extends StatelessWidget {
                     minLines: 1,
                     maxLines: 5,
                     onChanged: (a) {
-                      print(a);
+                      // print(a);
                     },
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
