@@ -19,6 +19,7 @@ class User {
       required this.banned,
       required this.followerCount,
       required this.followingCount,
+      required this.withdrawal,
       required this.userType});
 
   int userId;
@@ -29,6 +30,7 @@ class User {
   Rx<BanState> banned;
   RxInt followerCount;
   RxInt followingCount;
+  RxInt withdrawal;
   UserType userType;
 
   factory User.defaultuser({
@@ -40,6 +42,7 @@ class User {
     String? profileImage,
     Rx<FollowState>? followed,
     Rx<BanState>? banned,
+    RxInt? withdrawal,
     UserType? userType,
   }) =>
       User(
@@ -51,6 +54,7 @@ class User {
         followingCount: followingCount ?? 0.obs,
         followed: followed ?? FollowState.normal.obs,
         banned: banned ?? BanState.normal.obs,
+        withdrawal: withdrawal ?? 0.obs,
         userType: userType ?? UserType.student,
       );
 
@@ -115,6 +119,7 @@ class Person extends User {
     required this.profileTag,
     required followed,
     required banned,
+    required withdrawal,
     required this.rank,
     required this.lastRank,
     required this.schoolRank,
@@ -134,6 +139,7 @@ class Person extends User {
             followingCount: followingCount,
             banned: banned,
             followed: followed,
+            withdrawal: withdrawal,
             userType: UserType.student);
 
   int type;
@@ -165,6 +171,7 @@ class Person extends User {
     int? isuser,
     RxInt? followerCount,
     RxInt? followingCount,
+    RxInt? withdrawal,
     String? fieldId,
     int? totalposting,
     int? resentPostCount,
@@ -209,6 +216,7 @@ class Person extends User {
           admissionYear: admissionYear ?? "2000",
           snsList: snsList ?? <SNS>[].obs,
           followed: followed ?? FollowState.normal.obs,
+          withdrawal: withdrawal ?? 0.obs,
           banned: banned ?? BanState.normal.obs);
 
   factory Person.fromJson(Map<String, dynamic> json) => Person(
@@ -264,6 +272,7 @@ class Person extends User {
         banned: json["is_banned"] != null
             ? BanState.values[json["is_banned"]].obs
             : BanState.normal.obs,
+        withdrawal: 0.obs
       );
 
   void copywith(Map<String, dynamic> json) {
@@ -321,6 +330,7 @@ class Person extends User {
     banned.value = json["is_banned"] != null
         ? BanState.values[json["is_banned"]]
         : banned.value;
+    withdrawal.value = 0;
   }
 
   Map<String, dynamic> toJson() => {

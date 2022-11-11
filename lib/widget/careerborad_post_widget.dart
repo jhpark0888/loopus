@@ -145,7 +145,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                       Text('댓글 ', style: kmain.copyWith(color: maingray)),
                     if (post.comments.isNotEmpty)
                       Text(
-                        '${(post.comments.length).toString()}개',
+                        '${(post.commentCount).toString()}개',
                         style: kmain,
                       ),
                     const Spacer(),

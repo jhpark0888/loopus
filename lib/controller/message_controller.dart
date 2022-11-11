@@ -111,7 +111,6 @@ class MessageController extends GetxController with WidgetsBindingObserver {
         List<ChatRoom> temp = chatroom.data;
         List<int> membersId =
             List.generate(temp.length, (index) => temp[index].user);
-
         if (membersId.isNotEmpty) {
           await getUserProfile(membersId).then((usersList) {
             if (usersList.isError == false) {
@@ -120,150 +119,107 @@ class MessageController extends GetxController with WidgetsBindingObserver {
               List<int> none = List.from(allUserList['none']!);
               List<User> userList =
                   allUserList['profile']!.map((e) => User.fromJson(e)).toList();
-
-              none.forEach((userId) =>
-                  SQLController.to.updateUser(null, '알수없음', userId));
+              if (none.isNotEmpty) {
+                none.forEach((userId) {
+                  SQLController.to.updateUser('', '알수없음',1, userId);
+                  chattingRoomList
+                      .where((p0) => p0.user.value.userId == userId)
+                      .first
+                      .user
+                      .value
+                      .name = '알수없음';
+                  chattingRoomList
+                      .where((p0) => p0.user.value.userId == userId)
+                      .first
+                      .user
+                      .value
+                      .profileImage = '';
+                  chattingRoomList
+                      .where((p0) => p0.user.value.userId == userId)
+                      .first
+                      .user
+                      .value
+                      .withdrawal
+                      .value = 1;
+                  chattingRoomList
+                      .where((p0) => p0.user.value.userId == userId)
+                      .first
+                      .user
+                      .refresh();
+                });
+              }
               const FlutterSecureStorage().delete(key: 'newMsg');
               temp.forEach((element) async {
-                User? user =
-                    userList.where((user) => user.userId == element.user).first;
-                print("${user.userType}이 유저 타입");
-                if (chattingRoomList
-                    .where((messageRoom) =>
-                        messageRoom.user.value.userId == user.userId)
-                    .isEmpty) {
-                  SQLController.to.insertMessageRoom(element);
-                  SQLController.to.insertUser(user);
+                User? user;
+                if (userList
+                    .where((user) => user.userId == element.user)
+                    .isNotEmpty) {
+                  user = userList
+                      .where((user) => user.userId == element.user)
+                      .first;
+                }
+                //  else {
+                //   print('${element.user.runtimeType}입니다');
+                //   user = User.defaultuser();
+                //   user.name = '알수 없음';
+                //   user.userId = element.user;
+                //   user.withdrawal.value = 1;
+                // }
+                if (user != null) {
                   if (chattingRoomList
                       .where((messageRoom) =>
-                          messageRoom.chatRoom.value.user == user.userId)
-                      .isNotEmpty) {
-                    chattingRoomList
-                        .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userId)
-                        .first
-                        .user
-                        .value = user;
-                    searchRoomList
-                        .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userId)
-                        .first
-                        .user
-                        .value = user;
-
-                    chattingRoomList
-                        .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userId)
-                        .first
-                        .user
-                        .refresh();
-                    searchRoomList
-                        .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userId)
-                        .first
-                        .user
-                        .refresh();
-                  } else {
+                          messageRoom.user.value.userId == user!.userId)
+                      .isEmpty) {
+                    SQLController.to.insertMessageRoom(element);
+                    SQLController.to.insertUser(user);
                     chattingRoomList.add(MessageRoomWidget(
                         chatRoom: element.obs, user: user.obs));
                     searchRoomList.add(MessageRoomWidget(
                         chatRoom: element.obs, user: user.obs));
-                  }
-                } else {
-                  SQLController.to.updateLastMessage(
-                      element.message.value.content,
-                      element.message.value.date.toString(),
-                      element.roomId);
-                  if (chattingRoomList
-                          .where((messageRoom) =>
-                              messageRoom.user.value.userId == user.userId)
-                          .first
-                          .user
-                          .value
-                          .profileImage !=
-                      user.profileImage) {
-                    SQLController.to
-                        .updateUser(user.profileImage, null, user.userId);
-                  }
-                  if (chattingRoomList
-                      .where((messageRoom) =>
-                          messageRoom.chatRoom.value.roomId == element.roomId)
-                      .isNotEmpty) {
+                  } else {
+                    SQLController.to.updateLastMessage(
+                        element.message.value.content,
+                        element.message.value.date.toString(),
+                        element.roomId);
+                    if (chattingRoomList
+                            .where((messageRoom) =>
+                                messageRoom.user.value.userId == user!.userId)
+                            .first
+                            .user
+                            .value
+                            .profileImage !=
+                        user.profileImage) {
+                      SQLController.to
+                          .updateUser(user.profileImage, null,null, user.userId);
+                    }
+
                     chattingRoomList
                         .where((messageRoom) =>
                             messageRoom.chatRoom.value.roomId == element.roomId)
                         .first
                         .chatRoom
                         .value = element;
-                    searchRoomList
+                    chattingRoomList
                         .where((messageRoom) =>
                             messageRoom.chatRoom.value.roomId == element.roomId)
                         .first
-                        .chatRoom
-                        .value = element;
-                  }
-                  if (chattingRoomList
-                      .where((messageRoom) =>
-                          messageRoom.chatRoom.value.roomId == element.roomId)
-                      .isNotEmpty) {
+                        .chatRoom.refresh();
                     chattingRoomList
                         .where((messageRoom) =>
-                            messageRoom.user.value.userId == user.userId)
+                            messageRoom.user.value.userId == user!.userId)
                         .first
                         .user
-                        .value
-                        .profileImage = user.profileImage;
+                        .value = user;
 
-                    searchRoomList
-                        .where((messageRoom) =>
-                            messageRoom.user.value.userId == user.userId)
-                        .first
-                        .user
-                        .value
-                        .profileImage = user.profileImage;
-
-                    searchRoomList
-                        .where((messageRoom) =>
-                            messageRoom.user.value.userId == user.userId)
-                        .first
-                        .user.value = user;
                     chattingRoomList
                         .where((messageRoom) =>
-                            messageRoom.user.value.userId == user.userId)
+                            messageRoom.chatRoom.value.roomId == element.roomId)
                         .first
-                        .user.value = user;
+                        .user.refresh();
                   }
-                  chattingRoomList
-                      .where((messageRoom) =>
-                          messageRoom.chatRoom.value.user == user.userId)
-                      .first
-                      .user
-                      .value
-                      .userType = user.userType;
-                  searchRoomList
-                      .where((messageRoom) =>
-                          messageRoom.chatRoom.value.user == user.userId)
-                      .first
-                      .user
-                      .value
-                      .userType = user.userType;
-                  chattingRoomList
-                      .where((messageRoom) =>
-                          messageRoom.chatRoom.value.user == user.userId)
-                      .first
-                      .user
-                      .value
-                      .userId = user.userId;
-                  searchRoomList
-                      .where((messageRoom) =>
-                          messageRoom.chatRoom.value.user == user.userId)
-                      .first
-                      .user
-                      .value
-                      .userId = user.userId;
                 }
               });
-
+              searchRoomList.value = chattingRoomList.toList();
               sortList();
             }
           });

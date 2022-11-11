@@ -31,6 +31,7 @@ class Company extends User {
           followerCount: followerCount,
           followingCount: followingCount,
           userType: UserType.company,
+          withdrawal:0.obs
         );
 
   RxInt contactcount;

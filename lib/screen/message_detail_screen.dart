@@ -173,7 +173,7 @@ class MessageDetatilScreen extends StatelessWidget {
                       },
                       value1: '메세지 나가기',
                       value2: '계정 신고하기',
-                      isOne: false, buttonColor1: mainWhite, buttonColor2: rankred, textColor1: rankred, textColor2: mainWhite);  
+                      isOne: partner.withdrawal.value == 0 ? false : true, buttonColor1: mainWhite, buttonColor2: rankred, textColor1: rankred, textColor2: mainWhite);  
                 },
                 child: SizedBox(
                     height: 44,
@@ -299,7 +299,7 @@ class MessageDetatilScreen extends StatelessWidget {
                   minLines: 1,
                   maxLines: 3,
                   autocorrect: false,
-                  readOnly: false,
+                  readOnly: partner.withdrawal.value == 0 ? false : true,
                   style: kmainheight,
                   cursorColor: mainblack,
                   cursorWidth: 1.2,
@@ -317,7 +317,7 @@ class MessageDetatilScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8)),
                     contentPadding: const EdgeInsets.fromLTRB(16, 11, 16, 11),
                     isDense: true,
-                    hintText: '메세지 입력',
+                    hintText: partner.withdrawal.value == 0 ? '메세지 입력' : '대화가 불가능한 사용자에요',
                     counterText: "",
                     hintStyle:
                         kmain.copyWith(color: maingray).copyWith(height: 1.4),
