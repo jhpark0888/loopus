@@ -197,10 +197,12 @@ void login(
       int isStudent = jsonDecode(response.body)['is_student'];
 
       if (isStudent == 1) {
-        String strSchoolId = jsonDecode(response.body)['school_id'];
-        String strDeptId = jsonDecode(response.body)['department_id'];
-        List<int> groupTpList =
-            List.from(jsonDecode(response.body)['topic_list']);
+        String strSchoolId =
+            jsonDecode(response.body)['school_id']; //school학교id
+        String strDeptId =
+            jsonDecode(response.body)['department_id']; // department학과id
+        List<int> groupTpList = List.from(
+            jsonDecode(response.body)['topic_list']); //ex) [34, 53, 64]
 
         storage.write(key: 'strSchoolId', value: strSchoolId);
         storage.write(key: 'strDeptId', value: strDeptId);

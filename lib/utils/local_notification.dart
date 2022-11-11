@@ -88,7 +88,8 @@ class LocalNotificaition {
         } else if (type == 5 || type == 6 || type == 8) {
           int? postId =
               json['post_id'] != null ? int.parse(json['post_id']) : null;
-          Get.to(() => PostingScreen(postid: postId!));
+          Get.to(() => PostingScreen(postid: postId!),
+              preventDuplicates: false);
         } else if (type == 2) {
           Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
         }

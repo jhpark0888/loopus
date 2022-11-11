@@ -55,15 +55,7 @@ class PostingDetailController extends GetxController {
     //           user: Person.defaultuser())
     //       .obs;
     // }
-    await getposting(postid).then((value) async {
-      if (value.isError == false) {
-        post.value.copywith(value.data);
-
-        postscreenstate(ScreenState.success);
-      } else {
-        errorSituation(value, screenState: postscreenstate);
-      }
-    });
+    postingLoad();
     commentController.addListener(() {
       if (tagUser.value.userId != 0 && commentController.text == '') {
         tagdelete();
@@ -82,6 +74,18 @@ class PostingDetailController extends GetxController {
     // }
 
     super.onReady();
+  }
+
+  void postingLoad() async {
+    await getposting(postid).then((value) async {
+      if (value.isError == false) {
+        post.value.copywith(value.data);
+
+        postscreenstate(ScreenState.success);
+      } else {
+        errorSituation(value, screenState: postscreenstate);
+      }
+    });
   }
 
   void tagdelete() {
