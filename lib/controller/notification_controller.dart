@@ -108,13 +108,11 @@ class NotificationController extends GetxController {
       int type = int.parse(json['type'].toString());
       int senderId = int.parse(json['sender_id']);
       if (type == 4 || type == 7 || type == 9 || type == 11) {
-        Get.to(() => PostingScreen(postid: id),
-            opaque: false, preventDuplicates: false);
+        Get.to(() => PostingScreen(postid: id), preventDuplicates: false);
       } else if (type == 5 || type == 6 || type == 8) {
         int? postId =
             json['post_id'] != null ? int.parse(json['post_id']) : null;
-        Get.to(() => PostingScreen(postid: postId!),
-            opaque: false, preventDuplicates: false);
+        Get.to(() => PostingScreen(postid: postId!), preventDuplicates: false);
       } else if (type == 2) {
         Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'),
             preventDuplicates: false);

@@ -283,7 +283,8 @@ class NotificationWidget extends StatelessWidget {
     if (notification.user.userType == UserType.student) {
       Get.to(
           () => OtherProfileScreen(
-              userid: notification.user.userId, realname: notification.user.name),
+              userid: notification.user.userId,
+              realname: notification.user.name),
           preventDuplicates: false);
     } else {
       Get.to(
@@ -321,14 +322,14 @@ class NotificationWidget extends StatelessWidget {
         notification.type == NotificationType.groupCareerPost ||
         notification.type == NotificationType.schoolNoti) {
       Get.to(
-          () => PostingScreen(
-                post: null,
-                postid: notification.targetId,
-                // likecount: 0.obs,
-                // isLiked: 0.obs,
-              ),
-          preventDuplicates: false,
-          opaque: false);
+        () => PostingScreen(
+          post: null,
+          postid: notification.targetId,
+          // likecount: 0.obs,
+          // isLiked: 0.obs,
+        ),
+        preventDuplicates: false,
+      );
     } else if (notification.type == NotificationType.follow) {
       if (notification.user.userType == UserType.student) {
         Get.to(

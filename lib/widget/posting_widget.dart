@@ -302,7 +302,6 @@ class PostingWidget extends StatelessWidget {
         postid: item.id,
         autofocus: autoFocus,
       ),
-      opaque: false,
       preventDuplicates: false,
     );
   }
