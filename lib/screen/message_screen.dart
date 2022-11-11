@@ -104,26 +104,33 @@ class MessageScreen extends StatelessWidget {
                         )),
                     const SizedBox(height: 16),
                     messageController.searchRoomList.isNotEmpty
-                        ? Expanded(
-                            child: SlidableAutoCloseBehavior(
-                              closeWhenOpened: true,
-                              closeWhenTapped: true,
-                              child: ListView.builder(
-                                shrinkWrap: false,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.only(bottom: 24),
-                                // separatorBuilder: (context, index) {
-                                //   return const SizedBox(height: 24);
-                                // },
-                                itemBuilder: (context, index) {
-                                  return messageController
-                                      .searchRoomList[index];
-                                },
-                                itemCount:
-                                    messageController.searchRoomList.length,
+                        ? Obx(
+                          ()=> Expanded(
+                              child: SlidableAutoCloseBehavior(
+                                closeWhenOpened: true,
+                                closeWhenTapped: true,
+                                child: ListView.builder(
+                                  shrinkWrap: false,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.only(bottom: 24),
+                                  // separatorBuilder: (context, index) {
+                                  //   return const SizedBox(height: 24);
+                                  // },
+                                  itemBuilder: (context, index) {
+                                    if(messageController
+                                        .searchRoomList[index].user.value.banned.value == BanState.normal){
+                                    return messageController
+                                        .searchRoomList[index];
+                                        }else{
+                                          return const SizedBox.shrink();
+                                        }
+                                  },
+                                  itemCount:
+                                      messageController.searchRoomList.length,
+                                ),
                               ),
                             ),
-                          )
+                        )
                         : Expanded(
                             child: SizedBox(
                               width: Get.width,

@@ -221,6 +221,17 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                         .user
                         .value
                         .profileImage = user.profileImage;
+
+                    searchRoomList
+                        .where((messageRoom) =>
+                            messageRoom.user.value.userId == user.userId)
+                        .first
+                        .user.value = user;
+                    chattingRoomList
+                        .where((messageRoom) =>
+                            messageRoom.user.value.userId == user.userId)
+                        .first
+                        .user.value = user;
                   }
                   chattingRoomList
                       .where((messageRoom) =>

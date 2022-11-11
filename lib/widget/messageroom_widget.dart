@@ -28,8 +28,6 @@ class MessageRoomWidget extends StatelessWidget {
   MessageController messageController = Get.find<MessageController>();
   @override
   Widget build(BuildContext context) {
-    print(user.value.userType);
-    print(user.value.name);
     return GestureDetector(
       onTap: () async {
         chatRoom.value.notread.value = 0;

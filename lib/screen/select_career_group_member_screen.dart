@@ -58,6 +58,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                                 tag: careerId.toString())
                             .members
                             .refresh();
+                        if(Get.isRegistered<ProfileController>()){
                         ProfileController.to.myProjectList
                                       .where(
                                           (p0) =>
@@ -65,6 +66,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                                               careerId)
                                       .first.members.addAll(controller.selectList);
                         ProfileController.to.myProjectList.refresh();
+                        }
                         getbacks(2);
                         showCustomDialog('추가되었습니다.', 1200);
                       } else {
