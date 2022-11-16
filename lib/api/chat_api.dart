@@ -112,7 +112,7 @@ Future<HTTPResponse> getUserProfile(List<int> membersId) async {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
     final url = Uri.parse("$serverUri/chat/get_profile?members=$membersId");
-
+    
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
         url,
