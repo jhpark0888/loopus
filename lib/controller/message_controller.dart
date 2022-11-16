@@ -80,27 +80,29 @@ class MessageController extends GetxController with WidgetsBindingObserver {
   }
 
   void onChattingRefresh() async {
+    chattingRoomList.value = [];
     String? userId = await const FlutterSecureStorage().read(key: "id");
     await getChatroomlist(int.parse(userId!));
-    chatroomscreenstate(ScreenState.loading);
-    chattingRoomList.value = [];
+    chatroomscreenstate(ScreenState.success);
     refreshController.refreshCompleted();
+    refresh();
   }
 
   void onChattingLoading() async {
     String? userId = await const FlutterSecureStorage().read(key: "id");
     await getChatroomlist(int.parse(userId!));
+    refresh();
     refreshController.loadComplete();
   }
 
+  // void onChattingRefresh() {
+  //   chattingRoomLoad();
+  //   refreshController.refreshCompleted();
+  // }
+
   // @override
   // void chattingRoomLoad() async {
-  //   WidgetsBinding.instance!.addObserver(this);
-  //   await SQLController.to.getDBMessageRoom().then((value) async {
-  //     if (value.isNotEmpty) {
-  //       List<ChatRoom> temp = value;
-  //       await getDBUserInfo(temp);
-  //       await addList(temp);
+  //
   //     }
   //     chatroomscreenstate.value = ScreenState.success;
   //   });
