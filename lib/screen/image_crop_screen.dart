@@ -25,7 +25,7 @@ class ImageCropScreen extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           leading: Padding(
-            padding: const EdgeInsets.fromLTRB(12.5, 12.5, 0, 0),
+            padding: const EdgeInsets.fromLTRB(9.5, 9.5, 0, 0),
             child: GestureDetector(
                 onTap: () {
                   Get.back();
@@ -37,7 +37,7 @@ class ImageCropScreen extends StatelessWidget {
           ),
           actions: [
             Padding(
-              padding: const EdgeInsets.all(12.5),
+              padding: const EdgeInsets.all(9.5),
               child: GestureDetector(
                   onTap: () => _cropImage(context),
                   child: Text(
