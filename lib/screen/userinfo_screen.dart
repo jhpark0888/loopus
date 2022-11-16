@@ -112,27 +112,27 @@ class UserInfoScreen extends StatelessWidget {
                     leftText: '취소');
               },
             ),
-            CustomListTile(
-              title: "채팅 데이터베이스 초기화",
-              onTap: () {
-                showButtonDialog(
-                    title: '데이터베이스를 초기화 하시겠어요?',
-                    startContent: '채팅 정보가 날라가게 돼요',
-                    leftFunction: () => Get.back(),
-                    rightFunction: () async {
-                      deleteDatabase(join(await getDatabasesPath(),
-                          'MY_database${HomeController.to.myProfile.value.userId}.db'));
+            // CustomListTile(
+            //   title: "채팅 데이터베이스 초기화",
+            //   onTap: () {
+            //     showButtonDialog(
+            //         title: '데이터베이스를 초기화 하시겠어요?',
+            //         startContent: '채팅 정보가 날라가게 돼요',
+            //         leftFunction: () => Get.back(),
+            //         rightFunction: () async {
+            //           deleteDatabase(join(await getDatabasesPath(),
+            //               'MY_database${HomeController.to.myProfile.value.userId}.db'));
 
-                      deleteDatabase(
-                              join(await getDatabasesPath(), 'MY_database.db'))
-                          .then((value) => showBottomSnackbar('삭제되었어요'));
-                      Future.delayed(const Duration(milliseconds: 300));
-                      Get.back();
-                    },
-                    rightText: '초기화',
-                    leftText: '취소');
-              },
-            ),
+            //           deleteDatabase(
+            //                   join(await getDatabasesPath(), 'MY_database.db'))
+            //               .then((value) => showBottomSnackbar('삭제되었어요'));
+            //           Future.delayed(const Duration(milliseconds: 300));
+            //           Get.back();
+            //         },
+            //         rightText: '초기화',
+            //         leftText: '취소');
+            //   },
+            // ),
           ],
         ),
       ),

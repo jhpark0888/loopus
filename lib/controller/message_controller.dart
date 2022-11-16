@@ -25,6 +25,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
   Rx<ScreenState> chatroomscreenstate = ScreenState.loading.obs;
   RxBool activeTextfield = false.obs;
   RxList<Person> member = <Person>[].obs;
+
   @override
   void onInit() async {
     WidgetsBinding.instance!.addObserver(this);
@@ -77,6 +78,34 @@ class MessageController extends GetxController with WidgetsBindingObserver {
         .chatRoom.value.message.value.date
         .compareTo(a.chatRoom.value.message.value.date));
   }
+
+  void onChattingRefresh() async {
+    String? userId = await const FlutterSecureStorage().read(key: "id");
+    await getChatroomlist(int.parse(userId!));
+    chatroomscreenstate(ScreenState.loading);
+    chattingRoomList.value = [];
+    refreshController.refreshCompleted();
+  }
+
+  void onChattingLoading() async {
+    String? userId = await const FlutterSecureStorage().read(key: "id");
+    await getChatroomlist(int.parse(userId!));
+    refreshController.loadComplete();
+  }
+
+  // @override
+  // void chattingRoomLoad() async {
+  //   WidgetsBinding.instance!.addObserver(this);
+  //   await SQLController.to.getDBMessageRoom().then((value) async {
+  //     if (value.isNotEmpty) {
+  //       List<ChatRoom> temp = value;
+  //       await getDBUserInfo(temp);
+  //       await addList(temp);
+  //     }
+  //     chatroomscreenstate.value = ScreenState.success;
+  //   });
+  //   refresh();
+  // }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {

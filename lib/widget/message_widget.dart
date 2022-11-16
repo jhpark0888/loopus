@@ -81,13 +81,13 @@ class MessageWidget extends StatelessWidget {
                       hasTextOverflow(message.content, kmainheight)
                           ? Container(
                               constraints:
-                                  BoxConstraints(maxWidth: Get.width * (3 / 5)),
+                                  BoxConstraints(maxWidth: Get.width * (2 / 3)),
                               decoration: BoxDecoration(
                                   color: mainblue,
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(16)),
                               child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 16),
+                                      vertical: 7, horizontal: 14),
                                   child: Text(
                                     message.content,
                                     style:
@@ -103,10 +103,10 @@ class MessageWidget extends StatelessWidget {
                           : Container(
                               decoration: BoxDecoration(
                                   color: mainblue,
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(16)),
                               child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 16),
+                                      vertical: 7, horizontal: 14),
                                   child: Text(
                                     message.content,
                                     style: kmainheight.copyWith(
@@ -129,7 +129,7 @@ class MessageWidget extends StatelessWidget {
                               ? const Text(
                                   '읽음',
                                   textAlign: TextAlign.end,
-                                  style: kmainheight,
+                                  style: kcaption,
                                 )
                               : const SizedBox.shrink()
                         ])
@@ -176,17 +176,17 @@ class MessageWidget extends StatelessWidget {
                               hasTextOverflow(message.content, kmainheight)
                                   ? Container(
                                       constraints: BoxConstraints(
-                                          maxWidth: Get.width * (3 / 5)),
+                                          maxWidth: Get.width * (2 / 3)),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                             color: cardGray,
                                           ),
                                           color: cardGray,
                                           borderRadius:
-                                              BorderRadius.circular(8)),
+                                              BorderRadius.circular(16)),
                                       child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 16),
+                                              vertical: 7, horizontal: 14),
                                           child: Text(
                                             message.content,
                                             style: kmainheight,
@@ -208,10 +208,10 @@ class MessageWidget extends StatelessWidget {
                                           ),
                                           color: cardGray,
                                           borderRadius:
-                                              BorderRadius.circular(8)),
+                                              BorderRadius.circular(16)),
                                       child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 16),
+                                              vertical: 7, horizontal: 14),
                                           child: Text(
                                             message.content,
                                             style: kmainheight,

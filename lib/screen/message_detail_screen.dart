@@ -90,9 +90,8 @@ class MessageDetatilScreen extends StatelessWidget {
             actions: [
               GestureDetector(
                 onTap: () async {
-                  showBottomdialog(context,
-                      func1: () {
-                        showButtonDialog(
+                  showBottomdialog(context, func1: () {
+                    showButtonDialog(
                         leftText: '취소',
                         rightText: '나가기',
                         title: '메세지 나가기',
@@ -147,9 +146,8 @@ class MessageDetatilScreen extends StatelessWidget {
                             }
                           }
                         });
-                      },
-                      func2: () {
-                        showTextFieldDialog(
+                  }, func2: () {
+                    showTextFieldDialog(
                         textEditingController: TextEditingController(),
                         // leftText: '취소',
                         // rightText: '신고하기',
@@ -170,10 +168,14 @@ class MessageDetatilScreen extends StatelessWidget {
                             }
                           });
                         });
-                      },
+                  },
                       value1: '메세지 나가기',
                       value2: '계정 신고하기',
-                      isOne: false, buttonColor1: mainWhite, buttonColor2: rankred, textColor1: rankred, textColor2: mainWhite);  
+                      isOne: false,
+                      buttonColor1: mainWhite,
+                      buttonColor2: rankred,
+                      textColor1: rankred,
+                      textColor2: mainWhite);
                 },
                 child: SizedBox(
                     height: 44,
