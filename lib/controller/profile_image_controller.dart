@@ -62,8 +62,8 @@ enum ImageType {
 //         ],
 //         androidUiSettings: const AndroidUiSettings(
 //             toolbarTitle: 'Cropper',
-//             toolbarColor: mainblue,
-//             toolbarWidgetColor: mainWhite,
+//             toolbarColor: AppColors.mainblue,
+//             toolbarWidgetColor: AppColors.mainWhite,
 //             hideBottomControls: true,
 //             initAspectRatio: CropAspectRatioPreset.original,
 //             lockAspectRatio: false),
@@ -89,8 +89,8 @@ enum ImageType {
 //         sourcePath: pickimage.path,
 //         androidUiSettings: const AndroidUiSettings(
 //             toolbarTitle: 'Cropper',
-//             toolbarColor: mainblue,
-//             toolbarWidgetColor: mainWhite,
+//             toolbarColor: AppColors.mainblue,
+//             toolbarWidgetColor: AppColors.mainWhite,
 //             lockAspectRatio: true),
 //         iosUiSettings: const IOSUiSettings(
 //           aspectRatioPickerButtonHidden: true,
@@ -119,8 +119,8 @@ enum ImageType {
 //           sourcePath: image.path,
 //           androidUiSettings: const AndroidUiSettings(
 //               toolbarTitle: 'Cropper',
-//               toolbarColor: mainblue,
-//               toolbarWidgetColor: mainWhite,
+//               toolbarColor: AppColors.mainblue,
+//               toolbarWidgetColor: AppColors.mainWhite,
 //               lockAspectRatio: false),
 //           iosUiSettings: const IOSUiSettings(
 //             // resetAspectRatioEnabled: false,

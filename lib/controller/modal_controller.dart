@@ -37,369 +37,369 @@ import '../constant.dart';
 //   }
 // }
 
-void showContentModal(BuildContext context) {
-  final LocalDataController _localDataController =
-      Get.put(LocalDataController());
-  final NotificationController _notificationController =
-      Get.put(NotificationController());
-  RxBool isModalNextBtnClicked = false.obs;
-  RxBool isCheckOne = false.obs;
-  RxBool isCheckTwo = false.obs;
-  RxBool isCheckThree = false.obs;
-  RxBool isCheckFour = false.obs;
-  showModalBottomSheet(
-    enableDrag: false,
-    context: context,
-    builder: (context) => Obx(
-      () => Padding(
-        padding: const EdgeInsets.fromLTRB(16, 28, 16, 40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            GestureDetector(
-              onTap: () {
-                if (isCheckOne.value == true &&
-                    isCheckTwo.value == true &&
-                    isCheckThree.value == true &&
-                    isCheckFour.value == true) {
-                  isCheckOne.value = false;
-                  isCheckTwo.value = false;
-                  isCheckThree.value = false;
-                  isCheckFour.value = false;
-                } else {
-                  isCheckOne.value = true;
-                  isCheckTwo.value = true;
-                  isCheckThree.value = true;
-                  isCheckFour.value = true;
-                }
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: (isCheckOne.value == true &&
-                            isCheckTwo.value == true &&
-                            isCheckThree.value == true &&
-                            isCheckFour.value == true)
-                        ? mainblue
-                        : mainblack.withOpacity(0.6),
-                    width: 1.2,
-                  ),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Row(
-                  children: [
-                    (isCheckOne.value == true &&
-                            isCheckTwo.value == true &&
-                            isCheckThree.value == true &&
-                            isCheckFour.value == true)
-                        ? SvgPicture.asset(
-                            'assets/icons/Check_Active_blue.svg',
-                          )
-                        : SvgPicture.asset('assets/icons/Uncheck_rect.svg'),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      '모두 동의합니다',
-                      style: (isCheckOne.value == true &&
-                              isCheckTwo.value == true &&
-                              isCheckThree.value == true &&
-                              isCheckFour.value == true)
-                          ? ktempFont.copyWith(
-                              fontWeight: FontWeight.w400,
-                              color: mainblue,
-                            )
-                          : ktempFont.copyWith(
-                              fontWeight: FontWeight.w400,
-                              color: mainblack.withOpacity(0.6),
-                            ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    isCheckOne.value = !isCheckOne.value;
-                  },
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        (isCheckOne.value == true)
-                            ? 'assets/icons/Uncheck_norect_blue.svg'
-                            : 'assets/icons/Uncheck_norect.svg',
-                        color: isCheckOne.value == true
-                            ? mainblue
-                            : mainblack.withOpacity(0.6),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        '(필수)',
-                        style: ktempFont.copyWith(
-                          color: isCheckOne.value == true
-                              ? mainblue
-                              : mainblack.withOpacity(0.6),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        '서비스 이용약관',
-                        style: ktempFont.copyWith(
-                          color: isCheckOne.value == true
-                              ? mainblue
-                              : mainblack.withOpacity(0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                    onTap: () {
-                      Get.to(() => WebViewScreen(url: kTermsOfService));
-                    },
-                    // child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
-                    child: SizedBox.shrink()),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    isCheckTwo.value = !isCheckTwo.value;
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        (isCheckTwo.value == true)
-                            ? 'assets/icons/Uncheck_norect_blue.svg'
-                            : 'assets/icons/Uncheck_norect.svg',
-                        color: isCheckTwo.value == true
-                            ? mainblue
-                            : mainblack.withOpacity(0.6),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        '(필수)',
-                        style: ktempFont.copyWith(
-                          color: isCheckTwo.value == true
-                              ? mainblue
-                              : mainblack.withOpacity(0.6),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        '개인정보 처리방침',
-                        style: ktempFont.copyWith(
-                          color: isCheckTwo.value == true
-                              ? mainblue
-                              : mainblack.withOpacity(0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => WebViewScreen(url: kPrivacyPolicy));
-                  },
-                  child: SvgPicture.asset('assets/icons/arrow_right.svg'),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    isCheckFour.value = !isCheckFour.value;
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        (isCheckFour.value == true)
-                            ? 'assets/icons/Uncheck_norect_blue.svg'
-                            : 'assets/icons/Uncheck_norect.svg',
-                        color: isCheckFour.value == true
-                            ? mainblue
-                            : mainblack.withOpacity(0.6),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        '(필수)',
-                        style: ktempFont.copyWith(
-                          color: isCheckFour.value == true
-                              ? mainblue
-                              : mainblack.withOpacity(0.6),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        '개인정보 수집동의',
-                        style: ktempFont.copyWith(
-                          color: isCheckFour.value == true
-                              ? mainblue
-                              : mainblack.withOpacity(0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() =>
-                        WebViewScreen(url: kPersonalInfoCollectionAgreement));
-                  },
-                  child: SvgPicture.asset('assets/icons/arrow_right.svg'),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                isCheckThree.value = !isCheckThree.value;
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    (isCheckThree.value == true)
-                        ? 'assets/icons/Uncheck_norect_blue.svg'
-                        : 'assets/icons/Uncheck_norect.svg',
-                    color: isCheckThree.value == true
-                        ? mainblue
-                        : mainblack.withOpacity(0.6),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    '(선택)',
-                    style: ktempFont.copyWith(
-                      color: isCheckThree.value == true
-                          ? mainblue
-                          : mainblack.withOpacity(0.6),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    '루프어스 프로모션 알림 수신 동의',
-                    style: ktempFont.copyWith(
-                      color: isCheckThree.value == true
-                          ? mainblue
-                          : mainblack.withOpacity(0.6),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 24,
-            ),
-            GestureDetector(
-              onTap: (isCheckOne.value == true &&
-                      isCheckTwo.value == true &&
-                      isModalNextBtnClicked.value == false)
-                  ? () {
-                      isModalNextBtnClicked.value = true;
-                      Get.to(
-                        () => SignupTypeScreen(),
-                        preventDuplicates: false,
-                      );
+// void showContentModal(BuildContext context) {
+//   final LocalDataController _localDataController =
+//       Get.put(LocalDataController());
+//   final NotificationController _notificationController =
+//       Get.put(NotificationController());
+//   RxBool isModalNextBtnClicked = false.obs;
+//   RxBool isCheckOne = false.obs;
+//   RxBool isCheckTwo = false.obs;
+//   RxBool isCheckThree = false.obs;
+//   RxBool isCheckFour = false.obs;
+//   showModalBottomSheet(
+//     enableDrag: false,
+//     context: context,
+//     builder: (context) => Obx(
+//       () => Padding(
+//         padding: const EdgeInsets.fromLTRB(16, 28, 16, 40),
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             GestureDetector(
+//               onTap: () {
+//                 if (isCheckOne.value == true &&
+//                     isCheckTwo.value == true &&
+//                     isCheckThree.value == true &&
+//                     isCheckFour.value == true) {
+//                   isCheckOne.value = false;
+//                   isCheckTwo.value = false;
+//                   isCheckThree.value = false;
+//                   isCheckFour.value = false;
+//                 } else {
+//                   isCheckOne.value = true;
+//                   isCheckTwo.value = true;
+//                   isCheckThree.value = true;
+//                   isCheckFour.value = true;
+//                 }
+//               },
+//               child: Container(
+//                 padding: EdgeInsets.symmetric(
+//                   horizontal: 12,
+//                   vertical: 8,
+//                 ),
+//                 decoration: BoxDecoration(
+//                   border: Border.all(
+//                     color: (isCheckOne.value == true &&
+//                             isCheckTwo.value == true &&
+//                             isCheckThree.value == true &&
+//                             isCheckFour.value == true)
+//                         ? AppColors.mainblue
+//                         : AppColors.mainblack.withOpacity(0.6),
+//                     width: 1.2,
+//                   ),
+//                   borderRadius: BorderRadius.circular(4),
+//                 ),
+//                 child: Row(
+//                   children: [
+//                     (isCheckOne.value == true &&
+//                             isCheckTwo.value == true &&
+//                             isCheckThree.value == true &&
+//                             isCheckFour.value == true)
+//                         ? SvgPicture.asset(
+//                             'assets/icons/Check_Active_blue.svg',
+//                           )
+//                         : SvgPicture.asset('assets/icons/Uncheck_rect.svg'),
+//                     SizedBox(
+//                       width: 8,
+//                     ),
+//                     Text(
+//                       '모두 동의합니다',
+//                       style: (isCheckOne.value == true &&
+//                               isCheckTwo.value == true &&
+//                               isCheckThree.value == true &&
+//                               isCheckFour.value == true)
+//                           ? MyTextTheme.tempfont(context).copyWith(
+//                               fontWeight: FontWeight.w400,
+//                               color: AppColors.mainblue,
+//                             )
+//                           : MyTextTheme.tempfont(context).copyWith(
+//                               fontWeight: FontWeight.w400,
+//                               color: AppColors.mainblack.withOpacity(0.6),
+//                             ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             SizedBox(
+//               height: 20,
+//             ),
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 GestureDetector(
+//                   behavior: HitTestBehavior.translucent,
+//                   onTap: () {
+//                     isCheckOne.value = !isCheckOne.value;
+//                   },
+//                   child: Row(
+//                     children: [
+//                       SvgPicture.asset(
+//                         (isCheckOne.value == true)
+//                             ? 'assets/icons/Uncheck_norect_blue.svg'
+//                             : 'assets/icons/Uncheck_norect.svg',
+//                         color: isCheckOne.value == true
+//                             ? AppColors.mainblue
+//                             : AppColors.mainblack.withOpacity(0.6),
+//                       ),
+//                       SizedBox(
+//                         width: 8,
+//                       ),
+//                       Text(
+//                         '(필수)',
+//                         style: MyTextTheme.tempfont(context).copyWith(
+//                           color: isCheckOne.value == true
+//                               ? AppColors.mainblue
+//                               : AppColors.mainblack.withOpacity(0.6),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 4,
+//                       ),
+//                       Text(
+//                         '서비스 이용약관',
+//                         style: MyTextTheme.tempfont(context).copyWith(
+//                           color: isCheckOne.value == true
+//                               ? AppColors.mainblue
+//                               : AppColors.mainblack.withOpacity(0.6),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 GestureDetector(
+//                     onTap: () {
+//                       Get.to(() => WebViewScreen(url: kTermsOfService));
+//                     },
+//                     // child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
+//                     child: SizedBox.shrink()),
+//               ],
+//             ),
+//             SizedBox(
+//               height: 16,
+//             ),
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 GestureDetector(
+//                   behavior: HitTestBehavior.translucent,
+//                   onTap: () {
+//                     isCheckTwo.value = !isCheckTwo.value;
+//                   },
+//                   child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.center,
+//                     children: [
+//                       SvgPicture.asset(
+//                         (isCheckTwo.value == true)
+//                             ? 'assets/icons/Uncheck_norect_blue.svg'
+//                             : 'assets/icons/Uncheck_norect.svg',
+//                         color: isCheckTwo.value == true
+//                             ? AppColors.mainblue
+//                             : AppColors.mainblack.withOpacity(0.6),
+//                       ),
+//                       SizedBox(
+//                         width: 8,
+//                       ),
+//                       Text(
+//                         '(필수)',
+//                         style: MyTextTheme.tempfont(context).copyWith(
+//                           color: isCheckTwo.value == true
+//                               ? AppColors.mainblue
+//                               : AppColors.mainblack.withOpacity(0.6),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 4,
+//                       ),
+//                       Text(
+//                         '개인정보 처리방침',
+//                         style: MyTextTheme.tempfont(context).copyWith(
+//                           color: isCheckTwo.value == true
+//                               ? AppColors.mainblue
+//                               : AppColors.mainblack.withOpacity(0.6),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 GestureDetector(
+//                   onTap: () {
+//                     Get.to(() => WebViewScreen(url: kPrivacyPolicy));
+//                   },
+//                   child: SvgPicture.asset('assets/icons/arrow_right.svg'),
+//                 ),
+//               ],
+//             ),
+//             SizedBox(
+//               height: 16,
+//             ),
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 GestureDetector(
+//                   behavior: HitTestBehavior.translucent,
+//                   onTap: () {
+//                     isCheckFour.value = !isCheckFour.value;
+//                   },
+//                   child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.center,
+//                     children: [
+//                       SvgPicture.asset(
+//                         (isCheckFour.value == true)
+//                             ? 'assets/icons/Uncheck_norect_blue.svg'
+//                             : 'assets/icons/Uncheck_norect.svg',
+//                         color: isCheckFour.value == true
+//                             ? AppColors.mainblue
+//                             : AppColors.mainblack.withOpacity(0.6),
+//                       ),
+//                       SizedBox(
+//                         width: 8,
+//                       ),
+//                       Text(
+//                         '(필수)',
+//                         style: MyTextTheme.tempfont(context).copyWith(
+//                           color: isCheckFour.value == true
+//                               ? AppColors.mainblue
+//                               : AppColors.mainblack.withOpacity(0.6),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 4,
+//                       ),
+//                       Text(
+//                         '개인정보 수집동의',
+//                         style: MyTextTheme.tempfont(context).copyWith(
+//                           color: isCheckFour.value == true
+//                               ? AppColors.mainblue
+//                               : AppColors.mainblack.withOpacity(0.6),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 GestureDetector(
+//                   onTap: () {
+//                     Get.to(() =>
+//                         WebViewScreen(url: kPersonalInfoCollectionAgreement));
+//                   },
+//                   child: SvgPicture.asset('assets/icons/arrow_right.svg'),
+//                 ),
+//               ],
+//             ),
+//             SizedBox(
+//               height: 16,
+//             ),
+//             GestureDetector(
+//               behavior: HitTestBehavior.translucent,
+//               onTap: () {
+//                 isCheckThree.value = !isCheckThree.value;
+//               },
+//               child: Row(
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 children: [
+//                   SvgPicture.asset(
+//                     (isCheckThree.value == true)
+//                         ? 'assets/icons/Uncheck_norect_blue.svg'
+//                         : 'assets/icons/Uncheck_norect.svg',
+//                     color: isCheckThree.value == true
+//                         ? AppColors.mainblue
+//                         : AppColors.mainblack.withOpacity(0.6),
+//                   ),
+//                   SizedBox(
+//                     width: 8,
+//                   ),
+//                   Text(
+//                     '(선택)',
+//                     style: MyTextTheme.tempfont(context).copyWith(
+//                       color: isCheckThree.value == true
+//                           ? AppColors.mainblue
+//                           : AppColors.mainblack.withOpacity(0.6),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     width: 4,
+//                   ),
+//                   Text(
+//                     '루프어스 프로모션 알림 수신 동의',
+//                     style: MyTextTheme.tempfont(context).copyWith(
+//                       color: isCheckThree.value == true
+//                           ? AppColors.mainblue
+//                           : AppColors.mainblack.withOpacity(0.6),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             SizedBox(
+//               height: 24,
+//             ),
+//             GestureDetector(
+//               onTap: (isCheckOne.value == true &&
+//                       isCheckTwo.value == true &&
+//                       isModalNextBtnClicked.value == false)
+//                   ? () {
+//                       isModalNextBtnClicked.value = true;
+//                       Get.to(
+//                         () => SignupTypeScreen(),
+//                         preventDuplicates: false,
+//                       );
 
-                      _localDataController.agreeProNoti(isCheckThree.value);
-                      _notificationController.changePromotionAlarmState(
-                          _localDataController.isUserAgreeProNoti);
-                      if (isCheckThree.value == true) {
-                        SchedulerBinding.instance!.addPostFrameCallback((_) {
-                          showCustomDialog(
-                              '프로모션 알림 수신에 동의하셨습니다\n' +
-                                  '(${DateFormat('yy.MM.dd').format(DateTime.now())})',
-                              1000);
-                        });
-                      }
-                    }
-                  : () {},
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: (isCheckOne.value == true &&
-                          isCheckTwo.value == true &&
-                          isCheckFour.value == true)
-                      ? mainblue
-                      : Color(0xffe7e7e7),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Center(
-                  child: Text(
-                    '다음',
-                    style: ktempFont.copyWith(
-                      color: (isCheckOne.value == true &&
-                              isCheckTwo.value == true &&
-                              isCheckFour.value == true)
-                          ? mainWhite
-                          : mainblack.withOpacity(0.38),
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    ),
-    barrierColor: mainblack.withOpacity(0.3),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(16),
-        topRight: Radius.circular(16),
-      ),
-    ),
-  );
-}
+//                       _localDataController.agreeProNoti(isCheckThree.value);
+//                       _notificationController.changePromotionAlarmState(
+//                           _localDataController.isUserAgreeProNoti);
+//                       if (isCheckThree.value == true) {
+//                         SchedulerBinding.instance!.addPostFrameCallback((_) {
+//                           showCustomDialog(
+//                               '프로모션 알림 수신에 동의하셨습니다\n' +
+//                                   '(${DateFormat('yy.MM.dd').format(DateTime.now())})',
+//                               1000);
+//                         });
+//                       }
+//                     }
+//                   : () {},
+//               child: Container(
+//                 padding: EdgeInsets.symmetric(vertical: 12),
+//                 decoration: BoxDecoration(
+//                   color: (isCheckOne.value == true &&
+//                           isCheckTwo.value == true &&
+//                           isCheckFour.value == true)
+//                       ? AppColors.mainblue
+//                       : Color(0xffe7e7e7),
+//                   borderRadius: BorderRadius.circular(4),
+//                 ),
+//                 child: Center(
+//                   child: Text(
+//                     '다음',
+//                     style: MyTextTheme.tempfont(context).copyWith(
+//                       color: (isCheckOne.value == true &&
+//                               isCheckTwo.value == true &&
+//                               isCheckFour.value == true)
+//                           ? AppColors.mainWhite
+//                           : AppColors.mainblack.withOpacity(0.38),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     ),
+//     barrierColor: AppColors.mainblack.withOpacity(0.3),
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.only(
+//         topLeft: Radius.circular(16),
+//         topRight: Radius.circular(16),
+//       ),
+//     ),
+//   );
+// }
 
 void showModalIOS(
   BuildContext context, {
@@ -416,15 +416,15 @@ void showModalIOS(
   Color? boxColor,
 }) {
   showCupertinoModalPopup(
-    barrierColor: popupGray,
+    barrierColor: AppColors.popupGray,
     context: context,
     builder: (context) => CupertinoActionSheet(
       cancelButton: cancleButton
           ? GetBack != null
               ? CupertinoActionSheetAction(
-                  child: const Text(
+                  child: Text(
                     "닫기",
-                    style: kmain,
+                    style: MyTextTheme.main(context),
                   ),
                   isDefaultAction: true,
                   onPressed: () {
@@ -437,7 +437,7 @@ void showModalIOS(
                   height: 44,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: rankred,
+                    color: AppColors.rankred,
                   ),
                   child: CupertinoActionSheetAction(
                       child: const Text(
@@ -446,7 +446,7 @@ void showModalIOS(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           height: 1,
-                          color: mainWhite,
+                          color: AppColors.mainWhite,
                           fontFamily: 'NotoSansKR',
                         ),
                       ),
@@ -459,13 +459,13 @@ void showModalIOS(
           height: 44,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: isValue1Red ? rankred : mainWhite,
+            color: isValue1Red ? AppColors.rankred : AppColors.mainWhite,
           ),
           child: CupertinoActionSheetAction(
             child: Text(
               value1,
-              style: kmain.copyWith(
-                color: isValue1Red ? mainWhite : mainblack,
+              style: MyTextTheme.main(context).copyWith(
+                color: isValue1Red ? AppColors.mainWhite : AppColors.mainblack,
               ),
             ),
             onPressed: func1,
@@ -475,8 +475,8 @@ void showModalIOS(
           CupertinoActionSheetAction(
               child: Text(
                 value2,
-                style: kmain.copyWith(
-                  color: isValue2Red ? rankred : mainWhite,
+                style: MyTextTheme.main(context).copyWith(
+                  color: isValue2Red ? AppColors.rankred : AppColors.mainWhite,
                 ),
               ),
               onPressed: func2 != null ? func2 : () {})
@@ -496,7 +496,7 @@ void showModalIOSText(
   required bool isOne,
 }) {
   showCupertinoModalPopup(
-    barrierColor: mainblack.withOpacity(
+    barrierColor: AppColors.mainblack.withOpacity(
       0.3,
     ),
     context: context,
@@ -504,12 +504,12 @@ void showModalIOSText(
       cancelButton: Column(children: []),
       actions: [
         Container(
-          color: rankred,
+          color: AppColors.rankred,
           child: CupertinoActionSheetAction(
             child: Text(
               value1,
-              style: kmain.copyWith(
-                color: isValue1Red ? rankred : mainblack,
+              style: MyTextTheme.main(context).copyWith(
+                color: isValue1Red ? AppColors.rankred : AppColors.mainblack,
               ),
             ),
             onPressed: func1,
@@ -517,12 +517,13 @@ void showModalIOSText(
         ),
         if (isOne == false)
           Container(
-            color: mainWhite,
+            color: AppColors.mainWhite,
             child: CupertinoActionSheetAction(
                 child: Text(
                   value2,
-                  style: kmain.copyWith(
-                    color: isValue2Red ? rankred : mainblack,
+                  style: MyTextTheme.main(context).copyWith(
+                    color:
+                        isValue2Red ? AppColors.rankred : AppColors.mainblack,
                   ),
                 ),
                 onPressed: func2),
@@ -548,7 +549,7 @@ void showBottomdialog(
   String? accentTitle,
 }) {
   showModalBottomSheet(
-    barrierColor: bareerColor ?? popupGray,
+    barrierColor: bareerColor ?? AppColors.popupGray,
     enableDrag: false,
     context: context,
     backgroundColor: Colors.transparent,
@@ -564,10 +565,13 @@ void showBottomdialog(
                 child: RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(children: [
-                      TextSpan(text: title ?? "", style: kmainheight),
+                      TextSpan(
+                          text: title ?? "",
+                          style: MyTextTheme.mainheight(context)),
                       TextSpan(
                           text: accentTitle ?? "",
-                          style: kmainheight.copyWith(color: mainblue))
+                          style: MyTextTheme.mainheight(context)
+                              .copyWith(color: AppColors.mainblue))
                     ]))),
             GestureDetector(
               onTap: func1,
@@ -575,12 +579,12 @@ void showBottomdialog(
                 height: 42,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: buttonColor1 ?? mainblue),
+                    color: buttonColor1 ?? AppColors.mainblue),
                 child: Center(
                   child: Text(
                     value1,
-                    style: kmain.copyWith(
-                      color: textColor1 ?? mainWhite,
+                    style: MyTextTheme.main(context).copyWith(
+                      color: textColor1 ?? AppColors.mainWhite,
                     ),
                   ),
                 ),
@@ -597,12 +601,12 @@ void showBottomdialog(
                     height: 42,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: buttonColor2 ?? maingray),
+                        color: buttonColor2 ?? AppColors.maingray),
                     child: Center(
                       child: Text(
                         value2,
-                        style: kmain.copyWith(
-                          color: textColor2 ?? mainWhite,
+                        style: MyTextTheme.main(context).copyWith(
+                          color: textColor2 ?? AppColors.mainWhite,
                         ),
                       ),
                     ),
@@ -640,7 +644,8 @@ void showButtonDialog(
               width: 300,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+                  borderRadius: BorderRadius.circular(8),
+                  color: AppColors.mainWhite),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -649,7 +654,7 @@ void showButtonDialog(
                   ),
                   Text(
                     title,
-                    style: kmainbold,
+                    style: MyTextTheme.mainbold(Get.context!),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -659,16 +664,16 @@ void showButtonDialog(
                     text: TextSpan(children: [
                       TextSpan(
                         text: startContent,
-                        style: kmainheight,
+                        style: MyTextTheme.mainheight(Get.context!),
                       ),
                       TextSpan(
                         text: highlightContent ?? "",
-                        style: kmainheight.copyWith(
-                            color: highlightColor ?? mainblue),
+                        style: MyTextTheme.mainheight(Get.context!).copyWith(
+                            color: highlightColor ?? AppColors.mainblue),
                       ),
                       TextSpan(
                         text: endContent,
-                        style: kmainheight,
+                        style: MyTextTheme.mainheight(Get.context!),
                       )
                     ]),
                     textAlign: TextAlign.center,
@@ -697,8 +702,8 @@ void showButtonDialog(
                             onTap: rightFunction,
                             isBlue: true,
                             title: rightText,
-                            textColor: rightColor ?? mainWhite,
-                            boxColor: rankred,
+                            textColor: rightColor ?? AppColors.mainWhite,
+                            boxColor: AppColors.rankred,
                             isBig: true),
                       )),
                     ],
@@ -714,7 +719,7 @@ void showButtonDialog(
       ),
     ),
     barrierDismissible: false,
-    barrierColor: popupGray,
+    barrierColor: AppColors.popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -744,7 +749,8 @@ void showButtonDialog2({
               width: 300,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+                  borderRadius: BorderRadius.circular(8),
+                  color: AppColors.mainWhite),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -753,7 +759,7 @@ void showButtonDialog2({
                   ),
                   Text(
                     title,
-                    style: kmainbold,
+                    style: MyTextTheme.mainbold(Get.context!),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -763,16 +769,16 @@ void showButtonDialog2({
                     text: TextSpan(children: [
                       TextSpan(
                         text: startContent,
-                        style: kmainheight,
+                        style: MyTextTheme.mainheight(Get.context!),
                       ),
                       TextSpan(
                         text: highlightContent ?? "",
-                        style: kmainheight.copyWith(
-                            color: highlightColor ?? mainblue),
+                        style: MyTextTheme.mainheight(Get.context!).copyWith(
+                            color: highlightColor ?? AppColors.mainblue),
                       ),
                       TextSpan(
                         text: endContent,
-                        style: kmainheight,
+                        style: MyTextTheme.mainheight(Get.context!),
                       )
                     ]),
                     textAlign: TextAlign.center,
@@ -789,7 +795,7 @@ void showButtonDialog2({
                             onTap: leftFunction,
                             isBlue: false,
                             title: leftText,
-                            boxColor: mainblue,
+                            boxColor: AppColors.mainblue,
                             isBig: true),
                       )),
                       const SizedBox(
@@ -803,7 +809,7 @@ void showButtonDialog2({
                             isBlue: true,
                             title: rightText,
                             textColor: highlightColor,
-                            boxColor: maingray,
+                            boxColor: AppColors.maingray,
                             isBig: true),
                       )),
                     ],
@@ -819,7 +825,7 @@ void showButtonDialog2({
       ),
     ),
     barrierDismissible: false,
-    barrierColor: popupGray,
+    barrierColor: AppColors.popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -848,7 +854,8 @@ void showOneButtonDialog({
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+                  borderRadius: BorderRadius.circular(8),
+                  color: AppColors.mainWhite),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -857,7 +864,7 @@ void showOneButtonDialog({
                   ),
                   Text(
                     title,
-                    style: kmainbold,
+                    style: MyTextTheme.mainbold(Get.context!),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -867,16 +874,16 @@ void showOneButtonDialog({
                     text: TextSpan(children: [
                       TextSpan(
                         text: startContent,
-                        style: kmainheight,
+                        style: MyTextTheme.mainheight(Get.context!),
                       ),
                       TextSpan(
                         text: highlightContent ?? "",
-                        style: kmainheight.copyWith(
-                            color: highlightColor ?? mainblue),
+                        style: MyTextTheme.mainheight(Get.context!).copyWith(
+                            color: highlightColor ?? AppColors.mainblue),
                       ),
                       TextSpan(
                         text: endContent,
-                        style: kmainheight,
+                        style: MyTextTheme.mainheight(Get.context!),
                       )
                     ]),
                     textAlign: TextAlign.center,
@@ -911,7 +918,7 @@ void showOneButtonDialog({
       ),
     ),
     barrierDismissible: false,
-    barrierColor: popupGray,
+    barrierColor: AppColors.popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -936,7 +943,8 @@ void showCustomDialogline2({
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+                  borderRadius: BorderRadius.circular(8),
+                  color: AppColors.mainWhite),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -945,7 +953,7 @@ void showCustomDialogline2({
                   ),
                   Text(
                     title,
-                    style: kmain,
+                    style: MyTextTheme.main(Get.context!),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -955,16 +963,16 @@ void showCustomDialogline2({
                     text: TextSpan(children: [
                       TextSpan(
                         text: startContent,
-                        style: kmainheight,
+                        style: MyTextTheme.mainheight(Get.context!),
                       ),
                       TextSpan(
                         text: highlightContent ?? "",
-                        style: kmainheight.copyWith(
-                            color: highlightColor ?? mainblue),
+                        style: MyTextTheme.mainheight(Get.context!).copyWith(
+                            color: highlightColor ?? AppColors.mainblue),
                       ),
                       TextSpan(
                         text: endContent,
-                        style: kmainheight,
+                        style: MyTextTheme.mainheight(Get.context!),
                       )
                     ]),
                     textAlign: TextAlign.center,
@@ -993,7 +1001,7 @@ void showCustomDialogline2({
       ),
     ),
     barrierDismissible: false,
-    barrierColor: popupGray,
+    barrierColor: AppColors.popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -1014,7 +1022,7 @@ void showTextFieldDialog({
 }) {
   Get.dialog(
     AlertDialog(
-      backgroundColor: mainWhite,
+      backgroundColor: AppColors.mainWhite,
       elevation: 0,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -1028,21 +1036,22 @@ void showTextFieldDialog({
       buttonPadding: const EdgeInsets.all(16),
       title: Text(
         title,
-        style: kmainbold,
+        style: MyTextTheme.mainbold(Get.context!),
         textAlign: TextAlign.center,
       ),
       content: TextField(
         controller: textEditingController,
         maxLines: 3,
-        style: kmainheight,
+        style: MyTextTheme.mainheight(Get.context!),
         autofocus: true,
-        cursorColor: mainblack,
+        cursorColor: AppColors.mainblack,
         cursorWidth: 1.2,
         decoration: InputDecoration(
           filled: true,
-          fillColor: cardGray,
+          fillColor: AppColors.cardGray,
           hintText: hintText,
-          hintStyle: kmainheight.copyWith(color: maingray),
+          hintStyle: MyTextTheme.mainheight(Get.context!)
+              .copyWith(color: AppColors.maingray),
           contentPadding: const EdgeInsets.all(16),
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide.none,
@@ -1066,7 +1075,7 @@ void showTextFieldDialog({
                 isBlue: false,
                 title: leftText ?? "취소",
                 isBig: true,
-                boxColor: leftBoxColor ?? maingray,
+                boxColor: leftBoxColor ?? AppColors.maingray,
                 textColor: leftTextColor,
               ),
             )),
@@ -1089,7 +1098,7 @@ void showTextFieldDialog({
       ],
     ),
     barrierDismissible: false,
-    barrierColor: popupGray,
+    barrierColor: AppColors.popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -1129,8 +1138,8 @@ void showWithDrawalDialog({
                     ),
                   ),
                   height: 48,
-                  child: const Center(
-                    child: Text('취소', style: kmain),
+                  child: Center(
+                    child: Text('취소', style: MyTextTheme.main(Get.context!)),
                   ),
                 ),
               ),
@@ -1151,8 +1160,10 @@ void showWithDrawalDialog({
                   child: Center(
                     child: Text(
                       isWithdrawal ? '탈퇴' : '확인',
-                      style: kmain.copyWith(
-                        color: isWithdrawal ? rankred : mainblue,
+                      style: MyTextTheme.main(Get.context!).copyWith(
+                        color: isWithdrawal
+                            ? AppColors.rankred
+                            : AppColors.mainblue,
                       ),
                     ),
                   ),
@@ -1173,7 +1184,7 @@ void showWithDrawalDialog({
       backgroundColor: Colors.white,
       title: Text(
         title,
-        style: kmainheight,
+        style: MyTextTheme.mainheight(Get.context!),
         textAlign: TextAlign.center,
       ),
       content: Padding(
@@ -1190,7 +1201,7 @@ void showWithDrawalDialog({
       ),
     ),
     barrierDismissible: false,
-    barrierColor: mainblack.withOpacity(0.3),
+    barrierColor: AppColors.mainblack.withOpacity(0.3),
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -1201,7 +1212,7 @@ void showCustomBottomSheet() {
     Container(
       padding: const EdgeInsets.fromLTRB(20, 20, 12, 48),
       decoration: const BoxDecoration(
-        color: mainWhite,
+        color: AppColors.mainWhite,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
@@ -1214,9 +1225,9 @@ void showCustomBottomSheet() {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 '작성 및 추가',
-                style: kNavigationTitle,
+                style: MyTextTheme.navigationTitle(Get.context!),
               ),
               IconButton(
                 onPressed: () => Get.back(),
@@ -1246,17 +1257,17 @@ void showCustomBottomSheet() {
                     width: 24,
                   ),
                   decoration: BoxDecoration(
-                    color: lightcardgray,
+                    color: AppColors.lightcardgray,
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
                 const SizedBox(
                   width: 12,
                 ),
-                const Expanded(
+                Expanded(
                   child: Text(
                     '포스트 작성하기',
-                    style: kmain,
+                    style: MyTextTheme.main(Get.context!),
                   ),
                 ),
               ],
@@ -1286,17 +1297,17 @@ void showCustomBottomSheet() {
                     fit: BoxFit.cover,
                   ),
                   decoration: BoxDecoration(
-                    color: lightcardgray,
+                    color: AppColors.lightcardgray,
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
                 const SizedBox(
                   width: 12,
                 ),
-                const Expanded(
+                Expanded(
                   child: Text(
                     '새로운 커리어 추가하기',
-                    style: kmain,
+                    style: MyTextTheme.main(Get.context!),
                   ),
                 ),
               ],
@@ -1305,7 +1316,7 @@ void showCustomBottomSheet() {
         ],
       ),
     ),
-    barrierColor: mainblack.withOpacity(0.3),
+    barrierColor: AppColors.mainblack.withOpacity(0.3),
     enterBottomSheetDuration: const Duration(milliseconds: 150),
     exitBottomSheetDuration: const Duration(milliseconds: 150),
   );
@@ -1318,11 +1329,11 @@ void showCustomSnackbar(
     body!,
     titleText: Text(
       title,
-      style: kmainbold,
+      style: MyTextTheme.mainbold(Get.context!),
     ),
     messageText: Text(
       body,
-      style: kmain,
+      style: MyTextTheme.main(Get.context!),
     ),
     onTap: ontap,
     snackPosition: SnackPosition.TOP,
@@ -1332,7 +1343,7 @@ void showCustomSnackbar(
     barBlur: 40,
     isDismissible: true,
     borderRadius: 8,
-    backgroundColor: mainWhite,
+    backgroundColor: AppColors.mainWhite,
     boxShadows: [
       BoxShadow(
         blurRadius: 3,
@@ -1357,11 +1368,12 @@ void showBottomSnackbar(String message) {
     messageText: Text(
       message,
       textAlign: TextAlign.center,
-      style: kmainheight.copyWith(color: mainWhite),
+      style: MyTextTheme.mainheight(Get.context!)
+          .copyWith(color: AppColors.mainWhite),
     ),
     snackStyle: SnackStyle.FLOATING,
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: mainblue,
+    backgroundColor: AppColors.mainblue,
     padding: const EdgeInsets.fromLTRB(0, 14, 0, 14),
     margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
     borderRadius: 8,
@@ -1402,7 +1414,7 @@ void showErrorDialog({
                   ),
                   height: 48,
                   child: Center(
-                    child: Text('닫기', style: kmain),
+                    child: Text('닫기', style: MyTextTheme.main(Get.context!)),
                   ),
                 ),
               ),
@@ -1421,17 +1433,17 @@ void showErrorDialog({
       backgroundColor: Colors.white,
       title: Text(
         title,
-        style: kmainbold,
+        style: MyTextTheme.mainbold(Get.context!),
         textAlign: TextAlign.center,
       ),
       content: Text(
         content,
-        style: kmain,
+        style: MyTextTheme.main(Get.context!),
         textAlign: TextAlign.center,
       ),
     ),
     barrierDismissible: false,
-    barrierColor: mainblack.withOpacity(0.3),
+    barrierColor: AppColors.mainblack.withOpacity(0.3),
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -1448,7 +1460,7 @@ void showPopUpDialog(String title, String content) {
       ),
       title: Text(
         title,
-        style: kmainbold,
+        style: MyTextTheme.mainbold(Get.context!),
         textAlign: TextAlign.center,
       ),
       titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
@@ -1456,11 +1468,11 @@ void showPopUpDialog(String title, String content) {
       backgroundColor: Colors.white,
       content: Text(
         content,
-        style: kmainheight,
+        style: MyTextTheme.mainheight(Get.context!),
         textAlign: TextAlign.center,
       ),
     ),
-    barrierColor: mainblack.withOpacity(0.3),
+    barrierColor: AppColors.mainblack.withOpacity(0.3),
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -1479,7 +1491,7 @@ void showCustomDialog(String title, int duration) {
         ),
       ),
       // title: Text(title,
-      //   style: kmainheight,
+      //   style: MyTextTheme.mainheight(context),
       //   textAlign: TextAlign.center,),
       contentPadding: const EdgeInsets.fromLTRB(
         24,
@@ -1490,12 +1502,12 @@ void showCustomDialog(String title, int duration) {
       backgroundColor: Colors.white,
       content: Text(
         title,
-        style: kmainheight,
+        style: MyTextTheme.mainheight(Get.context!),
         textAlign: TextAlign.center,
       ),
     ),
     barrierDismissible: false,
-    barrierColor: mainblack.withOpacity(0.3),
+    barrierColor: AppColors.mainblack.withOpacity(0.3),
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   ).then((value) {
@@ -1512,14 +1524,14 @@ void showCustomDatePicker(BuildContext context, SelectDateType selectDateType) {
     minTime: DateTime(2000, 1, 1),
     maxTime: DateTime.now(),
     theme: DatePickerTheme(
-      headerColor: mainWhite,
-      backgroundColor: mainWhite,
-      cancelStyle: kmain.copyWith(
-        color: mainblack.withOpacity(0.6),
+      headerColor: AppColors.mainWhite,
+      backgroundColor: AppColors.mainWhite,
+      cancelStyle: MyTextTheme.main(context).copyWith(
+        color: AppColors.mainblack.withOpacity(0.6),
       ),
-      itemStyle: kmain,
-      doneStyle: kmain.copyWith(
-        color: mainblue,
+      itemStyle: MyTextTheme.main(context),
+      doneStyle: MyTextTheme.main(context).copyWith(
+        color: AppColors.mainblue,
         fontWeight: FontWeight.w500,
       ),
     ),
@@ -1557,7 +1569,7 @@ void showCustomYearPicker(
     Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         height: 250,
-        color: mainWhite,
+        color: AppColors.mainWhite,
         child: ClickableListWheelScrollView(
           scrollController: scrollController,
           itemCount: childCount,
@@ -1594,7 +1606,7 @@ void showSignUpEmailHint() {
       ),
       content: Image.asset("assets/illustrations/emailhint_image.png"),
     ),
-    barrierColor: popupGray,
+    barrierColor: AppColors.popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );

@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: mainWhite,
+            statusBarColor: AppColors.mainWhite,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),
@@ -128,7 +128,8 @@ class HomeScreen extends StatelessWidget {
                               height: 8,
                               width: 8,
                               decoration: const BoxDecoration(
-                                  color: rankred, shape: BoxShape.circle),
+                                  color: AppColors.rankred,
+                                  shape: BoxShape.circle),
                             )
                           : Container()),
                     ),
@@ -166,11 +167,15 @@ class HomeScreen extends StatelessWidget {
           () => _homeController.homeScreenState.value == ScreenState.loading
               ? const Center(child: LoadingWidget())
               : _homeController.homeScreenState.value == ScreenState.disconnect
-                  ? DisconnectReloadWidget(
-                      reload: () => _homeController.onPostingRefresh())
+                  ? DisconnectReloadWidget(reload: () {
+                      _homeController.getUserProfile();
+                      _homeController.onPostingRefresh();
+                    })
                   : _homeController.homeScreenState.value == ScreenState.error
-                      ? ErrorReloadWidget(
-                          reload: () => _homeController.onPostingRefresh())
+                      ? ErrorReloadWidget(reload: () {
+                          _homeController.getUserProfile();
+                          _homeController.onPostingRefresh();
+                        })
                       : ScrollNoneffectWidget(
                           child: SmartRefresher(
                             primary: false,
@@ -214,15 +219,20 @@ class HomeScreen extends StatelessWidget {
                                                   ),
                                                   Text(
                                                     '\'${_homeController.recommendCareer!.careerName}\'\n커리어엔 최근 어떤 일이 있었나요?',
-                                                    style: kmainheight,
+                                                    style:
+                                                        MyTextTheme.mainheight(
+                                                            context),
                                                   ),
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
                                                   Text(
                                                     '포스트를 바로 작성해 보세요',
-                                                    style: kmain.copyWith(
-                                                        color: maingray),
+                                                    style: MyTextTheme.main(
+                                                            context)
+                                                        .copyWith(
+                                                            color: AppColors
+                                                                .maingray),
                                                   ),
                                                   const SizedBox(
                                                     height: 10,
@@ -230,7 +240,8 @@ class HomeScreen extends StatelessWidget {
                                                   Divider(
                                                       height: 1,
                                                       thickness: 1,
-                                                      color: maingray),
+                                                      color:
+                                                          AppColors.maingray),
                                                 ],
                                               ),
                                             ),
@@ -255,17 +266,22 @@ class HomeScreen extends StatelessWidget {
                                                   const SizedBox(
                                                     height: 8,
                                                   ),
-                                                  const Text(
+                                                  Text(
                                                     '지금 커리어를 만들고 새로운 포스트를 기록해보세요!',
-                                                    style: kmainheight,
+                                                    style:
+                                                        MyTextTheme.mainheight(
+                                                            context),
                                                   ),
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
                                                   Text(
                                                     '커리어를 바로 작성해 보세요',
-                                                    style: kmain.copyWith(
-                                                        color: maingray),
+                                                    style: MyTextTheme.main(
+                                                            context)
+                                                        .copyWith(
+                                                            color: AppColors
+                                                                .maingray),
                                                   ),
                                                   const SizedBox(
                                                     height: 10,
@@ -273,7 +289,8 @@ class HomeScreen extends StatelessWidget {
                                                   Divider(
                                                       height: 1,
                                                       thickness: 1,
-                                                      color: maingray),
+                                                      color:
+                                                          AppColors.maingray),
                                                 ],
                                               ),
                                             ),
@@ -300,9 +317,10 @@ class HomeScreen extends StatelessWidget {
                                                       .contents[index]),
                                             );
                                           } else {
-                                            return const Text(
+                                            return Text(
                                               '에러',
-                                              style: kmainbold,
+                                              style:
+                                                  MyTextTheme.mainbold(context),
                                             );
                                           }
                                         },
@@ -341,7 +359,7 @@ class HomeScreen extends StatelessWidget {
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
-                  color: lightcardgray,
+                  color: AppColors.lightcardgray,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -350,7 +368,7 @@ class HomeScreen extends StatelessWidget {
                       'assets/icons/search_inactive.svg',
                       width: 16,
                       height: 16,
-                      color: mainblack.withOpacity(0.6),
+                      color: AppColors.mainblack.withOpacity(0.6),
                     ),
                     SizedBox(
                       width: 12,
@@ -358,7 +376,7 @@ class HomeScreen extends StatelessWidget {
                     Text(
                       "어떤 정보를 찾으시나요?",
                       style: TextStyle(
-                        color: mainblack.withOpacity(0.6),
+                        color: AppColors.mainblack.withOpacity(0.6),
                         fontSize: 14,
                       ),
                     ),
@@ -386,7 +404,7 @@ class HomeScreen extends StatelessWidget {
   //               Text(
   //                 "활동중인 공식 계정",
   //                 style: kButtonStyle.copyWith(
-  //                   color: mainblack.withOpacity(0.6),
+  //                   color: AppColors.mainblack.withOpacity(0.6),
   //                 ),
   //               ),
   //               SizedBox(
@@ -399,7 +417,7 @@ class HomeScreen extends StatelessWidget {
   //                   'assets/icons/information.svg',
   //                   width: 20,
   //                   height: 20,
-  //                   color: mainblack.withOpacity(0.6),
+  //                   color: AppColors.mainblack.withOpacity(0.6),
   //                 ),
   //               ),
   //             ],
@@ -608,23 +626,23 @@ class HomeScreen extends StatelessWidget {
   //         elevation: 0,
   //         pinned: true,
   //         floating: false,
-  //         backgroundColor: mainWhite,
+  //         backgroundColor: AppColors.mainWhite,
   //         flexibleSpace: Column(
   //           crossAxisAlignment: CrossAxisAlignment.stretch,
   //           children: [
   //             TabBar(
   //               controller: _homeController.hometabcontroller,
   //               labelStyle: kButtonStyle,
-  //               labelColor: mainblack,
+  //               labelColor: AppColors.mainblack,
   //               unselectedLabelStyle: kBody2Style,
-  //               unselectedLabelColor: mainblack.withOpacity(0.6),
+  //               unselectedLabelColor: AppColors.mainblack.withOpacity(0.6),
   //               indicator: const UnderlineIndicator(
   //                 strokeCap: StrokeCap.round,
   //                 borderSide: BorderSide(width: 1.2),
   //                 insets: EdgeInsets.symmetric(horizontal: 16.0),
   //               ),
   //               isScrollable: true,
-  //               indicatorColor: mainblack,
+  //               indicatorColor: AppColors.mainblack,
   //               tabs: const [
   //                 Tab(
   //                   height: 40,

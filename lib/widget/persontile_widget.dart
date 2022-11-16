@@ -57,7 +57,7 @@ class PersonTileWidget extends StatelessWidget {
                           imageUrl: user.profileImage,
                           placeholder: (context, url) => kProfilePlaceHolder(),
                           errorWidget: (context, string, widget) {
-                            return Container(color: maingray);
+                            return Container(color: AppColors.maingray);
                           },
                           fit: BoxFit.cover,
                         ),
@@ -73,10 +73,10 @@ class PersonTileWidget extends StatelessWidget {
                 Obx(
                   () => Text(
                     user.name,
-                    style: kmain.copyWith(
+                    style: MyTextTheme.main(context).copyWith(
                         color: _hoverController.isHover.value
-                            ? mainblack.withOpacity(0.6)
-                            : mainblack),
+                            ? AppColors.mainblack.withOpacity(0.6)
+                            : AppColors.mainblack),
                   ),
                 ),
                 SizedBox(
@@ -85,10 +85,10 @@ class PersonTileWidget extends StatelessWidget {
                 Obx(
                   () => Text(
                     "${user.univName} · ${user.department}",
-                    style: kmain.copyWith(
+                    style: MyTextTheme.main(context).copyWith(
                         // color: _hoverController.isHover.value
-                        //     ? mainblack.withOpacity(0.38)
-                        //     : mainblack.withOpacity(0.6),
+                        //     ? AppColors.mainblack.withOpacity(0.38)
+                        //     : AppColors.mainblack.withOpacity(0.6),
                         ),
                   ),
                 ),

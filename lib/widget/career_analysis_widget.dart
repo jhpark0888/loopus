@@ -20,47 +20,53 @@ class CareerAnalysisWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    // Row(
-    //   children: [
+    return
+        // Row(
+        //   children: [
         // Expanded(
         //   child: RichText(
         //       text: TextSpan(children: [
-        //     TextSpan(text: field, style: kmain.copyWith(color: mainblue)),
-        //     const TextSpan(text: ' 분야', style: kmain)
+        //     TextSpan(text: field, style: MyTextTheme.main(context).copyWith(color: AppColors.mainblue)),
+        //     const TextSpan(text: ' 분야', style: MyTextTheme.main(context))
         //   ])),
         // ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('상위 ${(groupRatio * 100).toInt()}%', style: kmain),
-            const SizedBox(width: 8),
-            rate(((lastgroupRatio) * 100).toInt()),
-          ],
-        );
-        // Expanded(
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Text('교내 ${(schoolRatio * 100).toInt()}%', style: kmain),
-        //       rate(((schoolRatio - lastschoolRatio) * 100).toInt()),
-        //     ],
-        //   ),
-        // )
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('상위 ${(groupRatio * 100).toInt()}%',
+            style: MyTextTheme.main(context)),
+        const SizedBox(width: 8),
+        rate(context, ((groupRatio) * 100).toInt(),
+            ((lastgroupRatio) * 100).toInt()),
+      ],
+    );
+    // Expanded(
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Text('교내 ${(schoolRatio * 100).toInt()}%', style: MyTextTheme.main(context)),
+    //       rate(((schoolRatio - lastschoolRatio) * 100).toInt()),
+    //     ],
+    //   ),
+    // )
     //   ],
     // );
   }
 
-  Widget rate(int variance) {
-    if(variance != 0){return Row(children: [
-      arrowDirection(variance),
-      const SizedBox(width: 3),
-        Text('${variance.abs()}%',
-            style:
-                kcaption.copyWith(color: variance >= 1 ? rankred : rankblue)),
-      const SizedBox(width: 8)
-    ]);}
-    else{return const SizedBox.shrink();}
+  Widget rate(BuildContext context, int _groupRatio, int variance) {
+    if (variance != 0) {
+      return Row(children: [
+        arrowDirection(variance),
+        const SizedBox(width: 3),
+        Text(
+            '${variance == 100 ? variance.abs() - _groupRatio.abs() : variance.abs()}%',
+            style: MyTextTheme.caption(context).copyWith(
+                color: variance >= 1 ? AppColors.rankred : AppColors.rankblue)),
+        const SizedBox(width: 8)
+      ]);
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 
   Widget arrowDirection(int variance) {

@@ -26,9 +26,9 @@ class ProfileSnsAddScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               "SNS",
-              style: kmainbold,
+              style: MyTextTheme.mainbold(context),
             ),
             const SizedBox(
               height: 24,
@@ -37,7 +37,7 @@ class ProfileSnsAddScreen extends StatelessWidget {
                 primary: false,
                 shrinkWrap: true,
                 itemBuilder: (context, index) =>
-                    snsRowWidget(SNSType.values[index]),
+                    snsRowWidget(context, SNSType.values[index]),
                 separatorBuilder: (context, index) => const SizedBox(
                       height: 24,
                     ),
@@ -48,7 +48,7 @@ class ProfileSnsAddScreen extends StatelessWidget {
     );
   }
 
-  Widget snsRowWidget(SNSType snsType) {
+  Widget snsRowWidget(BuildContext context, SNSType snsType) {
     return GestureDetector(
       onTap: () {
         _controller.currentSNSType = snsType;
@@ -72,7 +72,8 @@ class ProfileSnsAddScreen extends StatelessWidget {
             () => Text(
               "${snsType.snsEngtoKor} ${snsType == SNSType.naver ? "블로그 " : ""}"
               "${_controller.snsList.any((element) => element.snsType == snsType) ? "수정하기" : "추가하기"}",
-              style: kmain.copyWith(color: mainblue),
+              style:
+                  MyTextTheme.main(context).copyWith(color: AppColors.mainblue),
             ),
           ),
           const Spacer(),
@@ -87,7 +88,8 @@ class ProfileSnsAddScreen extends StatelessWidget {
                         },
                         child: Text(
                           "삭제",
-                          style: kmain.copyWith(color: maingray),
+                          style: MyTextTheme.main(context)
+                              .copyWith(color: AppColors.maingray),
                         ),
                       )
                     : Container(),
@@ -145,10 +147,10 @@ class ProfileSnsInputScreen extends StatelessWidget {
                 child: Obx(
                   () => Text(
                     "확인",
-                    style: kNavigationTitle.copyWith(
+                    style: MyTextTheme.navigationTitle(context).copyWith(
                         color: _controller.isButtonActive.value
-                            ? mainblue
-                            : maingray),
+                            ? AppColors.mainblue
+                            : AppColors.maingray),
                   ),
                 ))
           ],

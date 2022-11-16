@@ -182,9 +182,9 @@ class ScoutReportController extends GetxController
         );
         tempColors.add(generator.darkMutedColor ??
             generator.darkVibrantColor ??
-            PaletteColor(mainWhite, 2));
+            PaletteColor(AppColors.mainWhite, 2));
       } catch (e) {
-        tempColors.add(PaletteColor(mainblue, 2));
+        tempColors.add(PaletteColor(AppColors.mainblue, 2));
       }
     }
     colors(tempColors);

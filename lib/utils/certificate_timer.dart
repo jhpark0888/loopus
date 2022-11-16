@@ -72,11 +72,11 @@ class CertificateTimer {
         buttonText: "확인");
   }
 
-  Widget timerDisplay() {
+  Widget timerDisplay(BuildContext context) {
     return Obx(
       () => Text(
         '인증까지 남은 시간 ${sec.value ~/ 60}:${NumberFormat('00', "ko").format(sec.value % 60)}',
-        style: kmain,
+        style: MyTextTheme.main(context),
       ),
     );
   }
@@ -85,7 +85,7 @@ class CertificateTimer {
   //   return Obx(
   //     () => Text(
   //       '0${sec.value ~/ 60}:${NumberFormat('00', "ko").format(sec.value % 60)}',
-  //       style: kmainbold.copyWith(color: mainblack),
+  //       style: MyTextTheme.mainbold(context).copyWith(color: AppColors.mainblack),
   //     ),
   //   );
   // }

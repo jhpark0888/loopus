@@ -25,7 +25,7 @@ class SignupTypeScreen extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

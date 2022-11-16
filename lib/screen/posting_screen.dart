@@ -111,10 +111,11 @@ class PostingScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildTextComposer() {
+  Widget _buildTextComposer(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: dividegray, width: 1))),
+          border:
+              Border(top: BorderSide(color: AppColors.dividegray, width: 1))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -130,10 +131,12 @@ class PostingScreen extends StatelessWidget {
                             text: TextSpan(children: [
                           TextSpan(
                               text: '@${controller.tagUser.value.name}',
-                              style: kmainbold.copyWith(color: maingray)),
+                              style: MyTextTheme.mainbold(context)
+                                  .copyWith(color: AppColors.maingray)),
                           TextSpan(
                               text: '님에게 대댓글 남기는중',
-                              style: kmain.copyWith(color: maingray))
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.maingray))
                         ])),
                         SizedBox(
                           width: 8,
@@ -155,7 +158,7 @@ class PostingScreen extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              color: mainWhite,
+              color: AppColors.mainWhite,
             ),
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -169,7 +172,7 @@ class PostingScreen extends StatelessWidget {
                     enableSuggestions: false,
                     cursorWidth: 1.2,
                     style: const TextStyle(decoration: TextDecoration.none),
-                    cursorColor: mainblack,
+                    cursorColor: AppColors.mainblack,
                     controller: controller.commentController,
                     focusNode: controller.commentFocus,
                     autofocus: autofocus,
@@ -190,8 +193,9 @@ class PostingScreen extends StatelessWidget {
                         ),
                       ),
                       hintText: "댓글 입력",
-                      hintStyle: kmain.copyWith(color: maingray),
-                      fillColor: lightcardgray,
+                      hintStyle: MyTextTheme.main(context)
+                          .copyWith(color: AppColors.maingray),
+                      fillColor: AppColors.lightcardgray,
                       filled: true,
                     ),
                   ),
@@ -352,9 +356,9 @@ class PostingScreen extends StatelessWidget {
                                     value1: '포스트 수정하기',
                                     value2: '포스트 삭제하기',
                                     isOne: false,
-                                    buttonColor1: mainWhite,
-                                    buttonColor2: rankred,
-                                    textColor1: mainblack);
+                                    buttonColor1: AppColors.mainWhite,
+                                    buttonColor2: AppColors.rankred,
+                                    textColor1: AppColors.mainblack);
                               }
                             : () {
                                 showBottomdialog(context, func1: () {
@@ -366,8 +370,8 @@ class PostingScreen extends StatelessWidget {
                                       hintText:
                                           '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
                                       rightText: '신고하기',
-                                      rightBoxColor: rankred,
-                                      leftBoxColor: maingray,
+                                      rightBoxColor: AppColors.rankred,
+                                      leftBoxColor: AppColors.maingray,
                                       textEditingController: reportController,
                                       leftFunction: () {
                                         Get.back();
@@ -390,7 +394,7 @@ class PostingScreen extends StatelessWidget {
                                     value1: '포스트 신고하기',
                                     value2: '',
                                     isOne: true,
-                                    buttonColor1: rankred);
+                                    buttonColor1: AppColors.rankred);
                               },
                         child: SvgPicture.asset(
                             'assets/icons/appbar_more_option.svg'),
@@ -470,7 +474,7 @@ class PostingScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    _buildTextComposer()
+                                    _buildTextComposer(context)
                                   ],
                                 ),
             ),

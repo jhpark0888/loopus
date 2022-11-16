@@ -52,14 +52,14 @@ class GroupCareerDetailScreen extends StatelessWidget {
         tag: career.id.toString());
     return Scaffold(
         body: NestedScrollView(
-            controller: scrollController,
+            controller: careerDetailController.scrollController,
             headerSliverBuilder: ((context, innerBoxIsScrolled) {
               return [
                 SliverOverlapAbsorber(
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
-                    backgroundColor: mainWhite,
+                    backgroundColor: AppColors.mainWhite,
                     leading: _leading(
                       leading: true,
                     ),
@@ -86,7 +86,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                         EdgeInsets.only(top: Platform.isAndroid ? 70 : 100),
                     child: Column(
                       children: [
-                        joinCompany(),
+                        joinCompany(context),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 24, horizontal: 30.5),
@@ -107,23 +107,24 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                       text: TextSpan(children: [
                                     TextSpan(
                                         text: '${fieldList[career.fieldId]} 분야',
-                                        style: kmainbold),
-                                    const TextSpan(
-                                        text: ' 커리어', style: kmainbold)
+                                        style: MyTextTheme.mainbold(context)),
+                                    TextSpan(
+                                        text: ' 커리어',
+                                        style: MyTextTheme.mainbold(context))
                                   ])),
                                   const SizedBox(height: 8),
                                   RichText(
                                       text: TextSpan(children: [
                                     TextSpan(
                                         text: '$name님의 전체 커리어 중\n',
-                                        style: kmainheight),
+                                        style: MyTextTheme.mainheight(context)),
                                     TextSpan(
                                         text:
                                             '${(career.postRatio! * 100).toInt()}%',
-                                        style: kmainbold),
-                                    const TextSpan(
+                                        style: MyTextTheme.mainbold(context)),
+                                    TextSpan(
                                         text: '를 차지하는 커리어에요',
-                                        style: kmainheight)
+                                        style: MyTextTheme.mainheight(context))
                                   ])),
                                 ],
                               )
@@ -139,11 +140,11 @@ class GroupCareerDetailScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                const Padding(
+                                Padding(
                                   padding: const EdgeInsets.only(left: 20.0),
                                   child: Text(
                                     '함께하는 친구들',
-                                    style: kmainbold,
+                                    style: MyTextTheme.mainbold(context),
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
@@ -162,15 +163,17 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                                 HomeController
                                                     .to.myProfile.value.userId;
                                             if (ismanager && index == 0) {
-                                              return addPeople();
+                                              return addPeople(context);
                                             }
                                             if (ismanager) {
                                               return joinPeople(
+                                                  context,
                                                   careerDetailController
                                                       .members[index - 1],
                                                   career.managerId!);
                                             } else {
                                               return joinPeople(
+                                                  context,
                                                   careerDetailController
                                                       .members[index],
                                                   career.managerId!);
@@ -201,7 +204,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   bottom: PreferredSize(
                       preferredSize: Size.fromHeight(0),
                       child: adapt(careerDetailController.tabController, name)),
-                  backgroundColor: mainWhite,
+                  backgroundColor: AppColors.mainWhite,
                   titleSpacing: 0,
                   automaticallyImplyLeading: false,
                   pinned: true,
@@ -223,8 +226,8 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ])));
   }
 
-  Widget joinCompany() {
-    return Obx(()=>careerDetailController.career.value.company != null
+  Widget joinCompany(BuildContext context) {
+    return Obx(() => careerDetailController.career.value.company != null
         ? Column(
             children: [
               GestureDetector(
@@ -260,8 +263,10 @@ class GroupCareerDetailScreen extends StatelessWidget {
                               text: career.company != null
                                   ? career.company!.name
                                   : '네이버',
-                              style: kmainbold),
-                          const TextSpan(text: '와 함께한 커리어에요', style: kmain)
+                              style: MyTextTheme.mainbold(context)),
+                          TextSpan(
+                              text: '와 함께한 커리어에요',
+                              style: MyTextTheme.main(context))
                         ]))
                       ]),
                 ),
@@ -274,7 +279,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
         : const SizedBox.shrink());
   }
 
-  Widget joinPeople(User user, int manager) {
+  Widget joinPeople(BuildContext context, User user, int manager) {
     return GestureDetector(
       onTap: () {
         Get.to(
@@ -289,7 +294,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(36),
-                          color: rankred),
+                          color: AppColors.rankred),
                       width: 5,
                       height: 5),
                 ),
@@ -307,7 +312,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                     ),
                     Text(
                       user.name,
-                      style: kmain,
+                      style: MyTextTheme.main(context),
                       maxLines: 1,
                     )
                   ],
@@ -329,7 +334,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   children: [
                     Text(
                       user.name,
-                      style: kmain,
+                      style: MyTextTheme.main(context),
                       maxLines: 1,
                     ),
                   ],
@@ -339,7 +344,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget addPeople() {
+  Widget addPeople(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Get.to(() => SelectCareerGroupMemberScreen(
@@ -351,12 +356,12 @@ class GroupCareerDetailScreen extends StatelessWidget {
           'assets/icons/home_add.svg',
           width: 50,
           height: 50,
-          color: mainblue,
+          color: AppColors.mainblue,
         ),
         const SizedBox(height: 8),
         Text(
           '초대',
-          style: kmain.copyWith(color: mainblue),
+          style: MyTextTheme.main(context).copyWith(color: AppColors.mainblue),
         )
       ]),
     );
@@ -365,7 +370,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
   Widget adapt(TabController tabController, String name) {
     return Container(
         width: Get.width,
-        decoration: const BoxDecoration(color: mainWhite),
+        decoration: const BoxDecoration(color: AppColors.mainWhite),
         child: TabBarWidget(tabController: tabController, tabs: [
           Tab(
               height: 48,
@@ -411,6 +416,7 @@ class _MyAppSpace extends StatelessWidget {
                   child: Opacity(
                     opacity: 1 - opacity2,
                     child: getCollapseTitle(
+                      context,
                       Get.find<CareerDetailController>(
                               tag: career.id.toString())
                           .career
@@ -448,6 +454,7 @@ class _MyAppSpace extends StatelessWidget {
                           children: [
                             const SizedBox(height: 44),
                             getExpendTitle(
+                              context,
                               Get.find<CareerDetailController>(
                                       tag: career.id.toString())
                                   .career
@@ -460,10 +467,11 @@ class _MyAppSpace extends StatelessWidget {
                             career.updateDate != null
                                 ? Text(
                                     '최근 포스트 ${calculateDate(Get.find<CareerDetailController>(tag: career.id.toString()).career.value.updateDate!)}',
-                                    style: kmain.copyWith(color: mainWhite),
+                                    style: MyTextTheme.main(context)
+                                        .copyWith(color: AppColors.mainWhite),
                                   )
                                 : Container(
-                                    color: mainWhite,
+                                    color: AppColors.mainWhite,
                                     height: 2,
                                     width: 6,
                                   ),
@@ -476,14 +484,13 @@ class _MyAppSpace extends StatelessWidget {
                                     'assets/icons/group_career.svg'),
                                 const SizedBox(width: 8),
                                 Text('그룹 커리어',
-                                    style: kmain.copyWith(color: mainWhite)),
+                                    style: MyTextTheme.main(context)
+                                        .copyWith(color: AppColors.mainWhite)),
                                 const Spacer(),
                                 Text(
-                                  '포스트 ${ Get.find<CareerDetailController>(
-                              tag: career.id.toString())
-                          .career
-                        .value.post_count}',
-                                  style: kmain.copyWith(color: mainWhite),
+                                  '포스트 ${Get.find<CareerDetailController>(tag: career.id.toString()).career.value.post_count}',
+                                  style: MyTextTheme.main(context)
+                                      .copyWith(color: AppColors.mainWhite),
                                 )
                               ],
                             )
@@ -501,18 +508,19 @@ class _MyAppSpace extends StatelessWidget {
     );
   }
 
-  Widget getExpendTitle(String text) {
+  Widget getExpendTitle(BuildContext context, String text) {
     return Text(text,
         textAlign: TextAlign.start,
-        style: kNavigationTitle.copyWith(color: mainWhite));
+        style: MyTextTheme.navigationTitle(context)
+            .copyWith(color: AppColors.mainWhite));
   }
 
-  Widget getCollapseTitle(String text) {
+  Widget getCollapseTitle(BuildContext context, String text) {
     return Text(text,
         textAlign: TextAlign.center,
         softWrap: false,
         overflow: TextOverflow.ellipsis,
-        style: kmainbold);
+        style: MyTextTheme.mainbold(context));
   }
 
   Widget careerType(bool isPublic) {
@@ -635,14 +643,15 @@ class _leading extends StatelessWidget {
           Get.back();
         } else {
           if (career!.managerId == HomeController.to.myProfile.value.userId) {
-            showBottomdialog(context, bareerColor: popupGray, func2: () {
+            showBottomdialog(context, bareerColor: AppColors.popupGray,
+                func2: () {
               Get.back();
               showButtonDialog(
                 title: '이 커리어는 완전히 삭제돼요',
                 startContent: '이 커리어에 작성된\n',
                 highlightContent: '모든 포스트와 데이터는 완전 삭제되며,\n복구가 불가능해요.\n',
-                highlightColor: rankred,
-                rightColor: mainWhite,
+                highlightColor: AppColors.rankred,
+                rightColor: AppColors.mainWhite,
                 endContent: '정말 삭제하시겠어요?',
                 leftFunction: () {
                   Get.back();
@@ -674,23 +683,24 @@ class _leading extends StatelessWidget {
             },
                 value1: '커리어 수정하기',
                 value2: '커리어 삭제하기',
-                buttonColor1: mainWhite,
-                buttonColor2: rankred,
-                textColor1: mainblack,
+                buttonColor1: AppColors.mainWhite,
+                buttonColor2: AppColors.rankred,
+                textColor1: AppColors.mainblack,
                 isOne: false);
           } else if (career!.members
               .where((element) =>
                   element.userId == HomeController.to.myProfile.value.userId)
               .isNotEmpty) {
-            showBottomdialog(context, bareerColor: popupGray, func2: () {
+            showBottomdialog(context, bareerColor: AppColors.popupGray,
+                func2: () {
               Get.back();
               showButtonDialog(
                   title: '그룹 커리어에서 나가게 돼요',
                   startContent:
                       '이 커리어에 ${HomeController.to.myProfile.value.name}님은\n',
                   highlightContent: '더이상 글을 남길 수 없게 돼요.\n',
-                  highlightColor: rankred,
-                  rightColor: mainWhite,
+                  highlightColor: AppColors.rankred,
+                  rightColor: AppColors.mainWhite,
                   endContent:
                       '${HomeController.to.myProfile.value.name}님이 작성한 글은\n 그룹 커리어 내 남아 있을 수 있어요.\n정말 나가시겠어요?',
                   leftFunction: () {
@@ -718,10 +728,10 @@ class _leading extends StatelessWidget {
                 value1: '커리어 신고하기',
                 value2: '커리어 나가기',
                 isOne: false,
-                buttonColor1: mainWhite,
-                buttonColor2: rankred,
-                textColor1: mainblack,
-                textColor2: mainWhite);
+                buttonColor1: AppColors.mainWhite,
+                buttonColor2: AppColors.rankred,
+                textColor1: AppColors.mainblack,
+                textColor2: AppColors.mainWhite);
           } else {}
         }
       },
@@ -736,7 +746,7 @@ class _leading extends StatelessWidget {
           final opacity1 = (1.0 - Interval(0.0, 0.75).transform(t)).obs;
           return Obx(() => SvgPicture.asset(
               'assets/icons/${leading ? 'sliver_appbar_back' : 'sliver_appbar_more_option'}.svg',
-              color: opacity1 < 1 ? mainblack : mainWhite));
+              color: opacity1 < 1 ? AppColors.mainblack : AppColors.mainWhite));
         },
       ),
     );

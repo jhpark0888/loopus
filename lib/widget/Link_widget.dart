@@ -222,7 +222,8 @@ class LinkWidget extends StatelessWidget {
                                 children: [
                                   Text(
                                     linkController.info.value.domain,
-                                    style: kmain.copyWith(color: maingray),
+                                    style: MyTextTheme.main(context)
+                                        .copyWith(color: AppColors.maingray),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
@@ -231,7 +232,7 @@ class LinkWidget extends StatelessWidget {
                                   ),
                                   Text(
                                     linkController.info.value.title,
-                                    style: kmainbold,
+                                    style: MyTextTheme.mainbold(context),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
@@ -338,14 +339,15 @@ class LinkSmallWidget extends StatelessWidget {
                             children: [
                               Text(
                                 linkController.info.value.domain,
-                                style: kmain.copyWith(color: maingray),
+                                style: MyTextTheme.main(context)
+                                    .copyWith(color: AppColors.maingray),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 linkController.info.value.title,
-                                style: kmainbold,
+                                style: MyTextTheme.mainbold(context),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -405,7 +407,7 @@ class ScrapCard extends StatelessWidget {
         height: height ?? 270,
         width: width ?? Get.width,
         decoration: BoxDecoration(
-          color: cardGray,
+          color: AppColors.cardGray,
           image: isimgae
               ? DecorationImage(
                   image: NetworkImage(domain!),

@@ -1,27 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
-import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/search_controller.dart';
-import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/banpeople_screen.dart';
 import 'package:loopus/screen/certification_screen.dart';
-import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
-import 'package:loopus/screen/start_screen.dart';
-import 'package:loopus/screen/withdrawal_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -42,13 +31,13 @@ class UserInfoScreen extends StatelessWidget {
             const SizedBox(height: 16),
             CustomListTile(
               title: "이름",
-              titleColor: maingray,
+              titleColor: AppColors.maingray,
               onTap: () => userInfoModify(context),
               trailing: HomeController.to.myProfile.value.name,
             ),
             CustomListTile(
               title: "대학",
-              titleColor: maingray,
+              titleColor: AppColors.maingray,
               onTap: () => userInfoModify(context),
               trailing: HomeController.to.myProfile.value is Person
                   ? (HomeController.to.myProfile.value as Person).univName
@@ -56,7 +45,7 @@ class UserInfoScreen extends StatelessWidget {
             ),
             CustomListTile(
               title: "학과",
-              titleColor: maingray,
+              titleColor: AppColors.maingray,
               onTap: () => userInfoModify(context),
               trailing: HomeController.to.myProfile.value is Person
                   ? (HomeController.to.myProfile.value as Person).department
@@ -64,7 +53,7 @@ class UserInfoScreen extends StatelessWidget {
             ),
             CustomListTile(
               title: "입학 연도",
-              titleColor: maingray,
+              titleColor: AppColors.maingray,
               onTap: () => userInfoModify(context),
               trailing: HomeController.to.myProfile.value is Person
                   ? (HomeController.to.myProfile.value as Person).admissionYear
@@ -94,14 +83,14 @@ class UserInfoScreen extends StatelessWidget {
             ),
             CustomListTile(
               title: "회원탈퇴",
-              titleColor: rankred,
+              titleColor: AppColors.rankred,
               onTap: () {
                 showButtonDialog2(
                     title: '정말 탈퇴하시겠어요?',
                     startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n',
                     highlightContent: " 이후 복구가 불가능",
                     endContent: "해요 \n 다시 한 번 신중하게 생각 후 \n 탈퇴를 진행해주세요",
-                    highlightColor: rankred,
+                    highlightColor: AppColors.rankred,
                     leftFunction: () => Get.back(),
                     rightFunction: () {
                       Get.to(() => CertificationScreen(
@@ -149,8 +138,8 @@ class UserInfoScreen extends StatelessWidget {
         func2: () => Get.back(),
         value1: '계정 인증을 통해 개인 정보 수정하기',
         value2: '취소',
-        buttonColor1: mainblue,
-        buttonColor2: maingray,
+        buttonColor1: AppColors.mainblue,
+        buttonColor2: AppColors.maingray,
         // title: "개인 정보 수정을 위해선 재인증 절차가 필요합니다\n",
         // accentTitle: "학적이 변경된 경우, 변경된 학적 정보를 입력해주세요",
         isOne: false);

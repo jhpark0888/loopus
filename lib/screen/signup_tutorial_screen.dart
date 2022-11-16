@@ -38,10 +38,10 @@ class TutorialScreen extends StatelessWidget {
                   child: Center(
                     child: Obx(
                       () => Text("시작하기",
-                          style: kNavigationTitle.copyWith(
+                          style: MyTextTheme.navigationTitle(context).copyWith(
                             color: currentIndex.value == tutorialCount
-                                ? mainblue
-                                : maingray,
+                                ? AppColors.mainblue
+                                : AppColors.maingray,
                           )),
                     ),
                   ),
@@ -77,8 +77,8 @@ class TutorialScreen extends StatelessWidget {
                 controller: pageController,
                 count: tutorialCount,
                 effect: ScrollingDotsEffect(
-                  dotColor: maingray,
-                  activeDotColor: mainblue,
+                  dotColor: AppColors.maingray,
+                  activeDotColor: AppColors.mainblue,
                   spacing: 8,
                   dotWidth: 7,
                   dotHeight: 7,

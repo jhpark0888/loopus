@@ -58,14 +58,13 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                                 tag: careerId.toString())
                             .members
                             .refresh();
-                        if(Get.isRegistered<ProfileController>()){
-                        ProfileController.to.myProjectList
-                                      .where(
-                                          (p0) =>
-                                              p0.id ==
-                                              careerId)
-                                      .first.members.addAll(controller.selectList);
-                        ProfileController.to.myProjectList.refresh();
+                        if (Get.isRegistered<ProfileController>()) {
+                          ProfileController.to.myProjectList
+                              .where((p0) => p0.id == careerId)
+                              .first
+                              .members
+                              .addAll(controller.selectList);
+                          ProfileController.to.myProjectList.refresh();
                         }
                         getbacks(2);
                         showCustomDialog('추가되었습니다.', 1200);
@@ -79,10 +78,10 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                 icon: Obx(
                   () => Text(
                     '확인',
-                    style: kNavigationTitle.copyWith(
+                    style: MyTextTheme.navigationTitle(context).copyWith(
                         color: controller.selectList.isNotEmpty
-                            ? mainblue
-                            : maingray),
+                            ? AppColors.mainblue
+                            : AppColors.maingray),
                   ),
                 ))
           ],
@@ -125,13 +124,14 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                 },
                 itemBuilder: (context, index) {
                   return KeepAliveWidget(
-                      child: followingTile(controller.searchList[index]));
+                      child:
+                          followingTile(context, controller.searchList[index]));
                 },
                 itemCount: controller.searchList.length,
               )));
   }
 
-  Widget followingTile(Person user) {
+  Widget followingTile(BuildContext context, Person user) {
     RxBool activeStatus = false.obs;
     return GestureDetector(
       onTap: () {
@@ -159,12 +159,12 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                 children: [
                   Text(
                     user.name,
-                    style: kmainbold,
+                    style: MyTextTheme.mainbold(context),
                   ),
                   const SizedBox(height: 7),
                   Text(
                     "${(user as Person).univName} · ${user.department}",
-                    style: kmain,
+                    style: MyTextTheme.main(context),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ]),

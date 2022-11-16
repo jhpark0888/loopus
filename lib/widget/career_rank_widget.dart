@@ -32,7 +32,7 @@ class CareerRankWidget extends StatelessWidget {
       // width: 302,
       // height: 340,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-      decoration: BoxDecoration(color: mainWhite),
+      decoration: BoxDecoration(color: AppColors.mainWhite),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -41,7 +41,7 @@ class CareerRankWidget extends StatelessWidget {
           //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
           //   mainAxisSize: MainAxisSize.max,
           //   children: [
-          //     Text(isUniversity ? '교내' : '전국', style: kmainbold),
+          //     Text(isUniversity ? '교내' : '전국', style: MyTextTheme.mainbold(context)),
           //     GestureDetector(
           //         onTap: () {
           //           Get.to(() => RealTimeRankScreen(
@@ -49,7 +49,7 @@ class CareerRankWidget extends StatelessWidget {
           //                 isUniversity: isUniversity,
           //               ));
           //         },
-          //         child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
+          //         child: Text('전체보기', style: MyTextTheme.main(context).copyWith(color: AppColors.mainblue)))
           //   ],
           // ),
           // const SizedBox(height: 24),
@@ -66,11 +66,11 @@ class CareerRankWidget extends StatelessWidget {
                     ),
                 itemCount: min(3, ranker.length))
           else
-            const Expanded(
+            Expanded(
               child: Center(
                 child: Text(
                   "실시간 순위 변동이 없습니다",
-                  style: kmain,
+                  style: MyTextTheme.main(context),
                 ),
               ),
             )
@@ -104,10 +104,10 @@ class PersonRankWidget extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Text(
               isUniversity ? user.schoolRank.toString() : user.rank.toString(),
-              style: kmainbold,
+              style: MyTextTheme.mainbold(context),
             ),
             const SizedBox(height: 8),
-            rate(
+            rate(context,
                 rank: isUniversity ? user.schoolRank : user.rank,
                 lastRank: isUniversity ? user.schoolLastRank : user.lastRank)
           ]),
@@ -127,7 +127,7 @@ class PersonRankWidget extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 user.name,
-                style: kmain,
+                style: MyTextTheme.main(context),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               )
@@ -141,13 +141,13 @@ class PersonRankWidget extends StatelessWidget {
             children: [
               Text(
                 user.univName != "" ? user.univName : '대학교',
-                style: kmain,
+                style: MyTextTheme.main(context),
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 2),
               Text(
                 user.department,
-                style: kmain,
+                style: MyTextTheme.main(context),
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 2),
@@ -155,9 +155,12 @@ class PersonRankWidget extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(children: [
                   TextSpan(
-                      text: '최근 포스트 ', style: kmain.copyWith(color: maingray)),
+                      text: '최근 포스트 ',
+                      style: MyTextTheme.main(context)
+                          .copyWith(color: AppColors.maingray)),
                   TextSpan(
-                      text: '${user.resentPostCount.toString()}개', style: kmain)
+                      text: '${user.resentPostCount.toString()}개',
+                      style: MyTextTheme.main(context))
                 ]),
                 textAlign: TextAlign.start,
               )
@@ -171,7 +174,8 @@ class PersonRankWidget extends StatelessWidget {
     );
   }
 
-  Widget rate({required int rank, required int lastRank}) {
+  Widget rate(BuildContext context,
+      {required int rank, required int lastRank}) {
     int variance = rank - lastRank;
     if (variance != 0) {
       return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -179,17 +183,17 @@ class PersonRankWidget extends StatelessWidget {
         const SizedBox(width: 2),
         // 양수: 파랑, 음수: 빨강
         Text(lastRank != 0 ? '${variance.abs()}' : "NEW",
-            style: kcaption.copyWith(
+            style: MyTextTheme.caption(context).copyWith(
                 color: lastRank == 0
-                    ? rankred
+                    ? AppColors.rankred
                     : variance > 0
-                        ? rankblue
-                        : rankred)),
+                        ? AppColors.rankblue
+                        : AppColors.rankred)),
       ]);
     } else {
       return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
-          color: mainblack,
+          color: AppColors.mainblack,
           height: 2,
           width: 6,
         )

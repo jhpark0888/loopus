@@ -1,7 +1,3 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,27 +5,16 @@ import 'package:get/get.dart';
 import 'package:loopus/controller/career_board_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/model/company_model.dart';
-import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/screen/myProfile_screen.dart';
-import 'package:loopus/screen/posting_add_screen.dart';
-import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/realtime_rank_screen.dart';
-import 'package:loopus/screen/upload_screen.dart';
-import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 import 'package:loopus/widget/careerborad_post_widget.dart';
-import 'package:loopus/trash_bin/company_image_widget.dart';
-import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/hot_user_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
-import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -47,7 +32,7 @@ class CareerBoardScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: mainWhite,
+          statusBarColor: AppColors.mainWhite,
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
         ),
@@ -58,9 +43,9 @@ class CareerBoardScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 24, 0, 14),
           child: Row(
             children: [
-              const Text(
+              Text(
                 '커리어 보드',
-                style: ktitle,
+                style: MyTextTheme.title(context),
               ),
               const SizedBox(width: 8),
               SizedBox(
@@ -111,10 +96,10 @@ class CareerBoardScreen extends StatelessWidget {
         //   controller: _controller.tabController,
         //   indicatorColor: Colors.transparent,
         //   labelPadding: EdgeInsets.zero,
-        //   labelColor: mainblack,
-        //   labelStyle: ktitle,
+        //   labelColor: AppColors.mainblack,
+        //   labelStyle: MyTextTheme.title(context),
         //   isScrollable: true,
-        //   unselectedLabelColor: dividegray,
+        //   unselectedLabelColor: AppColors.dividegray,
         //   tabs: List.from(_controller.careerField.values).map((field) {
         //     if (field == List.from(_controller.careerField.values).last) {
         //       return _tabWidget(field, right: false);
@@ -151,7 +136,7 @@ class CareerBoardScreen extends StatelessWidget {
   //             width: 28,
   //             indent: 14,
   //             endIndent: 14,
-  //             color: dividegray,
+  //             color: AppColors.dividegray,
   //           )
   //       ],
   //     ),
@@ -195,9 +180,9 @@ class CareerBoardScreen extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        const Text(
+                                        Text(
                                           '실시간 커리어 순위',
-                                          style: kmainbold,
+                                          style: MyTextTheme.mainbold(context),
                                           textAlign: TextAlign.start,
                                         ),
                                         GestureDetector(
@@ -208,8 +193,10 @@ class CareerBoardScreen extends StatelessWidget {
                                                   ));
                                             },
                                             child: Text('전체보기',
-                                                style: kmain.copyWith(
-                                                    color: mainblue))),
+                                                style: MyTextTheme.main(context)
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .mainblue))),
                                       ],
                                     ),
                                   ),
@@ -227,7 +214,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   //   padding: const EdgeInsets.only(left: 16),
                                   //   child: Text(
                                   //     '${currentField.value} 분야 최근 인기 기업',
-                                  //     style: kmainbold,
+                                  //     style: MyTextTheme.mainbold(context),
                                   //   ),
                                   // ),
                                   // const SizedBox(height: 14),
@@ -239,7 +226,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   //       ? const Center(
                                   //           child: Text(
                                   //           "최근 인기 기업이 없습니다",
-                                  //           style: kmain,
+                                  //           style: MyTextTheme.main(context),
                                   //         ))
                                   //       : ScrollNoneffectWidget(
                                   //           child: ListView.separated(
@@ -266,10 +253,10 @@ class CareerBoardScreen extends StatelessWidget {
                                   //                   .length),
                                   //         ),
                                   // ),
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 16),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16),
                                     child: Text('성장 중인 친구들을 만나보세요',
-                                        style: kmainbold),
+                                        style: MyTextTheme.mainbold(context)),
                                   ),
                                   const SizedBox(
                                     height: 14,
@@ -303,9 +290,10 @@ class CareerBoardScreen extends StatelessWidget {
                                   const SizedBox(
                                     height: 32,
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 16),
-                                    child: Text('인기 포스트', style: kmainbold),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16),
+                                    child: Text('인기 포스트',
+                                        style: MyTextTheme.mainbold(context)),
                                   ),
                                   const SizedBox(height: 10),
                                   Obx(
@@ -314,10 +302,10 @@ class CareerBoardScreen extends StatelessWidget {
                                       child: _controller
                                               .popPostMap[currentField.key]!
                                               .isEmpty
-                                          ? const Center(
+                                          ? Center(
                                               child: Text(
                                               "실시간 포스트가 없습니다",
-                                              style: kmain,
+                                              style: MyTextTheme.main(context),
                                             ))
                                           : ScrollNoneffectWidget(
                                               child: ListView.separated(
@@ -351,12 +339,13 @@ class CareerBoardScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 32),
-                                  const Padding(
+                                  Padding(
                                       padding: const EdgeInsets.only(
                                           left: 16.0, right: 16),
                                       child: Text('인기있는 태그',
                                           // ${currentField.value}분야
-                                          style: kmainbold)),
+                                          style:
+                                              MyTextTheme.mainbold(context))),
                                   const SizedBox(height: 16),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -367,13 +356,15 @@ class CareerBoardScreen extends StatelessWidget {
                                       () => _controller
                                               .topTagMap[currentField.key]!
                                               .isEmpty
-                                          ? const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 20),
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 20),
                                               child: Center(
                                                   child: Text(
                                                 "최근 해시태그 분석이 없습니다",
-                                                style: kmain,
+                                                style:
+                                                    MyTextTheme.main(context),
                                               )),
                                             )
                                           : ListView.separated(
@@ -384,6 +375,7 @@ class CareerBoardScreen extends StatelessWidget {
                                                   .length,
                                               itemBuilder: (context, index) {
                                                 return tagAnalize(
+                                                    context,
                                                     _controller.topTagMap[
                                                         currentField
                                                             .key]![index],
@@ -407,11 +399,12 @@ class CareerBoardScreen extends StatelessWidget {
   // Widget topPost(Post post) {
 
   // }
-  Widget _postAnalysis(MapEntry<String, String> currentField) {
+  Widget _postAnalysis(
+      BuildContext context, MapEntry<String, String> currentField) {
     return Column(children: [
-      const Padding(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        child: Text('포스트 분석', style: kmainbold),
+      Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Text('포스트 분석', style: MyTextTheme.mainbold(context)),
       ),
       const SizedBox(height: 12),
       Padding(
@@ -422,9 +415,11 @@ class CareerBoardScreen extends StatelessWidget {
             Container(
                 width: 20,
                 height: 1,
-                decoration: BoxDecoration(color: myPostColor)),
+                decoration: BoxDecoration(color: AppColors.myPostColor)),
             const SizedBox(width: 4),
-            Text('내 포스트 수', style: ktempFont.copyWith(color: myPostColor)),
+            Text('내 포스트 수',
+                style: MyTextTheme.tempfont(context)
+                    .copyWith(color: AppColors.myPostColor)),
           ],
         ),
       ),
@@ -465,7 +460,7 @@ class CareerBoardScreen extends StatelessWidget {
                                       : _controller.postUsageTrendNum[e.key],
                                   width: 20,
                                   decoration: const BoxDecoration(
-                                      color: mainblue,
+                                      color: AppColors.mainblue,
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(16),
                                           topRight: Radius.circular(16))),
@@ -473,7 +468,7 @@ class CareerBoardScreen extends StatelessWidget {
                             const SizedBox(height: 12),
                             Text(
                               '${e.key}월',
-                              style: ktempFont,
+                              style: MyTextTheme.tempfont(context),
                             )
                           ],
                         ))
@@ -484,18 +479,18 @@ class CareerBoardScreen extends StatelessWidget {
     ]);
   }
 
-  Widget tagAnalize(Tag tag, int index) {
+  Widget tagAnalize(BuildContext context, Tag tag, int index) {
     return Row(children: [
       Text(
         index.toString(),
-        style: kmainbold,
+        style: MyTextTheme.mainbold(context),
       ),
       const SizedBox(width: 14),
       Tagwidget(tag: tag),
       const Spacer(),
       Text(
         '${tag.count.toString()}회',
-        style: kmain,
+        style: MyTextTheme.main(context),
       )
     ]);
   }

@@ -72,7 +72,7 @@ class CommentWidget extends StatelessWidget {
                         onTap: tapProfile,
                         child: Text(
                           comment.user.name,
-                          style: kmainbold,
+                          style: MyTextTheme.mainbold(context),
                         ),
                       ),
                       const Spacer(),
@@ -112,8 +112,8 @@ class CommentWidget extends StatelessWidget {
                                       value1: '댓글 삭제하기',
                                       value2: '',
                                       isOne: true,
-                                      buttonColor1: mainWhite,
-                                      textColor1: mainblack);
+                                      buttonColor1: AppColors.mainWhite,
+                                      textColor1: AppColors.mainblack);
                                 }
                               : () {
                                   showBottomdialog(context, func1: () {
@@ -125,7 +125,7 @@ class CommentWidget extends StatelessWidget {
                                         hintText:
                                             '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
                                         rightText: '신고하기',
-                                        rightBoxColor: rankred,
+                                        rightBoxColor: AppColors.rankred,
                                         textEditingController: reportController,
                                         leftFunction: () {
                                           Get.back();
@@ -148,12 +148,12 @@ class CommentWidget extends StatelessWidget {
                                       value1: '댓글 신고하기',
                                       value2: '',
                                       isOne: true,
-                                      buttonColor1: rankred);
+                                      buttonColor1: AppColors.rankred);
                                 },
                           // behavior: HitTestBehavior.translucent,
                           icon: SvgPicture.asset(
                             'assets/icons/comment_option_icon.svg',
-                            color: maingray,
+                            color: AppColors.maingray,
                           ),
                         ),
                       ),
@@ -162,7 +162,7 @@ class CommentWidget extends StatelessWidget {
                   // const SizedBox(height: 4),
                   Text(
                     comment.content,
-                    style: kmainheight,
+                    style: MyTextTheme.mainheight(context),
                   ),
                   const SizedBox(height: 8),
                   Obx(
@@ -170,7 +170,8 @@ class CommentWidget extends StatelessWidget {
                       children: [
                         Text(
                           '${commentCalculateDate(comment.date)} 전',
-                          style: kmain.copyWith(color: maingray),
+                          style: MyTextTheme.main(context)
+                              .copyWith(color: AppColors.maingray),
                         ),
                         const Spacer(),
                         GestureDetector(
@@ -183,23 +184,23 @@ class CommentWidget extends StatelessWidget {
                           },
                           child: Text(
                             '좋아요 ${comment.likecount.value}개',
-                            style: kmain.copyWith(
-                              color: maingray,
+                            style: MyTextTheme.main(context).copyWith(
+                              color: AppColors.maingray,
                             ),
                           ),
                           //  comment.likecount.value > 0
                           //     ? Text(
                           //         '좋아요 ${comment.likecount.value}개',
-                          //         style: kmain.copyWith(
+                          //         style: MyTextTheme.main(context).copyWith(
                           //           fontSize: 12,
-                          //           color: maingray,
+                          //           color: AppColors.maingray,
                           //         ),
                           //       )
                           //     : Text(
                           //         '좋아요',
-                          //         style: kmain.copyWith(
+                          //         style: MyTextTheme.main(context).copyWith(
                           //           fontSize: 12,
-                          //           color: maingray,
+                          //           color: AppColors.maingray,
                           //         ),
                           //       )
                         ),
@@ -215,7 +216,7 @@ class CommentWidget extends StatelessWidget {
                                     "assets/icons/unlike.svg",
                                     width: 16,
                                     height: 16,
-                                    color: maingray,
+                                    color: AppColors.maingray,
                                   )
                                 : SvgPicture.asset("assets/icons/like.svg",
                                     width: 16, height: 16),
@@ -344,18 +345,18 @@ class PostCommentWidget extends StatelessWidget {
                             Expanded(
                               child: Divider(
                                 height: 0.5,
-                                color: maingray,
+                                color: AppColors.maingray,
                               ),
                             ),
                             const SizedBox(width: 16),
                             Text(
                                 "${comment.replycount.value - comment.replyList.length}개 댓글 더보기",
-                                style: kmainbold),
+                                style: MyTextTheme.mainbold(context)),
                             const SizedBox(width: 16),
                             Expanded(
                               child: Divider(
                                 height: 0.5,
-                                color: maingray,
+                                color: AppColors.maingray,
                               ),
                             )
                           ],

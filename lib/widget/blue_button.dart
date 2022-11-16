@@ -33,17 +33,17 @@ class BlueTextButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: mainblue,
+          color: AppColors.mainblue,
           borderRadius: BorderRadius.circular(4),
         ),
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
         child: Obx(
           () => Text(
             text,
-            style: ktempFont.copyWith(
+            style: MyTextTheme.tempfont(context).copyWith(
               color: _hoverController.isHover.value
-                  ? mainWhite.withOpacity(0.6)
-                  : mainWhite,
+                  ? AppColors.mainWhite.withOpacity(0.6)
+                  : AppColors.mainWhite,
             ),
           ),
         ),

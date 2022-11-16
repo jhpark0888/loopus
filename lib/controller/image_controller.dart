@@ -197,7 +197,7 @@ class MultiImageController extends ImageController {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16), topRight: Radius.circular(16))),
         builder: (_) => Container(
-              color: mainWhite,
+              color: AppColors.mainWhite,
               child: Expanded(
                 child: SingleChildScrollView(
                   child: Column(

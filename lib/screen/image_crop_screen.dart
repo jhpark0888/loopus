@@ -30,9 +30,9 @@ class ImageCropScreen extends StatelessWidget {
                 onTap: () {
                   Get.back();
                 },
-                child: const Text(
+                child: Text(
                   "취소",
-                  style: kNavigationTitle,
+                  style: MyTextTheme.navigationTitle(context),
                 )),
           ),
           actions: [
@@ -42,7 +42,8 @@ class ImageCropScreen extends StatelessWidget {
                   onTap: () => _cropImage(context),
                   child: Text(
                     "완료",
-                    style: kNavigationTitle.copyWith(color: mainblue),
+                    style: MyTextTheme.navigationTitle(context)
+                        .copyWith(color: AppColors.mainblue),
                   )),
             ),
           ],
@@ -66,7 +67,7 @@ class ImageCropScreen extends StatelessWidget {
             return builder(snapshot.data!);
           } else {
             return Container(
-              color: mainWhite,
+              color: AppColors.mainWhite,
             );
           }
         });
@@ -125,7 +126,7 @@ class ImageCropScreen extends StatelessWidget {
 //                 },
 //                 child: const Text(
 //                   "취소",
-//                   style: kNavigationTitle,
+//                   style: MyTextTheme.navigationTitle(context),
 //                 )),
 //           ),
 //           actions: [
@@ -135,7 +136,7 @@ class ImageCropScreen extends StatelessWidget {
 //                   onTap: () => _cropImage(context),
 //                   child: Text(
 //                     "완료",
-//                     style: kNavigationTitle.copyWith(color: mainblue),
+//                     style: MyTextTheme.navigationTitle(context).copyWith(color: AppColors.mainblue),
 //                   )),
 //             ),
 //           ],
@@ -152,7 +153,7 @@ class ImageCropScreen extends StatelessWidget {
 //                 );
 //               } else {
 //                 return Container(
-//                   color: dividegray,
+//                   color: AppColors.dividegray,
 //                 );
 //               }
 //             }));

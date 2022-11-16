@@ -91,7 +91,7 @@
 //     return Container(
 //       key: controller.textFieldBoxKey.value,
 //       decoration: BoxDecoration(
-//         color: mainWhite,
+//         color: AppColors.mainWhite,
 //         border: Border(
 //           top: BorderSide(
 //             width: 1,
@@ -108,7 +108,7 @@
 //         enableSuggestions: false,
 //         cursorWidth: 1.2,
 //         style: const TextStyle(decoration: TextDecoration.none),
-//         cursorColor: mainblack.withOpacity(0.6),
+//         cursorColor: AppColors.mainblack.withOpacity(0.6),
 //         controller: controller.messagetextController,
 //         onFieldSubmitted: _handleSubmitted,
 //         minLines: 1,
@@ -132,8 +132,8 @@
 //                         '보내기',
 //                         style: kButtonStyle.copyWith(
 //                             color: controller.isSendButtonon.value
-//                                 ? mainblue
-//                                 : mainblack.withOpacity(0.38)),
+//                                 ? AppColors.mainblue
+//                                 : AppColors.mainblack.withOpacity(0.38)),
 //                       ),
 //                     ),
 //                   ),
@@ -153,9 +153,9 @@
 //           hintText: "메시지를 입력해주세요...",
 //           hintStyle: TextStyle(
 //             fontSize: 14,
-//             color: mainblack.withOpacity(0.38),
+//             color: AppColors.mainblack.withOpacity(0.38),
 //           ),
-//           fillColor: lightcardgray,
+//           fillColor: AppColors.lightcardgray,
 //           filled: true,
 //         ),
 //       ),
@@ -198,7 +198,7 @@
 //                           '메세지 목록을 받아오는 중이에요...',
 //                           style: TextStyle(
 //                             fontSize: 10,
-//                             color: mainblue,
+//                             color: AppColors.mainblue,
 //                             fontWeight: FontWeight.w500,
 //                           ),
 //                         )
@@ -221,7 +221,7 @@
 //                             spacing: 0.0,
 //                             height: 60,
 //                             completeDuration: Duration(milliseconds: 600),
-//                             textStyle: TextStyle(color: mainblack),
+//                             textStyle: TextStyle(color: AppColors.mainblack),
 //                             refreshingText: '',
 //                             releaseText: "",
 //                             completeText: "",
@@ -246,7 +246,7 @@
 //                               children: [
 //                                 const Icon(
 //                                   Icons.check_rounded,
-//                                   color: mainblue,
+//                                   color: AppColors.mainblue,
 //                                 ),
 //                               ],
 //                             ),

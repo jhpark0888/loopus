@@ -1,29 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:in_app_review/in_app_review.dart';
-import 'package:intl/intl.dart';
-
-import 'package:loopus/controller/app_controller.dart';
-import 'package:loopus/controller/error_controller.dart';
-import 'package:loopus/controller/ga_controller.dart';
-import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/other_profile_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/project_detail_controller.dart';
-import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
-import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/trash_bin/project_screen.dart';
 
 import '../constant.dart';
 
@@ -109,29 +92,29 @@ Future<HTTPResponse> updateCareer(int projectId, ProjectUpdateType updateType,
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    
-      final uri = Uri.parse(
-          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 && companyName != null? "&company_id=$companyId" : ""}");
-      var request = http.MultipartRequest('PUT', uri);
-      request.headers.addAll({
-        "Authorization": "Token $token",
-        'Content-Type': 'multipart/form-data'
-      });
-      if (updateType == ProjectUpdateType.looper) {
-        for (var member in selectedMember!) {
-          var multipartFile = await http.MultipartFile.fromString(
-              'looper', member.userId.toString());
-          request.files.add(multipartFile);
-        }
-      } else if (updateType == ProjectUpdateType.project_name) {
-        request.fields['project_name'] = title!;
-        if (companyId != 0 && companyName != null) {
-          print('s');
-          request.fields['company_name'] = companyName;
-        }
+
+    final uri = Uri.parse(
+        "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 && companyName != null ? "&company_id=$companyId" : ""}");
+    var request = http.MultipartRequest('PUT', uri);
+    request.headers.addAll({
+      "Authorization": "Token $token",
+      'Content-Type': 'multipart/form-data'
+    });
+    if (updateType == ProjectUpdateType.looper) {
+      for (var member in selectedMember!) {
+        var multipartFile = await http.MultipartFile.fromString(
+            'looper', member.userId.toString());
+        request.files.add(multipartFile);
       }
-      print(request.files);
-      return HTTPResponse.httpErrorHandling(() async {
+    } else if (updateType == ProjectUpdateType.project_name) {
+      request.fields['project_name'] = title!;
+      if (companyId != 0 && companyName != null) {
+        print('s');
+        request.fields['company_name'] = companyName;
+      }
+    }
+    print(request.files);
+    return HTTPResponse.httpErrorHandling(() async {
       http.StreamedResponse response = await request
           .send()
           .timeout(Duration(milliseconds: HTTPResponse.timeout));

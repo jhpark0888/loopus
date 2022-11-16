@@ -11,7 +11,8 @@ class EmptyPostWidget extends StatelessWidget {
       const SizedBox(width: 7),
       Text(
         '지금 바로 새로운 포스트를 작성해보세요',
-        style: kmainbold.copyWith(color: mainblue),
+        style:
+            MyTextTheme.mainbold(context).copyWith(color: AppColors.mainblue),
       )
     ]);
   }

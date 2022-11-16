@@ -56,8 +56,8 @@ class SearchTagWidget extends StatelessWidget {
                       // //     width: 24,
                       // //     height: 24,
                       // //     color: _hoverController.isHover.value
-                      // //         ? mainblack.withOpacity(0.6)
-                      // //         : mainblack,
+                      // //         ? AppColors.mainblack.withOpacity(0.6)
+                      // //         : AppColors.mainblack,
                       // //   ),
                       // // ),
                       // const SizedBox(
@@ -72,8 +72,8 @@ class SearchTagWidget extends StatelessWidget {
                       //           tag,
                       //           style: kButtonStyle.copyWith(
                       //             color: _hoverController.isHover.value
-                      //                 ? mainblack.withOpacity(0.6)
-                      //                 : mainblack,
+                      //                 ? AppColors.mainblack.withOpacity(0.6)
+                      //                 : AppColors.mainblack,
                       //           ),
                       //         ),
                       //       ),
@@ -86,8 +86,8 @@ class SearchTagWidget extends StatelessWidget {
                       //                 '관심도 ${numberFormat.format(count)}',
                       //                 style: kBody1Style.copyWith(
                       //                   color: _hoverController.isHover.value
-                      //                       ? mainblack.withOpacity(0.6)
-                      //                       : mainblack,
+                      //                       ? AppColors.mainblack.withOpacity(0.6)
+                      //                       : AppColors.mainblack,
                       //                 ),
                       //               ),
                       //             )
@@ -96,8 +96,8 @@ class SearchTagWidget extends StatelessWidget {
                       //                 '관심도 0',
                       //                 style: kBody1Style.copyWith(
                       //                   color: _hoverController.isHover.value
-                      //                       ? mainblack.withOpacity(0.6)
-                      //                       : mainblack,
+                      //                       ? AppColors.mainblack.withOpacity(0.6)
+                      //                       : AppColors.mainblack,
                       //                 ),
                       //               ),
                       //             ),
@@ -108,15 +108,16 @@ class SearchTagWidget extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                                color: maingray.withOpacity(0.5), width: 0.3)),
+                                color: AppColors.maingray.withOpacity(0.5),
+                                width: 0.3)),
                         padding: const EdgeInsets.fromLTRB(14, 5, 14, 5),
-                        child: Text(tag, style: kmain),
+                        child: Text(tag, style: MyTextTheme.main(context)),
                       ),
                       const Spacer(),
                       (count != null)
                           ? Text('${numberFormat.format(count)}회',
-                              style: kmain)
-                          : const Text('0 회', style: kmain),
+                              style: MyTextTheme.main(context))
+                          : Text('0 회', style: MyTextTheme.main(context)),
                     ],
                   ),
                 ),
@@ -145,8 +146,8 @@ class SearchTagWidget extends StatelessWidget {
                           width: 24,
                           height: 24,
                           color: _hoverController.isHover.value
-                              ? mainblack.withOpacity(0.6)
-                              : mainblack,
+                              ? AppColors.mainblack.withOpacity(0.6)
+                              : AppColors.mainblack,
                         ),
                       ),
                       SizedBox(
@@ -159,10 +160,10 @@ class SearchTagWidget extends StatelessWidget {
                             Obx(
                               () => Text(
                                 tag,
-                                style: ktempFont.copyWith(
+                                style: MyTextTheme.tempfont(context).copyWith(
                                   color: _hoverController.isHover.value
-                                      ? mainblack.withOpacity(0.6)
-                                      : mainblack,
+                                      ? AppColors.mainblack.withOpacity(0.6)
+                                      : AppColors.mainblack,
                                 ),
                               ),
                             ),
@@ -173,20 +174,24 @@ class SearchTagWidget extends StatelessWidget {
                                 ? Obx(
                                     () => Text(
                                       '관심도 ${numberFormat.format(count)}',
-                                      style: ktempFont.copyWith(
+                                      style: MyTextTheme.tempfont(context)
+                                          .copyWith(
                                         color: _hoverController.isHover.value
-                                            ? mainblack.withOpacity(0.6)
-                                            : mainblack,
+                                            ? AppColors.mainblack
+                                                .withOpacity(0.6)
+                                            : AppColors.mainblack,
                                       ),
                                     ),
                                   )
                                 : Obx(
                                     () => Text(
                                       '관심도 0',
-                                      style: ktempFont.copyWith(
+                                      style: MyTextTheme.tempfont(context)
+                                          .copyWith(
                                         color: _hoverController.isHover.value
-                                            ? mainblack.withOpacity(0.6)
-                                            : mainblack,
+                                            ? AppColors.mainblack
+                                                .withOpacity(0.6)
+                                            : AppColors.mainblack,
                                       ),
                                     ),
                                   ),
@@ -201,7 +206,7 @@ class SearchTagWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 tag,
-                style: kmain,
+                style: MyTextTheme.main(context),
               ),
             ),
           );

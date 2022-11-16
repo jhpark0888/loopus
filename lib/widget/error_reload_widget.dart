@@ -11,9 +11,9 @@ class ErrorReloadWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text(
+        Text(
           "오류가 발생했어요",
-          style: kmain,
+          style: MyTextTheme.main(context),
         ),
         IconButton(
           onPressed: reload,

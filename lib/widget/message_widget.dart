@@ -48,7 +48,7 @@ class MessageWidget extends StatelessWidget {
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  changeDay(),
+                  changeDay(context),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -63,7 +63,7 @@ class MessageWidget extends StatelessWidget {
                                     opacity: 0.6,
                                     child: Icon(
                                       Icons.reply_rounded,
-                                      color: mainblue,
+                                      color: AppColors.mainblue,
                                       size: 20,
                                     ),
                                   ),
@@ -73,25 +73,26 @@ class MessageWidget extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(12.0, 0, 8.0, 0.0),
                         child: Text(
                           messageDurationCalculate(message.date),
-                          style: kmainheight.copyWith(
-                            color: maingray,
+                          style: MyTextTheme.mainheight(context).copyWith(
+                            color: AppColors.maingray,
                           ),
                         ),
                       ),
-                      hasTextOverflow(message.content, kmainheight)
+                      hasTextOverflow(
+                              message.content, MyTextTheme.mainheight(context))
                           ? Container(
                               constraints:
                                   BoxConstraints(maxWidth: Get.width * (3 / 5)),
                               decoration: BoxDecoration(
-                                  color: mainblue,
+                                  color: AppColors.mainblue,
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8, horizontal: 16),
                                   child: Text(
                                     message.content,
-                                    style:
-                                        kmainheight.copyWith(color: mainWhite),
+                                    style: MyTextTheme.mainheight(context)
+                                        .copyWith(color: AppColors.mainWhite),
                                     textHeightBehavior:
                                         const TextHeightBehavior(
                                             applyHeightToFirstAscent: true,
@@ -102,15 +103,16 @@ class MessageWidget extends StatelessWidget {
                             )
                           : Container(
                               decoration: BoxDecoration(
-                                  color: mainblue,
+                                  color: AppColors.mainblue,
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8, horizontal: 16),
                                   child: Text(
                                     message.content,
-                                    style: kmainheight.copyWith(
-                                      color: mainWhite,
+                                    style: MyTextTheme.mainheight(context)
+                                        .copyWith(
+                                      color: AppColors.mainWhite,
                                     ),
                                     textHeightBehavior:
                                         const TextHeightBehavior(
@@ -126,10 +128,10 @@ class MessageWidget extends StatelessWidget {
                       ? Column(children: [
                           const SizedBox(height: 8),
                           message.isRead!.value
-                              ? const Text(
+                              ? Text(
                                   '읽음',
                                   textAlign: TextAlign.end,
-                                  style: kmainheight,
+                                  style: MyTextTheme.mainheight(context),
                                 )
                               : const SizedBox.shrink()
                         ])
@@ -138,7 +140,7 @@ class MessageWidget extends StatelessWidget {
               )
             : Column(
                 children: [
-                  changeDay(),
+                  changeDay(context),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +167,7 @@ class MessageWidget extends StatelessWidget {
                         children: [
                           Text(
                             partner.name,
-                            style: kmainbold,
+                            style: MyTextTheme.mainbold(context),
                           ),
                           const SizedBox(
                             height: 7,
@@ -173,15 +175,16 @@ class MessageWidget extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              hasTextOverflow(message.content, kmainheight)
+                              hasTextOverflow(message.content,
+                                      MyTextTheme.mainheight(context))
                                   ? Container(
                                       constraints: BoxConstraints(
                                           maxWidth: Get.width * (3 / 5)),
                                       decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: cardGray,
+                                            color: AppColors.cardGray,
                                           ),
-                                          color: cardGray,
+                                          color: AppColors.cardGray,
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       child: Padding(
@@ -189,7 +192,8 @@ class MessageWidget extends StatelessWidget {
                                               vertical: 8, horizontal: 16),
                                           child: Text(
                                             message.content,
-                                            style: kmainheight,
+                                            style:
+                                                MyTextTheme.mainheight(context),
                                             textHeightBehavior:
                                                 const TextHeightBehavior(
                                                     applyHeightToFirstAscent:
@@ -204,9 +208,9 @@ class MessageWidget extends StatelessWidget {
                                   : Container(
                                       decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: cardGray,
+                                            color: AppColors.cardGray,
                                           ),
-                                          color: cardGray,
+                                          color: AppColors.cardGray,
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       child: Padding(
@@ -214,7 +218,8 @@ class MessageWidget extends StatelessWidget {
                                               vertical: 8, horizontal: 16),
                                           child: Text(
                                             message.content,
-                                            style: kmainheight,
+                                            style:
+                                                MyTextTheme.mainheight(context),
                                             softWrap: true,
                                             textHeightBehavior:
                                                 const TextHeightBehavior(
@@ -232,7 +237,8 @@ class MessageWidget extends StatelessWidget {
                                     8.0, 18.0, 12.0, 0.0),
                                 child: Text(
                                   messageDurationCalculate(message.date),
-                                  style: kmainheight.copyWith(color: maingray),
+                                  style: MyTextTheme.mainheight(context)
+                                      .copyWith(color: AppColors.maingray),
                                   textAlign: TextAlign.end,
                                 ),
                               )
@@ -258,7 +264,7 @@ class MessageWidget extends StatelessWidget {
     return textPainter.didExceedMaxLines;
   }
 
-  Widget changeDay() {
+  Widget changeDay(BuildContext context) {
     if (isDayChange.value) {
       return Padding(
           padding: const EdgeInsets.fromLTRB(0, 7, 0, 14),
@@ -267,16 +273,19 @@ class MessageWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                  child: Divider(thickness: 0.5, color: maingray, height: 0.5),
+                  child: Divider(
+                      thickness: 0.5, color: AppColors.maingray, height: 0.5),
                 ),
                 const SizedBox(width: 14),
                 Text(
                   '${message.date.year}.${message.date.month}.${message.date.day}',
-                  style: kmain.copyWith(color: maingray),
+                  style: MyTextTheme.main(context)
+                      .copyWith(color: AppColors.maingray),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: Divider(thickness: 0.5, color: maingray, height: 0.5),
+                  child: Divider(
+                      thickness: 0.5, color: AppColors.maingray, height: 0.5),
                 ),
               ]));
     } else {

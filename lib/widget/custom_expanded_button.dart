@@ -39,23 +39,23 @@ class CustomExpandedButton extends StatelessWidget {
           color: boxColor != null
               ? boxColor
               : isBlue
-                  ? mainblue
-                  : maingray,
+                  ? AppColors.mainblue
+                  : AppColors.maingray,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Obx(
           () => Text(
             title!,
             textAlign: TextAlign.center,
-            style: kmain.copyWith(
+            style: MyTextTheme.main(context).copyWith(
               // ignore: prefer_if_null_operators
               color: textColor != null
                   ? _hoverController.isHover.value
                       ? textColor!.withOpacity(0.6)
                       : textColor
                   : _hoverController.isHover.value
-                      ? mainWhite.withOpacity(0.6)
-                      : mainWhite,
+                      ? AppColors.mainWhite.withOpacity(0.6)
+                      : AppColors.mainWhite,
             ),
           ),
         ),
@@ -97,8 +97,8 @@ class CustomExpandedBoldButton extends StatelessWidget {
           color: boxColor != null
               ? boxColor
               : isBlue
-                  ? mainblue
-                  : cardGray,
+                  ? AppColors.mainblue
+                  : AppColors.cardGray,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
@@ -106,15 +106,15 @@ class CustomExpandedBoldButton extends StatelessWidget {
             () => Text(
               title!,
               textAlign: TextAlign.center,
-              style: kmain.copyWith(
+              style: MyTextTheme.main(context).copyWith(
                 // ignore: prefer_if_null_operators
                 color: isBlue
                     ? _hoverController.isHover.value
-                        ? mainWhite.withOpacity(0.6)
-                        : mainWhite
+                        ? AppColors.mainWhite.withOpacity(0.6)
+                        : AppColors.mainWhite
                     : _hoverController.isHover.value
-                        ? mainblack.withOpacity(0.6)
-                        : mainblack,
+                        ? AppColors.mainblack.withOpacity(0.6)
+                        : AppColors.mainblack,
               ),
             ),
           ),

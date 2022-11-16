@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:intl/intl.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/career_detail_controller.dart';
@@ -13,21 +12,15 @@ import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/select_project_controller.dart';
-import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
-import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/project_add_company_screen.dart';
-import 'package:loopus/trash_bin/project_add_intro_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/company_widget.dart';
-import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/label_textfield_widget.dart';
-import '../utils/check_form_validate.dart';
 
 class ProjectAddTitleScreen extends StatelessWidget {
   ProjectAddTitleScreen({
@@ -127,10 +120,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
                     child: Obx(
                       () => Text(
                         '확인',
-                        style: kNavigationTitle.copyWith(
+                        style: MyTextTheme.navigationTitle(context).copyWith(
                           color: _controller.onTitleButton.value
-                              ? mainblue
-                              : maingray,
+                              ? AppColors.mainblue
+                              : AppColors.maingray,
                         ),
                       ),
                     ),
@@ -204,10 +197,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
                     },
                     child: Obx(
                       () => Text('확인',
-                          style: kNavigationTitle.copyWith(
+                          style: MyTextTheme.navigationTitle(context).copyWith(
                               color: _controller.onTitleButton.value
-                                  ? mainblue
-                                  : maingray)),
+                                  ? AppColors.mainblue
+                                  : AppColors.maingray)),
                     ),
                   )
           ],
@@ -221,7 +214,8 @@ class ProjectAddTitleScreen extends StatelessWidget {
             if (screenType == Screentype.add)
               Text(
                 "본인의 새로운 경험을 추가해보세요",
-                style: kmain.copyWith(color: maingray),
+                style: MyTextTheme.main(context)
+                    .copyWith(color: AppColors.maingray),
               ),
             const SizedBox(
               height: 16,
@@ -260,9 +254,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
                         ),
                         Text(
                           "그룹 커리어에요",
-                          style: kmain.copyWith(
-                              color:
-                                  _controller.isPublic.value ? null : maingray),
+                          style: MyTextTheme.main(context).copyWith(
+                              color: _controller.isPublic.value
+                                  ? null
+                                  : AppColors.maingray),
                         )
                       ],
                     ),
@@ -282,17 +277,18 @@ class ProjectAddTitleScreen extends StatelessWidget {
                       screenType == Screentype.add
                           ? "기업과 연계된 인턴/채용 커리어세요?"
                           : "연계된 기업 추가하기",
-                      style: kmain.copyWith(color: mainblue),
+                      style: MyTextTheme.main(context)
+                          .copyWith(color: AppColors.mainblue),
                     ),
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           "함께한 기업",
-                          style: kmain,
+                          style: MyTextTheme.main(context),
                         ),
                       ),
                       const SizedBox(

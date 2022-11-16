@@ -42,8 +42,6 @@ import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/screen/signup_complete_screen.dart';
 import 'package:loopus/screen/signup_email_pw_screen.dart';
 import 'package:loopus/screen/signup_fail_screen.dart';
-import 'package:loopus/trash_bin/project_screen.dart';
-import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/utils/error_control.dart';
@@ -158,8 +156,8 @@ class NotificationController extends GetxController {
       } else {
         Map<String, dynamic> json = event.data;
         if (Platform.isAndroid) {
-        localNotificaition.sampleNotification(
-            event.notification!.title!, event.notification!.body!, json);
+          localNotificaition.sampleNotification(
+              event.notification!.title!, event.notification!.body!, json);
         }
 
         if (event.data["type"] == "msg" || event.data['type'] == 'no_msg') {

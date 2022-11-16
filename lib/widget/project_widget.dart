@@ -9,7 +9,6 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
-import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:intl/intl.dart';
 
 class ProjectWidget extends StatelessWidget {
@@ -47,14 +46,14 @@ class ProjectWidget extends StatelessWidget {
             duration: Duration(milliseconds: 100),
             curve: kAnimationCurve,
             child: Container(
-              color: mainWhite,
+              color: AppColors.mainWhite,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Obx(
                     () => Text(
                       project.value.careerName,
-                      style: kmainbold,
+                      style: MyTextTheme.mainbold(context),
                     ),
                   ),
                   SizedBox(
@@ -67,23 +66,26 @@ class ProjectWidget extends StatelessWidget {
                             text: TextSpan(children: [
                           TextSpan(
                               text: '포스트 ',
-                              style: kmain.copyWith(color: maingray)),
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.maingray)),
                           TextSpan(
                             text: '${project.value.post_count!.value}개',
-                            style: kmain,
+                            style: MyTextTheme.main(context),
                           )
                         ])),
                       ),
                       Spacer(),
                       Obx(
-                        () => project.value.updateDate != null ? Text(
-                          '${lastPostCalculateDate(project.value.updateDate!)} 마지막 포스트',
-                          style: kmain,
-                        ) :  Container(
-          color: mainblack,
-          height: 2,
-          width: 6,
-        ),
+                        () => project.value.updateDate != null
+                            ? Text(
+                                '${lastPostCalculateDate(project.value.updateDate!)} 마지막 포스트',
+                                style: MyTextTheme.main(context),
+                              )
+                            : Container(
+                                color: AppColors.mainblack,
+                                height: 2,
+                                width: 6,
+                              ),
                         //  ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''
                         // }
                       ),
@@ -93,6 +95,7 @@ class ProjectWidget extends StatelessWidget {
                     height: 8,
                   ),
                   careerAnalysisWidget(
+                    context,
                     fieldList[project.value.fieldId]!,
                   )
                 ],
@@ -104,28 +107,32 @@ class ProjectWidget extends StatelessWidget {
     );
   }
 
-  Widget careerAnalysisWidget(String title) {
+  Widget careerAnalysisWidget(BuildContext context, String title) {
     return Row(
       children: [
         RichText(
             text: TextSpan(children: [
-          TextSpan(text: title, style: kmain.copyWith(color: mainblue)),
-          const TextSpan(text: ' 분야', style: kmain)
+          TextSpan(
+              text: title,
+              style: MyTextTheme.main(context)
+                  .copyWith(color: AppColors.mainblue)),
+          TextSpan(text: ' 분야', style: MyTextTheme.main(context))
         ])),
         Spacer(),
         Row(
           children: [
             project.value.isPublic
                 ? SvgPicture.asset('assets/icons/group_career.svg',
-                    color: mainblack)
+                    color: AppColors.mainblack)
                 : SvgPicture.asset('assets/icons/single_career.svg',
-                    color: mainblack),
+                    color: AppColors.mainblack),
             const SizedBox(
               width: 8,
             ),
             Text(
               project.value.isPublic ? "그룹 커리어" : "개인 커리어",
-              style: kmain.copyWith(color: mainblack),
+              style: MyTextTheme.main(context)
+                  .copyWith(color: AppColors.mainblack),
             ),
 
             // const Spacer(),
@@ -139,8 +146,8 @@ class ProjectWidget extends StatelessWidget {
             //     ),
             //     Text(
             //       career.isPublic ? "그룹 커리어" : "개인 커리어",
-            //       style: kmainbold.copyWith(
-            //           color: career.thumbnail == "" ? mainblack : mainWhite),
+            //       style: MyTextTheme.mainbold(context).copyWith(
+            //           color: career.thumbnail == "" ? AppColors.mainblack : AppColors.mainWhite),
             //     ),
             //   ],
             // )
@@ -150,14 +157,14 @@ class ProjectWidget extends StatelessWidget {
     );
   }
 
-  Widget rate(int variance) {
+  Widget rate(BuildContext context, int variance) {
     return Row(children: [
       const SizedBox(width: 4),
       arrowDirection(variance),
       const SizedBox(width: 4),
       if (variance != 0)
-        Text('${variance.abs()}%', style: kcaption
-            // .copyWith(color: variance >= 1 ? rankred : mainblue)
+        Text('${variance.abs()}%', style: MyTextTheme.caption(context)
+            // .copyWith(color: variance >= 1 ? AppColors.rankred : AppColors.mainblue)
             ),
     ]);
   }

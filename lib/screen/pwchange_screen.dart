@@ -30,7 +30,7 @@ class PwChangeScreen extends StatelessWidget {
       },
       child: Scaffold(
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -39,7 +39,7 @@ class PwChangeScreen extends StatelessWidget {
               children: [
                 Obx(() => _pwChangeController.pwcertification.value ==
                         Emailcertification.waiting
-                    ? _pwChangeController.timer.timerDisplay()
+                    ? _pwChangeController.timer.timerDisplay(context)
                     : Container()),
                 const SizedBox(
                   height: 24,
@@ -177,8 +177,8 @@ class PwChangeScreen extends StatelessWidget {
                       child: Center(
                         child: Text(
                           "비밀번호를 잊으셨나요?",
-                          style: kmain.copyWith(
-                            color: maingray,
+                          style: MyTextTheme.main(context).copyWith(
+                            color: AppColors.maingray,
                           ),
                         ),
                       )),

@@ -43,15 +43,15 @@ class SelectedTagWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-            color: mainWhite,
+            color: AppColors.mainWhite,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(width: 0.5, color: dividegray)),
+            border: Border.all(width: 0.5, color: AppColors.dividegray)),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               text,
-              style: kmain,
+              style: MyTextTheme.main(context),
             ),
             const SizedBox(
               width: 8,

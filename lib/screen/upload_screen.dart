@@ -39,9 +39,9 @@ class UploadScreen extends StatelessWidget {
             icon: SvgPicture.asset(
               'assets/icons/appbar_back.svg',
             )),
-        title: const Text(
+        title: Text(
           '이미지 첨부하기',
-          style: kNavigationTitle,
+          style: MyTextTheme.navigationTitle(context),
         ),
         centerTitle: true,
         actions: [
@@ -83,10 +83,10 @@ class UploadScreen extends StatelessWidget {
                 }
                 getbacks(2);
               },
-              child: const Center(
+              child: Center(
                 child: Text(
                   '확인',
-                  style: kNavigationTitle,
+                  style: MyTextTheme.navigationTitle(context),
                 ),
               ),
             ),
@@ -106,7 +106,8 @@ class UploadScreen extends StatelessWidget {
                         Container(
                             width: Get.width,
                             height: Get.width,
-                            decoration: const BoxDecoration(color: mainWhite),
+                            decoration:
+                                const BoxDecoration(color: AppColors.mainWhite),
                             child: _imageController.isSelect.value
                                 ? Obx(
                                     () => IndexedStack(
@@ -116,10 +117,10 @@ class UploadScreen extends StatelessWidget {
                                           _imageController.cropWidgetList.value,
                                     ),
                                   )
-                                : const Center(
+                                : Center(
                                     child: Text(
                                     '이미지를 선택해주세요 \n 최대 10장까지 가능해요',
-                                    style: kmainheight,
+                                    style: MyTextTheme.mainheight(context),
                                     textAlign: TextAlign.center,
                                   ))),
                         if (_imageController.isSelect.value)
@@ -152,7 +153,8 @@ class UploadScreen extends StatelessWidget {
                   title: Container(
                     decoration: BoxDecoration(
                         border: Border(
-                            top: BorderSide(width: 0.5, color: dividegray))),
+                            top: BorderSide(
+                                width: 0.5, color: AppColors.dividegray))),
                     child: Row(
                       children: [
                         GestureDetector(
@@ -235,7 +237,7 @@ class UploadScreen extends StatelessWidget {
                             //                                         width:
                             //                                             100,
                             //                                         color:
-                            //                                             dividegray,
+                            //                                             AppColors.dividegray,
                             //                                         child: _imageController.titleImageList[index].isNotEmpty
                             //                                             ? _photoWidget(_imageController.titleImageList[index][0], 500, 500, builder: (data) {
                             //                                                 return Image.memory(data, fit: BoxFit.cover);
@@ -243,7 +245,7 @@ class UploadScreen extends StatelessWidget {
                             //                                             : const Center(
                             //                                                 child: Text(
                             //                                                   "이미지 없음",
-                            //                                                   style: kmain,
+                            //                                                   style: MyTextTheme.main(context),
                             //                                                 ),
                             //                                               ),
                             //                                       ),
@@ -255,13 +257,13 @@ class UploadScreen extends StatelessWidget {
                             //                                             .albums[index]
                             //                                             .name,
                             //                                         style:
-                            //                                             kmainbold,
+                            //                                             MyTextTheme.mainbold(context),
                             //                                       ),
                             //                                       const Spacer(),
                             //                                       Text(
                             //                                         '${_imageController.albums[index].assetCount.toString()}개',
                             //                                         style:
-                            //                                             kmain,
+                            //                                             MyTextTheme.main(context),
                             //                                       ),
                             //                                     ],
                             //                                   ),
@@ -289,7 +291,7 @@ class UploadScreen extends StatelessWidget {
                                   Obx(
                                     () => Text(
                                       _imageController.headerTitle.value,
-                                      style: kmain,
+                                      style: MyTextTheme.main(context),
                                     ),
                                   ),
                                   const SizedBox(width: 8),
@@ -449,7 +451,7 @@ class UploadScreen extends StatelessWidget {
             return builder(snapshot.data!);
           } else {
             return Container(
-              color: mainWhite,
+              color: AppColors.mainWhite,
             );
           }
         });
@@ -504,18 +506,18 @@ class AlbumSelectScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
                           border: Border(
-                              bottom:
-                                  BorderSide(color: dividegray, width: 0.5))),
+                              bottom: BorderSide(
+                                  color: AppColors.dividegray, width: 0.5))),
                       child: Row(
                         children: [
                           Text(
                             _imageController.albums[index].name,
-                            style: kmainbold,
+                            style: MyTextTheme.mainbold(context),
                           ),
                           const Spacer(),
                           Text(
                             '${_imageController.albums[index].assetCount.toString()}개',
-                            style: kmain,
+                            style: MyTextTheme.main(context),
                           ),
                         ],
                       ),

@@ -77,7 +77,8 @@ class NotificationScreen extends StatelessWidget {
                             ? Center(
                                 child: Text(
                                 '받은 알림이 없어요',
-                                style: kmainheight.copyWith(color: maingray),
+                                style: MyTextTheme.mainheight(context)
+                                    .copyWith(color: AppColors.maingray),
                               ))
                             : ScrollNoneffectWidget(
                                 child: SingleChildScrollView(
@@ -87,30 +88,32 @@ class NotificationScreen extends StatelessWidget {
                                       children: [
                                         const SizedBox(height: 16),
                                         if (controller.newalarmList.isNotEmpty)
-                                          _alarmListView("새로운 알림",
+                                          _alarmListView(context, "새로운 알림",
                                               controller.newalarmList),
                                         if (controller.weekalarmList.isNotEmpty)
-                                          _alarmListView(
-                                              "이번 주", controller.weekalarmList),
+                                          _alarmListView(context, "이번 주",
+                                              controller.weekalarmList),
                                         if (controller
                                             .monthalarmList.isNotEmpty)
-                                          _alarmListView("이번 달",
+                                          _alarmListView(context, "이번 달",
                                               controller.monthalarmList),
                                         if (controller.oldalarmList.isNotEmpty)
-                                          _alarmListView(
-                                              "지난 알림", controller.oldalarmList),
+                                          _alarmListView(context, "지난 알림",
+                                              controller.oldalarmList),
                                       ]),
                                 ),
                               ))));
   }
 
-  Widget _alarmListView(String title, List<NotificationModel> alarmList) {
+  Widget _alarmListView(
+      BuildContext context, String title, List<NotificationModel> alarmList) {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Text(
           title,
-          style: kmainheight.copyWith(color: maingray),
+          style: MyTextTheme.mainheight(context)
+              .copyWith(color: AppColors.maingray),
           textAlign: TextAlign.start,
         ),
       ),
@@ -141,7 +144,7 @@ class NotificationScreen extends StatelessWidget {
             //   },
             //   direction: DismissDirection.endToStart,
             //   background: Container(
-            //     color: rankred,
+            //     color: AppColors.rankred,
             //     child: Row(
             //         mainAxisAlignment: MainAxisAlignment.end,
             //         children: [SvgPicture.asset('assets/icons/trash_icon.svg')]),

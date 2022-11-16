@@ -39,7 +39,7 @@ class SelectProjectScreen extends StatelessWidget {
                   //   controller.selectprojectlist.isNotEmpty
                   //       ? '포스트를 작성할 커리어를 선택해주세요'
                   //       : "포스트를 작성하기 위해 커리어를 추가해주세요",
-                  //   style: kmain.copyWith(color: maingray),
+                  //   style: MyTextTheme.main(context).copyWith(color: AppColors.maingray),
                   //   textAlign: TextAlign.center,
                   // ),
                   if (controller.selectprojectlist.isNotEmpty)
@@ -58,14 +58,14 @@ class SelectProjectScreen extends StatelessWidget {
                           separatorBuilder: (context, index) {
                             return Divider(
                               thickness: 0.5,
-                              color: dividegray,
+                              color: AppColors.dividegray,
                               height: 8,
                             );
                           },
                         ),
                         Divider(
                           thickness: 0.5,
-                          color: dividegray,
+                          color: AppColors.dividegray,
                           height: 2,
                         ),
                       ],
@@ -83,7 +83,8 @@ class SelectProjectScreen extends StatelessWidget {
                           SvgPicture.asset('assets/icons/career_add.svg'),
                           const SizedBox(width: 8),
                           Text('커리어 추가하기',
-                              style: kmain.copyWith(color: mainblue))
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.mainblue))
                         ],
                       ),
                     ),

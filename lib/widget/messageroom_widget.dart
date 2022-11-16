@@ -88,7 +88,7 @@ class MessageRoomWidget extends StatelessWidget {
                 //         rightText: chatRoom.value.type.value == 1 ? '해제' : "켜기",
                 //         leftText: '취소');
                 //   },
-                //   backgroundColor: maingray,
+                //   backgroundColor: AppColors.maingray,
                 //   foregroundColor: Colors.white,
                 //   label: chatRoom.value.type.value == 1 ? '알림끄기' : '알림켜기',
                 // ),
@@ -146,7 +146,7 @@ class MessageRoomWidget extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             width: Get.width,
-            color: mainWhite,
+            color: AppColors.mainWhite,
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -162,22 +162,25 @@ class MessageRoomWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(user.value.name, style: kmainbold),
+                      Text(user.value.name,
+                          style: MyTextTheme.mainbold(context)),
                       const SizedBox(height: 2),
                       Obx(
                         () => Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             hasTextOverflow(
-                                    chatRoom.value.message.value.content, kmain,
+                                    chatRoom.value.message.value.content,
+                                    MyTextTheme.main(context),
                                     maxWidth: Get.width - 190)
                                 ? SizedBox(
                                     width: Get.width - 190,
                                     child: Text(
                                       chatRoom.value.message.value.content,
                                       style: chatRoom.value.notread.value == 0
-                                          ? kmain.copyWith(color: maingray)
-                                          : kmain.copyWith(
+                                          ? MyTextTheme.main(context).copyWith(
+                                              color: AppColors.maingray)
+                                          : MyTextTheme.main(context).copyWith(
                                               fontWeight: FontWeight.w500),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
@@ -185,15 +188,17 @@ class MessageRoomWidget extends StatelessWidget {
                                 : Text(
                                     chatRoom.value.message.value.content,
                                     style: chatRoom.value.notread.value == 0
-                                        ? kmain.copyWith(color: maingray)
-                                        : kmain.copyWith(
+                                        ? MyTextTheme.main(context)
+                                            .copyWith(color: AppColors.maingray)
+                                        : MyTextTheme.main(context).copyWith(
                                             fontWeight: FontWeight.w500),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
                             Text(
                                 '· ${messageRoomDurationCalculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
-                                style: kmain.copyWith(color: maingray)),
+                                style: MyTextTheme.main(context)
+                                    .copyWith(color: AppColors.maingray)),
                             const SizedBox(width: 7),
                             chatRoom.value.type.value == 0
                                 ? const Icon(
@@ -214,7 +219,7 @@ class MessageRoomWidget extends StatelessWidget {
                     return Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(36),
-                          color: mainblue),
+                          color: AppColors.mainblue),
                       width: 7,
                       height: 7,
                     );

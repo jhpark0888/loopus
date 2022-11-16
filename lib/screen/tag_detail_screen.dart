@@ -34,12 +34,12 @@ class TagDetailScreen extends StatelessWidget {
 
   Tag tag;
 
-  Widget emptyTagWidget() {
+  Widget emptyTagWidget(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Text(
         '"${tag.tag}"에 대한 결과가 없습니다',
-        style: kmain,
+        style: MyTextTheme.main(context),
       ),
     );
   }
@@ -91,7 +91,7 @@ class TagDetailScreen extends StatelessWidget {
                     ),
                     // Text(
                     //   "최근 태그 사용 동향",
-                    //   style: kmain.copyWith(color: maingray),
+                    //   style: MyTextTheme.main(context).copyWith(color: AppColors.maingray),
                     // ),
 
                     Padding(
@@ -112,7 +112,7 @@ class TagDetailScreen extends StatelessWidget {
                                             Text(
                                               _controller.teptNumMap[entry.key]
                                                   .toString(),
-                                              style: kmain,
+                                              style: MyTextTheme.main(context),
                                             ),
                                             const SizedBox(
                                               height: 2,
@@ -124,7 +124,7 @@ class TagDetailScreen extends StatelessWidget {
                                                 height: entry.value.toDouble(),
                                                 width: 16,
                                                 decoration: BoxDecoration(
-                                                    color: mainblue,
+                                                    color: AppColors.mainblue,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             16)),
@@ -145,7 +145,7 @@ class TagDetailScreen extends StatelessWidget {
                               children: _controller.tagUsageTrendNum.keys
                                   .map((month) => Text(
                                         '$month월',
-                                        style: kmain,
+                                        style: MyTextTheme.main(context),
                                       ))
                                   .toList(),
                             ),
@@ -196,7 +196,7 @@ class TagDetailScreen extends StatelessWidget {
                 () => _controller.isTagLoadingList[0].value
                     ? const LoadingWidget()
                     : _controller.isTagEmptyList[0].value == true
-                        ? emptyTagWidget()
+                        ? emptyTagWidget(context)
                         : Obx(
                             () => SmartRefresher(
                               physics: const BouncingScrollPhysics(),
@@ -225,7 +225,7 @@ class TagDetailScreen extends StatelessWidget {
                 () => _controller.isTagLoadingList[1].value
                     ? const LoadingWidget()
                     : _controller.isTagEmptyList[1].value == true
-                        ? emptyTagWidget()
+                        ? emptyTagWidget(context)
                         : Obx(
                             () => SmartRefresher(
                               physics: const BouncingScrollPhysics(),
@@ -322,7 +322,7 @@ class TagDetailScreen extends StatelessWidget {
 //                               '관심도 ${numberFormat.format(int.parse(tagCount))}',
 //                               style: kSubTitle4Style.copyWith(
 //                                 fontSize: 16,
-//                                 color: mainblack.withOpacity(0.6),
+//                                 color: AppColors.mainblack.withOpacity(0.6),
 //                               ),
 //                             ),
 //                             SizedBox(
@@ -337,7 +337,7 @@ class TagDetailScreen extends StatelessWidget {
 //                                 'assets/icons/information.svg',
 //                                 width: 20,
 //                                 height: 20,
-//                                 color: mainblack.withOpacity(0.6),
+//                                 color: AppColors.mainblack.withOpacity(0.6),
 //                               ),
 //                             ),
 //                           ],
@@ -358,7 +358,7 @@ class TagDetailScreen extends StatelessWidget {
 //     return Container(
 //       width: Get.width,
 //       height: Get.height,
-//       color: mainWhite,
+//       color: AppColors.mainWhite,
 //     );
 //   }
 
@@ -368,7 +368,7 @@ class TagDetailScreen extends StatelessWidget {
 //         child: Text(
 //           text,
 //           textAlign: TextAlign.center,
-//           style: kNavigationTitle,
+//           style: MyTextTheme.navigationTitle(context),
 //         ));
 //   }
 

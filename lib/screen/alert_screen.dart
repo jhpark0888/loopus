@@ -45,7 +45,7 @@ class _AlertScreenState extends State<AlertScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(height: 1, thickness: 1, color: maingray),
+            child: Divider(height: 1, thickness: 1, color: AppColors.maingray),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
@@ -55,11 +55,11 @@ class _AlertScreenState extends State<AlertScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('프로모션 알림 설정', style: kmain),
+                Text('프로모션 알림 설정', style: MyTextTheme.main(context)),
                 if (Platform.isAndroid)
                   Switch(
-                      activeColor: mainblue,
-                      inactiveTrackColor: maingray,
+                      activeColor: AppColors.mainblue,
+                      inactiveTrackColor: AppColors.maingray,
                       value: _localDataController.isUserAgreeProNoti,
                       onChanged: (bool val) {
                         setState(() {
@@ -76,7 +76,7 @@ class _AlertScreenState extends State<AlertScreen> {
                       }),
                 if (Platform.isIOS)
                   CupertinoSwitch(
-                      activeColor: mainblue,
+                      activeColor: AppColors.mainblue,
                       value: _localDataController.isUserAgreeProNoti,
                       onChanged: (bool val) {
                         setState(() {
@@ -107,14 +107,14 @@ class _AlertScreenState extends State<AlertScreen> {
                   children: [
                     Text(
                       '\u2219 ',
-                      style:
-                          kcaption.copyWith(color: mainblack.withOpacity(0.6)),
+                      style: MyTextTheme.caption(context).copyWith(
+                          color: AppColors.mainblack.withOpacity(0.6)),
                     ),
                     Expanded(
                       child: Text(
                         '알림이 제대로 오지 않는다면, 로그아웃 후 다시 로그인을 시도해주세요.',
-                        style: kcaption.copyWith(
-                            color: mainblack.withOpacity(0.6)),
+                        style: MyTextTheme.caption(context).copyWith(
+                            color: AppColors.mainblack.withOpacity(0.6)),
                       ),
                     ),
                   ],
@@ -127,14 +127,14 @@ class _AlertScreenState extends State<AlertScreen> {
                   children: [
                     Text(
                       '\u2219 ',
-                      style:
-                          kcaption.copyWith(color: mainblack.withOpacity(0.6)),
+                      style: MyTextTheme.caption(context).copyWith(
+                          color: AppColors.mainblack.withOpacity(0.6)),
                     ),
                     Expanded(
                       child: Text(
                         '프로모션 알림을 설정해도 알림이 오지 않는다면, 시스템 알림 설정을 확인해보세요.',
-                        style: kcaption.copyWith(
-                            color: mainblack.withOpacity(0.6)),
+                        style: MyTextTheme.caption(context).copyWith(
+                            color: AppColors.mainblack.withOpacity(0.6)),
                       ),
                     ),
                   ],

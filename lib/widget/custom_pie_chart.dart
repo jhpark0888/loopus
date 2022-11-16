@@ -26,12 +26,15 @@ class _CustomPieChartState extends State<CustomPieChart>
   @override
   void initState() {
     // TODO: implement initState
-    element = PieElement(
-        widget.career.postRatio! * 100, widget.career.careerName, mainblue);
-    elements = [element, PieElement(100 - element.value, '여분', dividegray)];
+    element = PieElement(widget.career.postRatio! * 100,
+        widget.career.careerName, AppColors.mainblue);
+    elements = [
+      element,
+      PieElement(100 - element.value, '여분', AppColors.dividegray)
+    ];
     // elements = widget.careerList
     //     .map((career) => PieElement(career.postRatio! * 100, career.careerName,
-    //         career.id == widget.currentId ? mainblue : dividegray))
+    //         career.id == widget.currentId ? AppColors.mainblue : AppColors.dividegray))
     //     .toList();
     super.initState();
 
@@ -106,14 +109,15 @@ class PieChartPainter extends CustomPainter {
     for (PieElement element in elements) {
       Paint targetPaint = Paint() // 화면에 그릴 때 쓸 Paint를 정의합니다.
         ..color = element.color
-        ..strokeWidth = element.color == dividegray ? 6 : 15 // 선의 길이를 정합니다.
+        ..strokeWidth =
+            element.color == AppColors.dividegray ? 6 : 15 // 선의 길이를 정합니다.
         ..style = PaintingStyle
             .stroke // 선의 스타일을 정합니다. stroke면 외곽선만 그리고, fill이면 다 채웁니다.
         ..strokeCap = element.name != '여분'
             ? StrokeCap.butt
             : StrokeCap
                 .butt; // stroke의 스타일을 정합니다. round를 고르면 stroke의 끝이 둥글게 됩니다.
-      double radius = element.color == dividegray
+      double radius = element.color == AppColors.dividegray
           ? min(size.width / 2 - targetPaint.strokeWidth / 2,
               size.height / 2 - targetPaint.strokeWidth / 2)
           : min(
