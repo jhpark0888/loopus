@@ -79,95 +79,107 @@ class MessageScreen extends StatelessWidget {
         // child:
         body: Obx(() => messageController.chatroomscreenstate.value ==
                 ScreenState.success
-            ? Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                        height: 36,
-                        child: SearchTextFieldWidget(
-                          ontap: () {},
-                          hinttext: '검색',
-                          readonly: false,
-                          controller: messageController.searchName,
-                          onchanged: (name) {
-                            if (name.trim() != '') {
-                              messageController.searchRoomList.value =
-                                  messageController.chattingRoomList
-                                      .where((chattingRoom) => chattingRoom
-                                          .user.value.name
-                                          .contains(name))
-                                      .toList();
-                            } else {
-                              messageController.searchRoomList.value =
-                                  messageController.chattingRoomList;
-                            }
-                          },
-                        )),
-                    const SizedBox(height: 16),
-                    messageController.searchRoomList.isNotEmpty
-                        ? Obx(
-                            () =>
-                                // ScrollNoneffectWidget(
-                                // child: SmartRefresher(
-                                //   physics: const BouncingScrollPhysics(),
-                                //   controller: messageController.refreshController,
-                                //   enablePullUp: (messageController
-                                //               .chatroomscreenstate.value ==
-                                //           ScreenState.loading)
-                                //       ? false
-                                //       : true,
-                                //   header: MyCustomHeader(),
-                                //   footer: const MyCustomFooter(),
-                                //   onRefresh: messageController.onChattingRefresh,
-                                //   onLoading: messageController.onChattingLoading,
-                                //   child:
-                                Expanded(
-                              child: SlidableAutoCloseBehavior(
-                                closeWhenOpened: true,
-                                closeWhenTapped: true,
-                                child: ListView.builder(
-                                  shrinkWrap: false,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding: const EdgeInsets.only(bottom: 24),
-                                  // separatorBuilder: (context, index) {
-                                  //   return const SizedBox(height: 24);
-                                  // },
-                                  itemBuilder: (context, index) {
-                                    if (messageController.searchRoomList[index]
-                                            .user.value.banned.value ==
-                                        BanState.normal) {
-                                      return messageController
-                                          .searchRoomList[index];
-                                    } else {
-                                      return const SizedBox.shrink();
-                                    }
-                                  },
-                                  itemCount:
-                                      messageController.searchRoomList.length,
+            ? SmartRefresher(
+                controller: messageController.refreshController,
+                header: MyCustomHeader(),
+                footer: const MyCustomFooter(),
+                onRefresh: messageController.onChattingRefresh,
+                // onLoading: messageController.onChattingLoading,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                          height: 36,
+                          child: SearchTextFieldWidget(
+                            ontap: () {},
+                            hinttext: '검색',
+                            readonly: false,
+                            controller: messageController.searchName,
+                            onchanged: (name) {
+                              if (name.trim() != '') {
+                                messageController.searchRoomList.value =
+                                    messageController.chattingRoomList
+                                        .where((chattingRoom) => chattingRoom
+                                            .user.value.name
+                                            .contains(name))
+                                        .toList();
+                              } else {
+                                messageController.searchRoomList.value =
+                                    messageController.chattingRoomList;
+                              }
+                            },
+                          )),
+                      const SizedBox(height: 16),
+                      messageController.searchRoomList.isNotEmpty
+                          ? Obx(
+                              () =>
+                                  // ScrollNoneffectWidget(
+                                  // child: SmartRefresher(
+                                  //   physics: const BouncingScrollPhysics(),
+                                  //   controller: messageController.refreshController,
+                                  //   enablePullUp: (messageController
+                                  //               .chatroomscreenstate.value ==
+                                  //           ScreenState.loading)
+                                  //       ? false
+                                  //       : true,
+                                  //   header: MyCustomHeader(),
+                                  //   footer: const MyCustomFooter(),
+                                  //   onRefresh: messageController.onChattingRefresh,
+                                  //   onLoading: messageController.onChattingLoading,
+                                  //   child:
+                                  Expanded(
+                                child: SlidableAutoCloseBehavior(
+                                  closeWhenOpened: true,
+                                  closeWhenTapped: true,
+                                  child: ListView.builder(
+                                    shrinkWrap: false,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.only(bottom: 24),
+                                    // separatorBuilder: (context, index) {
+                                    //   return const SizedBox(height: 24);
+                                    // },
+                                    itemBuilder: (context, index) {
+                                      if (messageController
+                                              .searchRoomList[index]
+                                              .user
+                                              .value
+                                              .banned
+                                              .value ==
+                                          BanState.normal) {
+                                        return messageController
+                                            .searchRoomList[index];
+                                      } else {
+                                        return const SizedBox.shrink();
+                                      }
+                                    },
+                                    itemCount:
+                                        messageController.searchRoomList.length,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        : Expanded(
-                            child: SizedBox(
-                              width: Get.width,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '메시지 목록이 비어있어요',
-                                    style: MyTextTheme.main(context).copyWith(
-                                      color:
-                                          AppColors.mainblack.withOpacity(0.38),
+                            )
+                          : Expanded(
+                              child: SizedBox(
+                                width: Get.width,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '메시지 목록이 비어있어요',
+                                      style: MyTextTheme.main(context).copyWith(
+                                        color: AppColors.mainblack
+                                            .withOpacity(0.38),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                  ],
+                            )
+                    ],
+                  ),
                 ),
               )
             : const Center(child: LoadingWidget())));

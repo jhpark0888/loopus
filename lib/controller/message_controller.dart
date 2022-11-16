@@ -79,14 +79,14 @@ class MessageController extends GetxController with WidgetsBindingObserver {
         .compareTo(a.chatRoom.value.message.value.date));
   }
 
-  // void onChattingRefresh() async {
-  //   chattingRoomList.value = [];
-  //   String? userId = await const FlutterSecureStorage().read(key: "id");
-  //   await getChatroomlist(int.parse(userId!));
-  //   chatroomscreenstate(ScreenState.success);
-  //   refreshController.refreshCompleted();
-  //   refresh();
-  // }
+  void onChattingRefresh() async {
+    // chattingRoomList.value = [];
+    // String? userId = await const FlutterSecureStorage().read(key: "id");
+    // await getChatroomlist(int.parse(userId!));
+    // chatroomscreenstate(ScreenState.success);
+    refreshController.refreshCompleted();
+    // refresh();
+  }
 
   // void onChattingLoading() async {
   //   String? userId = await const FlutterSecureStorage().read(key: "id");
