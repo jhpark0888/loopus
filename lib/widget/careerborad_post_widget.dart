@@ -44,9 +44,9 @@ class CareerBoardPostWidget extends StatelessWidget {
         height: 345,
         width: 280,
         decoration: BoxDecoration(
-            color: mainWhite,
+            color: AppColors.mainWhite,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: maingray, width: 0.5)),
+            border: Border.all(color: AppColors.maingray, width: 0.5)),
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,7 +69,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                           child: post.isMarked.value == 0
                               ? SvgPicture.asset(
                                   "assets/icons/bookmark_inactive.svg",
-                                  color: mainblack,
+                                  color: AppColors.mainblack,
                                 )
                               : SvgPicture.asset(
                                   "assets/icons/bookmark_active.svg"),
@@ -79,7 +79,8 @@ class CareerBoardPostWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(post.project!.careerName,
-                      style: kmain.copyWith(color: maingray)),
+                      style: MyTextTheme.main(context)
+                          .copyWith(color: AppColors.maingray)),
                 ],
               ),
             ),
@@ -97,20 +98,24 @@ class CareerBoardPostWidget extends StatelessWidget {
                                 imageUrl: post.images.first,
                                 fit: BoxFit.cover,
                                 errorWidget: (context, string, widget) {
-                                  return Container(color: maingray);
+                                  return Container(color: AppColors.maingray);
                                 },
                               )
-                            : LinkSmallWidget(url: post.links.first)),
+                            : LinkSmallWidget(
+                                url: post.links.first,
+                              )),
                     const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.only(left: 14, right: 14),
                       child: Obx(
                         () => ExpandableText(
                           textSpan: TextSpan(
-                              text: post.content.value, style: kmainheight),
+                              text: post.content.value,
+                              style: MyTextTheme.mainheight(context)),
                           moreSpan: TextSpan(
                               text: "...더보기",
-                              style: kmainheight.copyWith(color: maingray)),
+                              style: MyTextTheme.mainheight(context)
+                                  .copyWith(color: AppColors.maingray)),
                           maxLines: 1,
                         ),
                       ),
@@ -125,7 +130,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                   child: Obx(
                     () => Text(
                       post.content.value,
-                      style: kmainheight,
+                      style: MyTextTheme.mainheight(context),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -137,19 +142,24 @@ class CareerBoardPostWidget extends StatelessWidget {
               child: Obx(
                 () => Row(
                   children: [
-                    Text('좋아요 ', style: kmain.copyWith(color: maingray)),
-                    Text('${post.likeCount}개', style: kmain),
+                    Text('좋아요 ',
+                        style: MyTextTheme.main(context)
+                            .copyWith(color: AppColors.maingray)),
+                    Text('${post.likeCount}개',
+                        style: MyTextTheme.main(context)),
 
                     const SizedBox(width: 7),
                     if (post.comments.isNotEmpty)
-                      Text('댓글 ', style: kmain.copyWith(color: maingray)),
+                      Text('댓글 ',
+                          style: MyTextTheme.main(context)
+                              .copyWith(color: AppColors.maingray)),
                     if (post.comments.isNotEmpty)
                       Text(
                         '${(post.comments.length).toString()}개',
-                        style: kmain,
+                        style: MyTextTheme.main(context),
                       ),
                     const Spacer(),
-                    // Text('교내추천', style: kmain.copyWith(color: maingray))
+                    // Text('교내추천', style: MyTextTheme.main(context).copyWith(color: AppColors.maingray))
                   ],
                 ),
               ),

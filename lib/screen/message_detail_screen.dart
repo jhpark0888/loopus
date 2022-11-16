@@ -90,9 +90,8 @@ class MessageDetatilScreen extends StatelessWidget {
             actions: [
               GestureDetector(
                 onTap: () async {
-                  showBottomdialog(context,
-                      func1: () {
-                        showButtonDialog(
+                  showBottomdialog(context, func1: () {
+                    showButtonDialog(
                         leftText: '취소',
                         rightText: '나가기',
                         title: '메세지 나가기',
@@ -147,9 +146,8 @@ class MessageDetatilScreen extends StatelessWidget {
                             }
                           }
                         });
-                      },
-                      func2: () {
-                        showTextFieldDialog(
+                  }, func2: () {
+                    showTextFieldDialog(
                         textEditingController: TextEditingController(),
                         // leftText: '취소',
                         // rightText: '신고하기',
@@ -157,8 +155,8 @@ class MessageDetatilScreen extends StatelessWidget {
                         hintText:
                             '신고 내용을 입력해주세요. 관리자 확인 \n 이후 관련 약관에 따라 처리됩니다.\n ',
                         rightText: '신고하기 ',
-                        rightBoxColor: rankred,
-                        leftBoxColor: maingray,
+                        rightBoxColor: AppColors.rankred,
+                        leftBoxColor: AppColors.maingray,
                         leftFunction: () => Get.back(),
                         rightFunction: () {
                           userreport(controller.partnerId).then((value) {
@@ -170,10 +168,14 @@ class MessageDetatilScreen extends StatelessWidget {
                             }
                           });
                         });
-                      },
+                  },
                       value1: '메세지 나가기',
                       value2: '계정 신고하기',
-                      isOne: false, buttonColor1: mainWhite, buttonColor2: rankred, textColor1: rankred, textColor2: mainWhite);  
+                      isOne: false,
+                      buttonColor1: AppColors.mainWhite,
+                      buttonColor2: AppColors.rankred,
+                      textColor1: AppColors.rankred,
+                      textColor2: AppColors.mainWhite);
                 },
                 child: SizedBox(
                     height: 44,
@@ -187,7 +189,7 @@ class MessageDetatilScreen extends StatelessWidget {
           bottomNavigationBar: Padding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: sendField()),
+              child: sendField(context)),
           body: SafeArea(
             child: Obx(
               () => controller.screenState.value == ScreenState.loading
@@ -282,12 +284,13 @@ class MessageDetatilScreen extends StatelessWidget {
     );
   }
 
-  Widget sendField() {
+  Widget sendField(BuildContext context) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.fromLTRB(16, 6.5, 16, 6.5),
         decoration: BoxDecoration(
-            border: Border(top: BorderSide(width: 1, color: dividegray))),
+            border:
+                Border(top: BorderSide(width: 1, color: AppColors.dividegray))),
         child: Row(
           children: [
             Expanded(
@@ -300,15 +303,15 @@ class MessageDetatilScreen extends StatelessWidget {
                   maxLines: 3,
                   autocorrect: false,
                   readOnly: false,
-                  style: kmainheight,
-                  cursorColor: mainblack,
+                  style: MyTextTheme.mainheight(context),
+                  cursorColor: AppColors.mainblack,
                   cursorWidth: 1.2,
                   cursorRadius: Radius.circular(5.0),
                   autofocus: false,
                   // textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: cardGray,
+                    fillColor: AppColors.cardGray,
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(8)),
@@ -319,8 +322,9 @@ class MessageDetatilScreen extends StatelessWidget {
                     isDense: true,
                     hintText: '메세지 입력',
                     counterText: "",
-                    hintStyle:
-                        kmain.copyWith(color: maingray).copyWith(height: 1.4),
+                    hintStyle: MyTextTheme.main(context)
+                        .copyWith(color: AppColors.maingray)
+                        .copyWith(height: 1.4),
                   )),
             ),
             const SizedBox(width: 14),

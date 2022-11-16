@@ -65,11 +65,11 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                   padding: const EdgeInsets.only(top: 12, right: 17.5),
                   child: Obx(
                     () => Text('확인',
-                        style: kNavigationTitle.copyWith(
+                        style: MyTextTheme.navigationTitle(context).copyWith(
                             color:
                                 postingAddController.scrapList.value.isNotEmpty
-                                    ? mainblue
-                                    : mainblack.withOpacity(0.5))),
+                                    ? AppColors.mainblue
+                                    : AppColors.mainblack.withOpacity(0.5))),
                   ),
                 ))
           ],
@@ -97,7 +97,7 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('링크', style: kmainbold),
+                        Text('링크', style: MyTextTheme.mainbold(context)),
                         const SizedBox(height: 16),
                         Obx(
                           () => Row(
@@ -126,7 +126,8 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                                         const EdgeInsets.fromLTRB(7, 7, 0, 7),
                                     child: Text(
                                       "추가하기",
-                                      style: kmain.copyWith(color: mainblue),
+                                      style: MyTextTheme.main(context)
+                                          .copyWith(color: AppColors.mainblue),
                                     ),
                                   ),
                                 )

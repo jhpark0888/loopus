@@ -43,7 +43,7 @@ class UserTileWidget extends StatelessWidget {
         }
       },
       behavior: HitTestBehavior.translucent,
-      // splashColor: kSplashColor,
+      // splashColor: AppColors.kSplashColor,
       child: Row(
         children: [
           UserImageWidget(
@@ -58,16 +58,18 @@ class UserTileWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(user.name,
-                    style:
-                        kmainbold.copyWith(color: isDark ? mainWhite : null)),
+                    style: MyTextTheme.mainbold(context)
+                        .copyWith(color: isDark ? AppColors.mainWhite : null)),
                 const SizedBox(height: 4),
                 user.userType == UserType.student
                     ? Text(
                         '${(user as Person).univName} · ${(user as Person).department}',
-                        style: kmain.copyWith(color: isDark ? mainWhite : null))
+                        style: MyTextTheme.main(context).copyWith(
+                            color: isDark ? AppColors.mainWhite : null))
                     : Text(
                         "${fieldList[(user as Company).fieldId]} · ${(user as Company).address}",
-                        style: kmain.copyWith(color: isDark ? mainWhite : null),
+                        style: MyTextTheme.main(context).copyWith(
+                            color: isDark ? AppColors.mainWhite : null),
                         overflow: TextOverflow.ellipsis,
                       ),
               ],

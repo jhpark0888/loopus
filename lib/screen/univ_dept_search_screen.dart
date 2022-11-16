@@ -25,7 +25,7 @@ class UnivDeptSearchScreen extends StatelessWidget {
   TextEditingController searchController = TextEditingController();
   UnivDeptSearchType searchType;
 
-  Widget searchResult({Univ? univ, Dept? dept}) {
+  Widget searchResult(BuildContext context, {Univ? univ, Dept? dept}) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -47,7 +47,7 @@ class UnivDeptSearchScreen extends StatelessWidget {
           searchType == UnivDeptSearchType.univ
               ? univ!.univname
               : dept!.deptname,
-          style: kmain,
+          style: MyTextTheme.main(context),
         ),
       ),
     );
@@ -128,11 +128,11 @@ class UnivDeptSearchScreen extends StatelessWidget {
                                                   return searchType ==
                                                           UnivDeptSearchType
                                                               .univ
-                                                      ? searchResult(
+                                                      ? searchResult(context,
                                                           univ: _signupController
                                                                   .searchUnivList[
                                                               index])
-                                                      : searchResult(
+                                                      : searchResult(context,
                                                           dept: _signupController
                                                                   .searchDeptList[
                                                               index]);
@@ -161,8 +161,8 @@ class UnivDeptSearchScreen extends StatelessWidget {
                     title:
                         "${searchType == UnivDeptSearchType.univ ? "대학" : "학과"} 문의하기",
                     rightText: '문의하기',
-                    rightBoxColor: mainblue,
-                    leftBoxColor: maingray,
+                    rightBoxColor: AppColors.mainblue,
+                    leftBoxColor: AppColors.maingray,
                     hintText:
                         '찾으시는 ${searchType == UnivDeptSearchType.univ ? "대학" : "학과"}명을 입력해주세요. 빠른 시일 내 업데이트 할게요.',
                     leftFunction: () {
@@ -190,7 +190,8 @@ class UnivDeptSearchScreen extends StatelessWidget {
                 },
                 child: Text(
                     "찾으시는 ${searchType == UnivDeptSearchType.univ ? "대학이" : "학과가"} 없으신가요?",
-                    style: kmain.copyWith(color: mainblue)),
+                    style: MyTextTheme.main(context)
+                        .copyWith(color: AppColors.mainblue)),
               ),
               const SizedBox(
                 height: 14,

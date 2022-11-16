@@ -49,8 +49,8 @@ class CustomTextField extends StatelessWidget {
       minLines: 1,
       maxLines: maxLines ?? 1,
       autofocus: autofocus ?? true,
-      style: style?? kmain,
-      cursorColor: mainblue,
+      style: style ?? MyTextTheme.main(context),
+      cursorColor: AppColors.mainblue,
       cursorWidth: 1.2,
       cursorRadius: const Radius.circular(2),
       controller: textController,
@@ -60,26 +60,27 @@ class CustomTextField extends StatelessWidget {
           contentPadding: const EdgeInsets.only(bottom: 12),
           isDense: true,
           hintText: hintText,
-          hintStyle: kmain.copyWith(
-            color: maingray,
+          hintStyle: MyTextTheme.main(context).copyWith(
+            color: AppColors.maingray,
           ),
           suffix: suffix,
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: maingray, width: 1),
+            borderSide: BorderSide(color: AppColors.maingray, width: 1),
           ),
           disabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: maingray, width: 1),
+            borderSide: BorderSide(color: AppColors.maingray, width: 1),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: maingray, width: 1),
+            borderSide: BorderSide(color: AppColors.maingray, width: 1),
           ),
           errorBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: rankred, width: 1),
+            borderSide: BorderSide(color: AppColors.rankred, width: 1),
           ),
           focusedErrorBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: rankred, width: 1),
+            borderSide: BorderSide(color: AppColors.rankred, width: 1),
           ),
-          errorStyle: kmain.copyWith(color: rankred)),
+          errorStyle:
+              MyTextTheme.main(context).copyWith(color: AppColors.rankred)),
       validator: validator,
     );
   }

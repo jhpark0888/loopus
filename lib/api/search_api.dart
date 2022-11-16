@@ -7,18 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/search_controller.dart';
-import 'package:loopus/controller/tag_detail_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
-import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/project_model.dart';
-import 'package:loopus/model/question_model.dart';
-import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/model/user_model.dart';
-import 'package:loopus/trash_bin/search_tag_project_widget.dart';
-import 'package:loopus/widget/searchedtag_widget.dart';
-
-import '../controller/error_controller.dart';
 
 Future<HTTPResponse> tagsearch(String searchWord) async {
   ConnectivityResult result = await initConnectivity();

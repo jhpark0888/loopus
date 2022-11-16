@@ -11,9 +11,9 @@ class DisconnectReloadWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text(
+        Text(
           "네트워크 연결을 확인해주세요",
-          style: kmain,
+          style: MyTextTheme.main(context),
         ),
         IconButton(
           onPressed: reload,

@@ -43,21 +43,22 @@ class MyCompanyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainblack,
+      backgroundColor: AppColors.mainblack,
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: mainblack,
+          statusBarColor: AppColors.mainblack,
           statusBarIconBrightness: Brightness.light,
           statusBarBrightness: Brightness.dark,
         ),
-        backgroundColor: mainblack,
+        backgroundColor: AppColors.mainblack,
         elevation: 0,
         centerTitle: false,
         titleSpacing: 0,
         title: Obx(
           () => Text(
             '${_controller.myCompanyInfo.value.name} 프로필',
-            style: kNavigationTitle.copyWith(color: mainWhite),
+            style: MyTextTheme.navigationTitle(context)
+                .copyWith(color: AppColors.mainWhite),
           ),
         ),
         leading: GestureDetector(
@@ -66,7 +67,7 @@ class MyCompanyScreen extends StatelessWidget {
           },
           child: SvgPicture.asset(
             'assets/icons/appbar_back.svg',
-            color: mainWhite,
+            color: AppColors.mainWhite,
           ),
         ),
         actions: [
@@ -77,7 +78,7 @@ class MyCompanyScreen extends StatelessWidget {
               icon: SvgPicture.asset(
                 'assets/icons/bookmark_inactive.svg',
                 width: 28,
-                color: mainWhite,
+                color: AppColors.mainWhite,
               )),
           GestureDetector(
             onTap: () {
@@ -85,7 +86,7 @@ class MyCompanyScreen extends StatelessWidget {
             },
             child: SvgPicture.asset(
               'assets/icons/setting.svg',
-              color: mainWhite,
+              color: AppColors.mainWhite,
             ),
           ),
         ],
@@ -107,7 +108,7 @@ class MyCompanyScreen extends StatelessWidget {
               //       context),
               //   sliver:
               SliverAppBar(
-                backgroundColor: mainWhite,
+                backgroundColor: AppColors.mainWhite,
                 toolbarHeight: 44,
                 pinned: true,
                 primary: false,
@@ -121,7 +122,7 @@ class MyCompanyScreen extends StatelessWidget {
           body: TabBarView(
             // physics: const NeverScrollableScrollPhysics(),
             controller: _controller.tabController,
-            children: [_introView(), _postView(), _visitView()],
+            children: [_introView(), _postView(), _visitView(context)],
           ),
         ),
       ),
@@ -164,8 +165,8 @@ class MyCompanyScreen extends StatelessWidget {
                   func2: changeProfileImage,
                   value1: '기본 이미지로 변경',
                   value2: '사진첩에서 사진 선택',
-                  buttonColor1: maingray,
-                  buttonColor2: mainblue,
+                  buttonColor1: AppColors.maingray,
+                  buttonColor2: AppColors.mainblue,
                   isOne: false),
               child: UserImageWidget(
                 imageUrl: _controller.myCompanyInfo.value.profileImage,
@@ -178,7 +179,8 @@ class MyCompanyScreen extends StatelessWidget {
         Obx(
           () => Text(
             _controller.myCompanyInfo.value.name,
-            style: kmainbold.copyWith(color: mainWhite),
+            style: MyTextTheme.mainbold(context)
+                .copyWith(color: AppColors.mainWhite),
           ),
         ),
         const SizedBox(height: 8),
@@ -189,19 +191,21 @@ class MyCompanyScreen extends StatelessWidget {
               children: [
                 Text(
                   fieldList[_controller.myCompanyInfo.value.fieldId]!,
-                  style: kmain.copyWith(color: mainWhite),
+                  style: MyTextTheme.main(context)
+                      .copyWith(color: AppColors.mainWhite),
                 ),
                 const SizedBox(
                   height: 9,
                   child: VerticalDivider(
                     thickness: 1,
                     width: 16,
-                    color: mainWhite,
+                    color: AppColors.mainWhite,
                   ),
                 ),
                 Text(
                   _controller.myCompanyInfo.value.address,
-                  style: kmain.copyWith(color: mainWhite),
+                  style: MyTextTheme.main(context)
+                      .copyWith(color: AppColors.mainWhite),
                 ),
               ],
             ),
@@ -216,7 +220,8 @@ class MyCompanyScreen extends StatelessWidget {
           child: Obx(
             () => Text(
               _controller.myCompanyInfo.value.homepage,
-              style: kmain.copyWith(color: mainblue),
+              style:
+                  MyTextTheme.main(context).copyWith(color: AppColors.mainblue),
             ),
           ),
         ),
@@ -231,13 +236,14 @@ class MyCompanyScreen extends StatelessWidget {
                         children: [
                           Text(
                             "이 기업에 관심있는 프로필",
-                            style: kmainbold.copyWith(color: mainWhite),
+                            style: MyTextTheme.mainbold(context)
+                                .copyWith(color: AppColors.mainWhite),
                           ),
                           const SizedBox(width: 8),
                           Center(
                             child: SvgPicture.asset(
                               'assets/icons/information.svg',
-                              color: dividegray,
+                              color: AppColors.dividegray,
                             ),
                           ),
                           const Spacer(),
@@ -249,7 +255,8 @@ class MyCompanyScreen extends StatelessWidget {
                             },
                             child: Text(
                               "전체보기",
-                              style: kmain.copyWith(color: mainblue),
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.mainblue),
                             ),
                           )
                         ],
@@ -264,6 +271,7 @@ class MyCompanyScreen extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemBuilder: (context, index) => interestingUser(
+                              context,
                               _controller.myCompanyInfo.value.itrUsers[index]),
                           separatorBuilder: (context, index) => const SizedBox(
                                 width: 16,
@@ -284,7 +292,7 @@ class MyCompanyScreen extends StatelessWidget {
 
   Widget _tabView() {
     return Container(
-      color: mainblack,
+      color: AppColors.mainblack,
       child: TabBarWidget(
         tabController: _controller.tabController,
         isDark: true,
@@ -295,8 +303,8 @@ class MyCompanyScreen extends StatelessWidget {
               icon: SvgPicture.asset(
                 'assets/icons/company_intro.svg',
                 color: _controller.currentIndex.value == 0
-                    ? mainWhite
-                    : dividegray,
+                    ? AppColors.mainWhite
+                    : AppColors.dividegray,
               ),
             ),
           ),
@@ -306,8 +314,8 @@ class MyCompanyScreen extends StatelessWidget {
               icon: SvgPicture.asset(
                 'assets/icons/post_active.svg',
                 color: _controller.currentIndex.value == 1
-                    ? mainWhite
-                    : dividegray,
+                    ? AppColors.mainWhite
+                    : AppColors.dividegray,
               ),
             ),
           ),
@@ -317,8 +325,8 @@ class MyCompanyScreen extends StatelessWidget {
               icon: SvgPicture.asset(
                 'assets/icons/company_view.svg',
                 color: _controller.currentIndex.value == 2
-                    ? mainWhite
-                    : dividegray,
+                    ? AppColors.mainWhite
+                    : AppColors.dividegray,
               ),
             ),
           ),
@@ -347,12 +355,12 @@ class MyCompanyScreen extends StatelessWidget {
                             fit: BoxFit.cover,
                             placeholder: (context, string) {
                               return Container(
-                                color: maingray,
+                                color: AppColors.maingray,
                               );
                             },
                             errorWidget: (context, string, widget) {
                               return Container(
-                                color: maingray,
+                                color: AppColors.maingray,
                               );
                             },
                           ),
@@ -366,15 +374,16 @@ class MyCompanyScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     "기업소개",
-                                    style: kmainbold.copyWith(color: mainWhite),
+                                    style: MyTextTheme.mainbold(context)
+                                        .copyWith(color: AppColors.mainWhite),
                                   ),
                                   const SizedBox(
                                     height: 16,
                                   ),
                                   Text(
                                     "\"${_controller.myCompanyInfo.value.slogan}\"",
-                                    style: kmainboldHeight.copyWith(
-                                        color: mainWhite),
+                                    style: MyTextTheme.mainboldheight(context)
+                                        .copyWith(color: AppColors.mainWhite),
                                   ),
                                   const SizedBox(
                                     height: 16,
@@ -391,7 +400,8 @@ class MyCompanyScreen extends StatelessWidget {
                               child: Text(
                                 _controller.myCompanyInfo.value.images[index]
                                     .imageInfo,
-                                style: kmainheight.copyWith(color: mainWhite),
+                                style: MyTextTheme.mainheight(context)
+                                    .copyWith(color: AppColors.mainWhite),
                               ),
                             )
                         ],
@@ -467,7 +477,7 @@ class MyCompanyScreen extends StatelessWidget {
   //               padding: const EdgeInsets.symmetric(horizontal: 20),
   //               child: Text(
   //                 _controller.myCompanyInfo.value.intro,
-  //                 style: kmainheight.copyWith(color: mainWhite),
+  //                 style: MyTextTheme.mainheight(context).copyWith(color: AppColors.mainWhite),
   //               ),
   //             ),
   //             const SizedBox(
@@ -520,7 +530,7 @@ class MyCompanyScreen extends StatelessWidget {
           ));
   }
 
-  Widget _visitView() {
+  Widget _visitView(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -529,10 +539,12 @@ class MyCompanyScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               "이 탭은 관리 탭으로 계정 주인만 확인할 수 있어요",
-              style: kmain.copyWith(color: maingray),
+              style:
+                  MyTextTheme.main(context).copyWith(color: AppColors.maingray),
             ),
             const SizedBox(height: 16),
             _labelRow(
+              context,
               "팔로워",
               () {
                 Get.to(() => FollowPeopleScreen(
@@ -543,6 +555,7 @@ class MyCompanyScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             _labelRow(
+              context,
               "팔로잉",
               () {
                 Get.to(() => FollowPeopleScreen(
@@ -554,6 +567,7 @@ class MyCompanyScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Obx(
               () => _labelRow(
+                context,
                 "최근 ${_controller.myCompanyInfo.value.name}가 살펴본 프로필",
                 () {
                   Get.to(() => CompanyVisitScreen(
@@ -579,6 +593,7 @@ class MyCompanyScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Obx(
               () => _labelRow(
+                context,
                 "최근 ${_controller.myCompanyInfo.value.name}를 조회한 프로필",
                 () {
                   Get.to(() => CompanyVisitScreen(
@@ -608,22 +623,29 @@ class MyCompanyScreen extends StatelessWidget {
     );
   }
 
-  Widget _labelRow(String label, Function() onTap, {int? count}) {
+  Widget _labelRow(BuildContext context, String label, Function() onTap,
+      {int? count}) {
     return Row(
       children: [
-        Text(label, style: kmainbold.copyWith(color: mainWhite)),
+        Text(label,
+            style: MyTextTheme.mainbold(context)
+                .copyWith(color: AppColors.mainWhite)),
         const SizedBox(width: 8),
         if (count != null)
-          Text("$count명", style: kmain.copyWith(color: mainWhite)),
+          Text("$count명",
+              style: MyTextTheme.main(context)
+                  .copyWith(color: AppColors.mainWhite)),
         const Spacer(),
         GestureDetector(
             onTap: onTap,
-            child: Text("전체보기", style: kmain.copyWith(color: mainblue))),
+            child: Text("전체보기",
+                style: MyTextTheme.main(context)
+                    .copyWith(color: AppColors.mainblue))),
       ],
     );
   }
 
-  Widget interestingUser(User user) {
+  Widget interestingUser(BuildContext context, User user) {
     return Column(
       children: [
         GestureDetector(
@@ -634,7 +656,7 @@ class MyCompanyScreen extends StatelessWidget {
         ),
         Text(
           user.name,
-          style: kmain.copyWith(color: mainWhite),
+          style: MyTextTheme.main(context).copyWith(color: AppColors.mainWhite),
         )
       ],
     );

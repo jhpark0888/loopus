@@ -65,7 +65,8 @@ class PostingWidget extends StatelessWidget {
     return InkWell(
       onTap: type != PostingWidgetType.detail ? () => tapPosting() : null,
       // behavior: HitTestBehavior.translucent,
-      splashColor: type != PostingWidgetType.detail ? kSplashColor : null,
+      splashColor:
+          type != PostingWidgetType.detail ? AppColors.kSplashColor : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -89,7 +90,8 @@ class PostingWidget extends StatelessWidget {
                         onTap: tapProjectname,
                         child: Text(
                           item.project!.careerName,
-                          style: kmain.copyWith(color: maingray),
+                          style: MyTextTheme.main(context)
+                              .copyWith(color: AppColors.maingray),
                         ),
                       ),
                     ),
@@ -124,16 +126,21 @@ class PostingWidget extends StatelessWidget {
                         () => Column(
                           children: [
                             type == PostingWidgetType.detail
-                                ? Text(item.content.value, style: kmainheight)
+                                ? Text(item.content.value,
+                                    style: MyTextTheme.mainheight(context))
                                 : ExpandableText(
                                     textSpan: TextSpan(
                                         text: item.content.value,
-                                        style: kmainheight.copyWith(
-                                            color: isDark ? mainWhite : null)),
+                                        style: MyTextTheme.mainheight(context)
+                                            .copyWith(
+                                                color: isDark
+                                                    ? AppColors.mainWhite
+                                                    : null)),
                                     moreSpan: TextSpan(
                                         text: ' ...더보기',
-                                        style: kmainheight.copyWith(
-                                            color: maingray)),
+                                        style: MyTextTheme.mainheight(context)
+                                            .copyWith(
+                                                color: AppColors.maingray)),
                                     maxLines: 3),
                             const SizedBox(
                               height: 10,
@@ -168,7 +175,8 @@ class PostingWidget extends StatelessWidget {
                                 child: item.isLiked.value == 0
                                     ? SvgPicture.asset(
                                         "assets/icons/postunlike.svg",
-                                        color: isDark ? mainWhite : null,
+                                        color:
+                                            isDark ? AppColors.mainWhite : null,
                                       )
                                     : SvgPicture.asset(
                                         "assets/icons/postlike.svg"),
@@ -188,7 +196,8 @@ class PostingWidget extends StatelessWidget {
                                     : null,
                                 child: SvgPicture.asset(
                                     "assets/icons/comment.svg",
-                                    color: isDark ? mainWhite : null)),
+                                    color:
+                                        isDark ? AppColors.mainWhite : null)),
                             const Spacer(),
                             Obx(
                               () => InkWell(
@@ -196,7 +205,8 @@ class PostingWidget extends StatelessWidget {
                                 child: (item.isMarked.value == 0)
                                     ? SvgPicture.asset(
                                         "assets/icons/post_bookmark_inactive.svg",
-                                        color: isDark ? mainWhite : null,
+                                        color:
+                                            isDark ? AppColors.mainWhite : null,
                                       )
                                     : SvgPicture.asset(
                                         "assets/icons/post_bookmark_active.svg"),
@@ -222,14 +232,15 @@ class PostingWidget extends StatelessWidget {
                               child: Obx(
                                 () => Text(
                                   '좋아요 ${item.likeCount.value}개',
-                                  style: kmain.copyWith(
-                                      color: isDark ? mainWhite : null),
+                                  style: MyTextTheme.main(context).copyWith(
+                                      color:
+                                          isDark ? AppColors.mainWhite : null),
                                 ),
                               )),
                           const Spacer(),
                           Text(calculateDate(item.date),
-                              style: kmain.copyWith(
-                                  color: isDark ? mainWhite : null)),
+                              style: MyTextTheme.main(context).copyWith(
+                                  color: isDark ? AppColors.mainWhite : null)),
                         ]),
                         SizedBox(
                             height: (type == PostingWidgetType.detail ||
@@ -248,18 +259,21 @@ class PostingWidget extends StatelessWidget {
                                         children: [
                                           Text(
                                             item.comments.first.user.name,
-                                            style: kmainbold.copyWith(
-                                                color:
-                                                    isDark ? mainWhite : null),
+                                            style: MyTextTheme.mainbold(context)
+                                                .copyWith(
+                                                    color: isDark
+                                                        ? AppColors.mainWhite
+                                                        : null),
                                           ),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: Text(
                                               item.comments.first.content,
-                                              style: kmain.copyWith(
-                                                  color: isDark
-                                                      ? mainWhite
-                                                      : null),
+                                              style: MyTextTheme.main(context)
+                                                  .copyWith(
+                                                      color: isDark
+                                                          ? AppColors.mainWhite
+                                                          : null),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),

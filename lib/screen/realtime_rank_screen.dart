@@ -81,7 +81,8 @@ class RealTimeRankScreen extends StatelessWidget {
                                               isUniversity == true
                                                   ? "교내 TOP 50"
                                                   : "TOP 50",
-                                              style: kmain)),
+                                              style:
+                                                  MyTextTheme.main(context))),
                                       ListView.separated(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 24),

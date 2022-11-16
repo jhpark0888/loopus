@@ -72,7 +72,7 @@ import '../constant.dart';
 //                                         alignment: Alignment.centerRight,
 //                                         child: Text(
 //                                             "Total ${_controller.userList.length}개",
-//                                             style: kmain)),
+//                                             style: MyTextTheme.main(context))),
 //                                     const SizedBox(
 //                                       height: 24,
 //                                     ),
@@ -131,12 +131,12 @@ import '../constant.dart';
 //               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 //             Text(
 //               user.name,
-//               style: kmainbold,
+//               style: MyTextTheme.mainbold(context),
 //             ),
 //             const SizedBox(height: 7),
 //             Text(
 //               "${user.univName} · ${user.department}",
-//               style: kmain,
+//               style: MyTextTheme.main(context),
 //               overflow: TextOverflow.ellipsis,
 //             ),
 //           ]),
@@ -165,8 +165,8 @@ import '../constant.dart';
 //                   decoration: BoxDecoration(
 //                       color: user.followed.value == FollowState.normal ||
 //                               user.followed.value == FollowState.follower
-//                           ? mainblue
-//                           : cardGray,
+//                           ? AppColors.mainblue
+//                           : AppColors.cardGray,
 //                       borderRadius: BorderRadius.circular(8)),
 //                   child: Center(
 //                     child: Text(
@@ -174,11 +174,11 @@ import '../constant.dart';
 //                               user.followed.value == FollowState.follower
 //                           ? "팔로우"
 //                           : "팔로잉",
-//                       style: kmain.copyWith(
+//                       style: MyTextTheme.main(context).copyWith(
 //                           color: user.followed.value == FollowState.normal ||
 //                                   user.followed.value == FollowState.follower
-//                               ? mainWhite
-//                               : mainblack),
+//                               ? AppColors.mainWhite
+//                               : AppColors.mainblack),
 //                     ),
 //                   ),
 //                 ),
@@ -237,7 +237,8 @@ class CompanyInterestingScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   "총 ${company.itrUsers.length}개의 프로필",
-                  style: kmain.copyWith(color: maingray),
+                  style: MyTextTheme.main(context)
+                      .copyWith(color: AppColors.maingray),
                 ),
                 const SizedBox(height: 24),
                 ListView.separated(

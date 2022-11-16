@@ -6,7 +6,6 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/screen/other_company_screen.dart';
-import 'package:loopus/trash_bin/company_image_widget.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/follow_button_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -29,7 +28,7 @@ class CompanyWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: maingray,
+                color: AppColors.maingray,
                 width: 0.5,
               ),
             ),
@@ -40,12 +39,12 @@ class CompanyWidget extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorWidget: (context, string, widget) {
                       return Container(
-                        color: maingray,
+                        color: AppColors.maingray,
                       );
                     },
                   )
                 : Container(
-                    color: maingray,
+                    color: AppColors.maingray,
                   ),
           ),
           const SizedBox(
@@ -69,7 +68,7 @@ class CompanyWidget extends StatelessWidget {
                   children: [
                     Text(
                       company.name,
-                      style: kmain,
+                      style: MyTextTheme.main(context),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -78,15 +77,19 @@ class CompanyWidget extends StatelessWidget {
                       children: [
                         Text(
                           fieldList[company.fieldId]!,
-                          style: kmain.copyWith(color: maingray),
+                          style: MyTextTheme.main(context)
+                              .copyWith(color: AppColors.maingray),
                         ),
                         const Spacer(),
                         RichText(
                             text: TextSpan(children: [
                           TextSpan(
                               text: "관심 ",
-                              style: kmain.copyWith(color: maingray)),
-                          TextSpan(text: "${company.itrCount}명", style: kmain)
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.maingray)),
+                          TextSpan(
+                              text: "${company.itrCount}명",
+                              style: MyTextTheme.main(context))
                         ]))
                       ],
                     )
@@ -136,7 +139,7 @@ class CompanyTileWidget extends StatelessWidget {
           Expanded(
             child: Text(
               company.name,
-              style: kmainbold,
+              style: MyTextTheme.mainbold(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),

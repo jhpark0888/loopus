@@ -60,7 +60,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
         },
         child: Scaffold(
           bottomNavigationBar: BottomAppBar(
-            color: mainWhite,
+            color: AppColors.mainWhite,
             elevation: 0,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -69,7 +69,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
                 children: [
                   Obx(() => _signupController.signupcertification.value ==
                           Emailcertification.waiting
-                      ? _signupController.timer.timerDisplay()
+                      ? _signupController.timer.timerDisplay(context)
                       : Container()),
                   const SizedBox(
                     height: 24,
@@ -164,14 +164,14 @@ class SignupEmailcheckScreen extends StatelessWidget {
                   ),
                   Text(
                     "${_signupController.emailidcontroller.text}@${_signupController.selectUniv.value.email}",
-                    style: kmainbold,
+                    style: MyTextTheme.mainbold(context),
                   ),
                   const SizedBox(
                     height: 24,
                   ),
-                  const Text(
+                  Text(
                     "위 웹메일 주소에서 인증번호를 확인해주세요",
-                    style: kmain,
+                    style: MyTextTheme.main(context),
                   ),
                   const SizedBox(
                     height: 24,
@@ -235,7 +235,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 "인증번호가 다릅니다. 다시 확인해주세요",
-                                style: kmain.copyWith(color: rankred),
+                                style: MyTextTheme.main(context)
+                                    .copyWith(color: AppColors.rankred),
                               ),
                             ),
                           )
@@ -248,7 +249,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
                       },
                       child: Text(
                         "인천대학교 메일이 오지 않는 경우 해결 방법",
-                        style: kmain.copyWith(color: mainblue),
+                        style: MyTextTheme.main(context)
+                            .copyWith(color: AppColors.mainblue),
                       ))
                 ],
               ),

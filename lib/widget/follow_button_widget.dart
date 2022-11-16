@@ -31,11 +31,11 @@ class FollowButtonWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                     color: user.banned.value == BanState.ban
-                        ? rankred
+                        ? AppColors.rankred
                         : user.followed.value == FollowState.normal ||
                                 user.followed.value == FollowState.follower
-                            ? mainblue
-                            : cardGray,
+                            ? AppColors.mainblue
+                            : AppColors.cardGray,
                     borderRadius: BorderRadius.circular(8)),
                 child: Center(
                   child: Text(
@@ -45,11 +45,11 @@ class FollowButtonWidget extends StatelessWidget {
                                 user.followed.value == FollowState.follower
                             ? "팔로우"
                             : "팔로잉",
-                    style: kmain.copyWith(
+                    style: MyTextTheme.main(context).copyWith(
                         color: user.followed.value == FollowState.normal ||
                                 user.followed.value == FollowState.follower
-                            ? mainWhite
-                            : mainblack),
+                            ? AppColors.mainWhite
+                            : AppColors.mainblack),
                   ),
                 ),
               ),

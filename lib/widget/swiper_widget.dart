@@ -123,9 +123,9 @@ enum SwiperType { image, link, file }
 //               : widget.aspectRatio,
 //           child: Container(
 //               decoration: const BoxDecoration(
-//                 color: mainblack,
+//                 color: AppColors.mainblack,
 //                 border: Border.symmetric(
-//                   horizontal: BorderSide(color: mainWhite),
+//                   horizontal: BorderSide(color: AppColors.mainWhite),
 //                 ),
 //               ),
 //               // width: Get.width,
@@ -157,8 +157,8 @@ enum SwiperType { image, link, file }
 //                 size: 7,
 //                 activeSize: 7,
 //                 space: 7,
-//                 color: maingray,
-//                 activeColor: mainblue,
+//                 color: AppColors.maingray,
+//                 activeColor: AppColors.mainblue,
 //                 count: widget.items.length,
 //                 controller: _pageController,
 //                 layout: PageIndicatorLayout.SLIDE,
@@ -226,7 +226,7 @@ enum SwiperType { image, link, file }
 //           Positioned.fill(
 //               child: Opacity(
 //             opacity: 0.3,
-//             child: Container(color: mainblack),
+//             child: Container(color: AppColors.mainblack),
 //           )),
 //           Positioned(
 //               left: offset.dx,
@@ -272,9 +272,9 @@ class SwiperWidget extends StatelessWidget {
           Container(
               height: 270,
               decoration: const BoxDecoration(
-                color: mainblack,
+                color: AppColors.mainblack,
                 border: Border.symmetric(
-                  horizontal: BorderSide(color: mainWhite),
+                  horizontal: BorderSide(color: AppColors.mainWhite),
                 ),
               ),
               // width: Get.width,
@@ -283,7 +283,10 @@ class SwiperWidget extends StatelessWidget {
                 controller: _pageController,
                 itemBuilder: (BuildContext context, int index) {
                   return KeepAliveWidget(
-                    child: LinkWidget(url: items[index], widgetType: 'post'),
+                    child: LinkWidget(
+                      url: items[index],
+                      widgetType: 'post',
+                    ),
                   );
                 },
                 itemCount: items.length,
@@ -293,9 +296,9 @@ class SwiperWidget extends StatelessWidget {
             aspectRatio: aspectRatio ?? 1,
             child: Container(
                 decoration: const BoxDecoration(
-                  color: mainblack,
+                  color: AppColors.mainblack,
                   border: Border.symmetric(
-                    horizontal: BorderSide(color: mainWhite),
+                    horizontal: BorderSide(color: AppColors.mainWhite),
                   ),
                 ),
                 // width: Get.width,
@@ -331,8 +334,8 @@ class SwiperWidget extends StatelessWidget {
                 controller: _pageController,
                 count: items.length,
                 effect: ScrollingDotsEffect(
-                  dotColor: maingray,
-                  activeDotColor: mainblue,
+                  dotColor: AppColors.maingray,
+                  activeDotColor: AppColors.mainblue,
                   spacing: 8,
                   dotWidth: 7,
                   dotHeight: 7,

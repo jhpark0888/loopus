@@ -29,14 +29,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: mainWhite,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
-        ),
         title: Text(
           title ?? '',
-          style: kNavigationTitle,
+          style: MyTextTheme.navigationTitle(context),
         ),
         titleSpacing: titleSpacing,
         centerTitle: centetTitle ?? true,
@@ -54,7 +49,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               ),
         automaticallyImplyLeading: false,
         elevation: 0,
-        backgroundColor: mainWhite,
         leadingWidth: 44,
         leading: leading ??
             GestureDetector(

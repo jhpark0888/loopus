@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:loopus/constant.dart';
 
 class NoUlTextField extends StatelessWidget {
-  NoUlTextField({
-    Key? key,
-    required this.controller,
-    this.hintText,
-    required this.obscureText,
-    this.maxLines,
-    this.maxLength,
-    this.onChanged
-  }) : super(key: key);
+  NoUlTextField(
+      {Key? key,
+      required this.controller,
+      this.hintText,
+      required this.obscureText,
+      this.maxLines,
+      this.maxLength,
+      this.onChanged})
+      : super(key: key);
   TextEditingController? controller;
   bool obscureText;
   int? maxLines;
@@ -27,8 +27,8 @@ class NoUlTextField extends StatelessWidget {
       minLines: 6,
       maxLines: maxLines,
       autofocus: false,
-      style: kmain.copyWith(height: 1.5),
-      cursorColor: mainblue,
+      style: MyTextTheme.main(context).copyWith(height: 1.5),
+      cursorColor: AppColors.mainblue,
       cursorWidth: 1.5,
       cursorRadius: const Radius.circular(2),
       controller: controller,
@@ -37,8 +37,8 @@ class NoUlTextField extends StatelessWidget {
         contentPadding: const EdgeInsets.only(bottom: 12, top: 13),
         isDense: true,
         hintText: hintText,
-        hintStyle: kmain.copyWith(
-          color: mainblack.withOpacity(0.38),
+        hintStyle: MyTextTheme.main(context).copyWith(
+          color: AppColors.mainblack.withOpacity(0.38),
         ),
         enabledBorder: InputBorder.none,
         disabledBorder: InputBorder.none,

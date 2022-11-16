@@ -27,7 +27,7 @@ class CompanyListWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(contact.category, style: kmainbold),
+        Text(contact.category, style: MyTextTheme.mainbold(context)),
         SizedBox(height: 14),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -53,11 +53,12 @@ class CompanyListWidget extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(contact.companyProfile.companyName,
-                                style: kmain),
+                                style: MyTextTheme.main(context)),
                             SizedBox(height: 7),
                             Text(
                               contact.category,
-                              style: kmainheight.copyWith(color: maingray),
+                              style: MyTextTheme.mainheight(context)
+                                  .copyWith(color: AppColors.maingray),
                             )
                           ],
                         ),
@@ -83,8 +84,8 @@ class CompanyListWidget extends StatelessWidget {
                                   user.followed.value == FollowState.normal ||
                                           user.followed.value ==
                                               FollowState.follower
-                                      ? mainblue
-                                      : cardGray,
+                                      ? AppColors.mainblue
+                                      : AppColors.cardGray,
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                             child: Text(
@@ -93,13 +94,13 @@ class CompanyListWidget extends StatelessWidget {
                                           FollowState.follower
                                   ? "팔로우"
                                   : "팔로잉",
-                              style: kmain.copyWith(
+                              style: MyTextTheme.main(context).copyWith(
                                   color: user.followed.value ==
                                               FollowState.normal ||
                                           user.followed.value ==
                                               FollowState.follower
-                                      ? mainWhite
-                                      : mainblack),
+                                      ? AppColors.mainWhite
+                                      : AppColors.mainblack),
                             ),
                           ),
                         ),

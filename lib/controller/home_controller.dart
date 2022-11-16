@@ -1,39 +1,25 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
-import 'package:loopus/controller/career_board_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/issue_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/mycompany_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
-import 'package:loopus/trash_bin/question_api.dart';
-import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
-import 'package:loopus/controller/bookmark_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/notification_controller.dart';
-import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/share_intent_controller.dart';
-import 'package:loopus/model/contact_model.dart';
-import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
-import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/select_project_screen.dart';
-import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/utils/error_control.dart';
-import 'package:loopus/widget/posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
@@ -150,7 +136,7 @@ class HomeController extends GetxController
   }
 
   void onPostingRefresh() async {
-    getUserProfile();
+    // getUserProfile();
 
     enablePostingPullup.value = true;
     posts.clear();

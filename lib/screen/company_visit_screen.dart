@@ -65,8 +65,9 @@ class CompanyVisitScreen extends StatelessWidget {
                                         const SizedBox(height: 16),
                                         Text(
                                             "총 ${_controller.userList.length}개의 프로필",
-                                            style: kmain.copyWith(
-                                                color: maingray)),
+                                            style: MyTextTheme.main(context)
+                                                .copyWith(
+                                                    color: AppColors.maingray)),
                                         const SizedBox(
                                           height: 24,
                                         ),

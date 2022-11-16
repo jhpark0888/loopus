@@ -72,7 +72,7 @@ class ReplyWidget extends StatelessWidget {
                         onTap: tapProfile,
                         child: Text(
                           reply.user.name,
-                          style: kmainbold,
+                          style: MyTextTheme.mainbold(context),
                         ),
                       ),
                       // const Spacer(),
@@ -89,15 +89,15 @@ class ReplyWidget extends StatelessWidget {
                       //             preventDuplicates: false);
                       //       },
                       //     text: ' @${reply.taggedUser.name}',
-                      //     style: kmainbold.copyWith(
+                      //     style: MyTextTheme.mainbold(context).copyWith(
                       //         height: 1.5,
-                      //         color: mainblue,
+                      //         color: AppColors.mainblue,
                       //         fontSize: 14,
                       //         fontWeight: FontWeight.w400),
                       //   ),
                       //   TextSpan(
                       //     text: reply.content,
-                      //     style: kmainheight,
+                      //     style: MyTextTheme.mainheight(context),
                       //   )
                       // ])),
                       const Spacer(),
@@ -145,8 +145,8 @@ class ReplyWidget extends StatelessWidget {
                                       value1: '답글 삭제하기',
                                       value2: '',
                                       isOne: true,
-                                      buttonColor1: mainWhite,
-                                      textColor1: mainblack);
+                                      buttonColor1: AppColors.mainWhite,
+                                      textColor1: AppColors.mainblack);
                                   // showModalIOS(
                                   //   context,
                                   //   cancleButton: false,
@@ -223,7 +223,7 @@ class ReplyWidget extends StatelessWidget {
                           // behavior: HitTestBehavior.translucent,
                           icon: SvgPicture.asset(
                             'assets/icons/comment_option_icon.svg',
-                            color: maingray,
+                            color: AppColors.maingray,
                           ),
                         ),
                       ),
@@ -232,7 +232,7 @@ class ReplyWidget extends StatelessWidget {
                   // const SizedBox(
                   //   height: 4,
                   // ),
-                  Text(reply.content, style: kmainheight),
+                  Text(reply.content, style: MyTextTheme.mainheight(context)),
                   // RichText(
                   //   textAlign: TextAlign.start,
                   //     text: TextSpan(children: [
@@ -247,7 +247,7 @@ class ReplyWidget extends StatelessWidget {
                   //   //           preventDuplicates: false);
                   //   //     },
                   //   //   text: '@${reply.taggedUser.name}',
-                  //   //   style: kmainbold.copyWith(
+                  //   //   style: MyTextTheme.mainbold(context).copyWith(
                   //   //       height: 1.5,
                   //   //       color: Color.fromARGB(255, 71, 155, 224),
                   //   //       fontSize: 14,
@@ -255,7 +255,7 @@ class ReplyWidget extends StatelessWidget {
                   //   // ),
                   //   TextSpan(
                   //     text: reply.content,
-                  //     style: kmainheight,
+                  //     style: MyTextTheme.mainheight(context),
                   //   )
                   // ])),
                   const SizedBox(
@@ -267,7 +267,8 @@ class ReplyWidget extends StatelessWidget {
                       children: [
                         Text(
                           '${commentCalculateDate(reply.date)} 전',
-                          style: kmain.copyWith(color: maingray),
+                          style: MyTextTheme.main(context)
+                              .copyWith(color: AppColors.maingray),
                         ),
                         const Spacer(),
                         GestureDetector(
@@ -280,8 +281,8 @@ class ReplyWidget extends StatelessWidget {
                             },
                             child: Text(
                               '좋아요 ${reply.likecount.value}개',
-                              style: kmain.copyWith(
-                                color: maingray,
+                              style: MyTextTheme.main(context).copyWith(
+                                color: AppColors.maingray,
                               ),
                             )),
                         const SizedBox(
@@ -294,7 +295,7 @@ class ReplyWidget extends StatelessWidget {
                                   "assets/icons/unlike.svg",
                                   width: 16,
                                   height: 16,
-                                  color: maingray,
+                                  color: AppColors.maingray,
                                 )
                               : SvgPicture.asset(
                                   "assets/icons/like.svg",

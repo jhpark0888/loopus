@@ -53,7 +53,7 @@ class MessageScreen extends StatelessWidget {
         //                   '메시지 목록을 받아오는 중이에요...',
         //                   style: TextStyle(
         //                     fontSize: 10,
-        //                     color: mainblue,
+        //                     color: AppColors.mainblue,
         //                     fontWeight: FontWeight.w500,
         //                   ),
         //                 )
@@ -105,7 +105,7 @@ class MessageScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     messageController.searchRoomList.isNotEmpty
                         ? Obx(
-                          ()=> Expanded(
+                            () => Expanded(
                               child: SlidableAutoCloseBehavior(
                                 closeWhenOpened: true,
                                 closeWhenTapped: true,
@@ -117,20 +117,21 @@ class MessageScreen extends StatelessWidget {
                                   //   return const SizedBox(height: 24);
                                   // },
                                   itemBuilder: (context, index) {
-                                    if(messageController
-                                        .searchRoomList[index].user.value.banned.value == BanState.normal){
-                                    return messageController
-                                        .searchRoomList[index];
-                                        }else{
-                                          return const SizedBox.shrink();
-                                        }
+                                    if (messageController.searchRoomList[index]
+                                            .user.value.banned.value ==
+                                        BanState.normal) {
+                                      return messageController
+                                          .searchRoomList[index];
+                                    } else {
+                                      return const SizedBox.shrink();
+                                    }
                                   },
                                   itemCount:
                                       messageController.searchRoomList.length,
                                 ),
                               ),
                             ),
-                        )
+                          )
                         : Expanded(
                             child: SizedBox(
                               width: Get.width,
@@ -140,8 +141,9 @@ class MessageScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     '메시지 목록이 비어있어요',
-                                    style: kmain.copyWith(
-                                      color: mainblack.withOpacity(0.38),
+                                    style: MyTextTheme.main(context).copyWith(
+                                      color:
+                                          AppColors.mainblack.withOpacity(0.38),
                                     ),
                                   ),
                                 ],

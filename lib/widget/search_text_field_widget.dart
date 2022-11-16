@@ -34,8 +34,8 @@ class SearchTextFieldWidget extends StatelessWidget {
         readOnly: readonly,
         onTap: ontap,
         onChanged: onchanged,
-        style: kmainheight,
-        cursorColor: mainblack,
+        style: MyTextTheme.mainheight(context),
+        cursorColor: AppColors.mainblack,
         cursorWidth: 1.2,
         textAlignVertical: TextAlignVertical.center,
         cursorRadius: Radius.circular(5.0),
@@ -46,7 +46,7 @@ class SearchTextFieldWidget extends StatelessWidget {
         focusNode: focusNode,
         decoration: InputDecoration(
           filled: true,
-          fillColor: cardGray,
+          fillColor: AppColors.cardGray,
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(8)),
@@ -56,14 +56,15 @@ class SearchTextFieldWidget extends StatelessWidget {
           contentPadding: const EdgeInsets.only(right: 16),
           isDense: true,
           hintText: hinttext,
-          hintStyle: kmain.copyWith(color: maingray),
+          hintStyle:
+              MyTextTheme.main(context).copyWith(color: AppColors.maingray),
           prefixIcon: Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
             child: SvgPicture.asset(
               "assets/icons/search_inactive.svg",
               width: 20,
               height: 20,
-              color: maingray,
+              color: AppColors.maingray,
             ),
           ),
         ));

@@ -175,7 +175,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                   hintText:
                                       '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
                                   rightText: '신고',
-                                  rightBoxColor: rankred,
+                                  rightBoxColor: AppColors.rankred,
                                   textEditingController: reportController,
                                   leftFunction: () {
                                     Get.back();
@@ -194,9 +194,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                             },
                             value1: '계정 차단하기',
                             value2: '계정 신고하기',
-                            buttonColor1: mainWhite,
-                            buttonColor2: rankred,
-                            textColor1: rankred,
+                            buttonColor1: AppColors.mainWhite,
+                            buttonColor2: AppColors.rankred,
+                            textColor1: AppColors.rankred,
                             isOne: false,
                           );
                         },
@@ -228,7 +228,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                       //       context),
                       //   sliver:
                       SliverAppBar(
-                        backgroundColor: mainWhite,
+                        backgroundColor: AppColors.mainWhite,
                         toolbarHeight: 44,
                         pinned: true,
                         primary: false,
@@ -299,10 +299,10 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                   Obx(
                     () => Text(
                       _controller.otherUser.value.followerCount.toString(),
-                      style: kmainbold.copyWith(
+                      style: MyTextTheme.mainbold(context).copyWith(
                           color: _hoverController.isHover.value
-                              ? mainblack.withOpacity(0.6)
-                              : mainblack),
+                              ? AppColors.mainblack.withOpacity(0.6)
+                              : AppColors.mainblack),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -311,7 +311,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                   ),
                   Text(
                     '팔로워',
-                    style: kmain.copyWith(color: maingray),
+                    style: MyTextTheme.main(context)
+                        .copyWith(color: AppColors.maingray),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -332,8 +333,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                               func2: changeProfileImage,
                               value1: '기본 이미지로 변경',
                               value2: '사진첩에서 사진 선택',
-                              buttonColor1: maingray,
-                              buttonColor2: mainblue,
+                              buttonColor1: AppColors.maingray,
+                              buttonColor2: AppColors.mainblue,
                               isOne: false);
                         }
                       },
@@ -354,12 +355,13 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                             func2: changeProfileImage,
                             value1: '기본 이미지로 변경',
                             value2: '사진첩에서 사진 선택',
-                            buttonColor1: maingray,
-                            buttonColor2: mainblue,
+                            buttonColor1: AppColors.maingray,
+                            buttonColor2: AppColors.mainblue,
                             isOne: false),
                         child: Container(
                           decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: mainWhite),
+                              shape: BoxShape.circle,
+                              color: AppColors.mainWhite),
                           child: SvgPicture.asset(
                             "assets/icons/profile_image.svg",
                             width: 28,
@@ -388,10 +390,10 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                   Obx(
                     () => Text(
                       _controller.otherUser.value.followingCount.toString(),
-                      style: kmainbold.copyWith(
+                      style: MyTextTheme.mainbold(context).copyWith(
                           color: _hoverController.isHover.value
-                              ? mainblack.withOpacity(0.6)
-                              : mainblack),
+                              ? AppColors.mainblack.withOpacity(0.6)
+                              : AppColors.mainblack),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -400,7 +402,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                   ),
                   Text(
                     '팔로잉',
-                    style: kmain.copyWith(color: maingray),
+                    style: MyTextTheme.main(context)
+                        .copyWith(color: AppColors.maingray),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -414,7 +417,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
         Obx(
           () => Text(
             _controller.otherUser.value.name,
-            style: kmainbold,
+            style: MyTextTheme.mainbold(context),
           ),
         ),
         const SizedBox(
@@ -435,31 +438,31 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                 const SizedBox(width: 8),
                 Text(
                   _controller.otherUser.value.univName,
-                  style: kmain,
+                  style: MyTextTheme.main(context),
                 ),
                 const SizedBox(
                   height: 9,
                   child: VerticalDivider(
                     thickness: 1,
                     width: 16,
-                    color: mainblack,
+                    color: AppColors.mainblack,
                   ),
                 ),
                 Text(
                   _controller.otherUser.value.department,
-                  style: kmain,
+                  style: MyTextTheme.main(context),
                 ),
                 const SizedBox(
                   height: 9,
                   child: VerticalDivider(
                     thickness: 1,
                     width: 16,
-                    color: mainblack,
+                    color: AppColors.mainblack,
                   ),
                 ),
                 Text(
                   "${_controller.otherUser.value.admissionYear.substring(2)}년도 입학",
-                  style: kmain,
+                  style: MyTextTheme.main(context),
                 ),
               ],
             ),
@@ -559,7 +562,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                       "assets/icons/home_add.svg",
                       width: 28,
                       height: 28,
-                      color: mainblue,
+                      color: AppColors.mainblue,
                     ),
                   ),
                   _controller.otherUser.value.snsList.isNotEmpty
@@ -574,7 +577,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                             padding: const EdgeInsets.only(left: 8),
                             child: Text(
                               "SNS를 추가해주세요",
-                              style: kmain.copyWith(color: mainblue),
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.mainblue),
                             ),
                           ),
                         )
@@ -599,20 +603,21 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
             Container(
               decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: maingray, width: 2.0),
+                  bottom: BorderSide(color: AppColors.maingray, width: 2.0),
                 ),
               ),
             ),
             TabBar(
                 controller: _tabController,
-                labelStyle: kmainbold,
-                labelColor: mainblack,
-                unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-                unselectedLabelColor: dividegray,
+                labelStyle: MyTextTheme.mainbold(context),
+                labelColor: AppColors.mainblack,
+                unselectedLabelStyle: MyTextTheme.mainbold(context)
+                    .copyWith(color: AppColors.dividegray),
+                unselectedLabelColor: AppColors.dividegray,
                 automaticIndicatorColorAdjustment: false,
                 indicator: const UnderlineIndicator(
                   strokeCap: StrokeCap.round,
-                  borderSide: BorderSide(width: 2, color: mainblack),
+                  borderSide: BorderSide(width: 2, color: AppColors.mainblack),
                 ),
                 onTap: (index) {
                   currentIndex(index);
@@ -624,7 +629,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                       height: 40,
                       child: SvgPicture.asset(
                         'assets/icons/list_active.svg',
-                        color: currentIndex.value == 0 ? null : dividegray,
+                        color: currentIndex.value == 0
+                            ? null
+                            : AppColors.dividegray,
                       ),
                     ),
                   ),
@@ -633,7 +640,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                       height: 40,
                       child: SvgPicture.asset(
                         'assets/icons/post_active.svg',
-                        color: currentIndex.value == 1 ? null : dividegray,
+                        color: currentIndex.value == 1
+                            ? null
+                            : AppColors.dividegray,
                       ),
                     ),
                   ),
@@ -662,7 +671,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                             child: Text(
                               "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
                               "\n실제 서비스 가입 유무는 다를 수 있습니다.",
-                              style: kcaption.copyWith(color: popupGray),
+                              style: MyTextTheme.caption(context)
+                                  .copyWith(color: AppColors.popupGray),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -693,7 +703,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text('${widget.realname}님과 관련있는 기업',
-                                        style: kmainbold),
+                                        style: MyTextTheme.mainbold(context)),
                                     const SizedBox(width: 8),
                                     if (_controller.otherUser.value.isuser == 1)
                                       SizedBox(
@@ -739,7 +749,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                     )
                                   : Text(
                                       '아직 ${_controller.otherUser.value.name}님과 관련있는 기업이 없어요',
-                                      style: kmain.copyWith(color: maingray),
+                                      style: MyTextTheme.main(context)
+                                          .copyWith(color: AppColors.maingray),
                                     ),
                               // CareerAnalysisWidget(
                               //   field: fieldList[
@@ -764,7 +775,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Text('커리어', style: kmainbold),
+                                    Text('커리어',
+                                        style: MyTextTheme.mainbold(context)),
                                     const SizedBox(width: 8),
                                     CareerAnalysisWidget(
                                       field: fieldList[
@@ -809,8 +821,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                         },
                                         child: Text(
                                           "수정하기",
-                                          style:
-                                              kmain.copyWith(color: mainblue),
+                                          style: MyTextTheme.main(context)
+                                              .copyWith(
+                                                  color: AppColors.mainblue),
                                         ),
                                       )
                                   ],
@@ -853,8 +866,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                     child: Text(
                                       "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
                                       "\n실제 서비스 가입 유무는 다를 수 있습니다.",
-                                      style:
-                                          kcaption.copyWith(color: popupGray),
+                                      style: MyTextTheme.caption(context)
+                                          .copyWith(color: AppColors.popupGray),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -915,11 +928,12 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(company.name, style: kmain),
+              Text(company.name, style: MyTextTheme.main(context)),
               const SizedBox(height: 4),
               Text(
                 fieldList[company.fieldId]!,
-                style: kmain.copyWith(color: maingray),
+                style: MyTextTheme.main(context)
+                    .copyWith(color: AppColors.maingray),
               )
             ],
           ),

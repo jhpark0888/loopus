@@ -29,7 +29,7 @@ import 'package:loopus/widget/user_image_widget.dart';
 //               onTap: () {
 //                 Get.to(() => WebViewScreen(url: url));
 //               },
-//               splashColor: kSplashColor,
+//               splashColor: AppColors.kSplashColor,
 //               child: SizedBox(
 //                 width: 270,
 //                 child: Column(
@@ -45,7 +45,7 @@ import 'package:loopus/widget/user_image_widget.dart';
 //                         : Container(
 //                             height: 170,
 //                             width: 270,
-//                             color: cardGray,
+//                             color: AppColors.cardGray,
 //                           ),
 //                     const SizedBox(
 //                       height: 10,
@@ -53,7 +53,7 @@ import 'package:loopus/widget/user_image_widget.dart';
 //                     Expanded(
 //                       child: Text(
 //                         _newsController.title,
-//                         style: kmainheight,
+//                         style: MyTextTheme.mainheight(context),
 //                         maxLines: 2,
 //                         overflow: TextOverflow.ellipsis,
 //                       ),
@@ -79,7 +79,7 @@ import 'package:loopus/widget/user_image_widget.dart';
 //                               ),
 //                               Text(
 //                                 _newsController.authorName,
-//                                 style: kmain,
+//                                 style: MyTextTheme.main(context),
 //                               )
 //                             ],
 //                           ),
@@ -123,7 +123,8 @@ class NewsListWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               title ?? _issueListTitle(),
-              style: kmainbold.copyWith(color: isDark ? mainWhite : null),
+              style: MyTextTheme.mainbold(context)
+                  .copyWith(color: isDark ? AppColors.mainWhite : null),
             ),
           ),
           const SizedBox(
@@ -206,7 +207,7 @@ class NewsWidget extends StatelessWidget {
                 width: size,
                 height: size,
                 errorWidget: (context, string, widget) {
-                  return Container(color: maingray);
+                  return Container(color: AppColors.maingray);
                 },
               ),
             );
@@ -225,33 +226,36 @@ class NewsWidget extends StatelessWidget {
                 width: size,
                 height: size,
                 errorWidget: (context, string, widget) {
-                  return Container(color: maingray);
+                  return Container(color: AppColors.maingray);
                 },
               ),
             );
     }
   }
 
-  Widget _authorNameView() {
+  Widget _authorNameView(BuildContext context) {
     if (issue is NewsIssue) {
       NewsIssue newsIssue = issue as NewsIssue;
       return Text(
         newsIssue.corp,
-        style: kmain.copyWith(color: isDark ? mainWhite : null),
+        style: MyTextTheme.main(context)
+            .copyWith(color: isDark ? AppColors.mainWhite : null),
         overflow: TextOverflow.ellipsis,
       );
     } else if (issue is BrunchIssue) {
       BrunchIssue brunchIssue = issue as BrunchIssue;
       return Text(
         brunchIssue.writer,
-        style: kmain.copyWith(color: isDark ? mainWhite : null),
+        style: MyTextTheme.main(context)
+            .copyWith(color: isDark ? AppColors.mainWhite : null),
         overflow: TextOverflow.ellipsis,
       );
     } else {
       YoutubeIssue youtubeIssue = issue as YoutubeIssue;
       return Text(
         youtubeIssue.chName,
-        style: kmain.copyWith(color: isDark ? mainWhite : null),
+        style: MyTextTheme.main(context)
+            .copyWith(color: isDark ? AppColors.mainWhite : null),
         overflow: TextOverflow.ellipsis,
       );
     }
@@ -266,7 +270,7 @@ class NewsWidget extends StatelessWidget {
               onTap: () {
                 Get.to(() => WebViewScreen(url: issue.url));
               },
-              splashColor: kSplashColor,
+              splashColor: AppColors.kSplashColor,
               child: SizedBox(
                 width: 270,
                 child: Column(
@@ -280,7 +284,7 @@ class NewsWidget extends StatelessWidget {
                             width: 270,
                             fit: BoxFit.cover,
                             errorWidget: (context, string, widget) {
-                              return Container(color: maingray);
+                              return Container(color: AppColors.maingray);
                             })
                         : Image.asset(
                             "assets/illustrations/link_noimage.png",
@@ -294,8 +298,8 @@ class NewsWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         issue.title,
-                        style: kmainheight.copyWith(
-                            color: isDark ? mainWhite : null),
+                        style: MyTextTheme.mainheight(context).copyWith(
+                            color: isDark ? AppColors.mainWhite : null),
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis,
@@ -310,7 +314,7 @@ class NewsWidget extends StatelessWidget {
                         const SizedBox(
                           width: 8,
                         ),
-                        Expanded(child: _authorNameView())
+                        Expanded(child: _authorNameView(context))
                       ],
                     )
                   ],

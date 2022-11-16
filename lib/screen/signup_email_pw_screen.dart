@@ -29,7 +29,7 @@ class SignupEmailPwScreen extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -117,7 +117,7 @@ class SignupEmailPwScreen extends StatelessWidget {
                     textController: _signupController.emailidcontroller,
                     suffix: Text(
                       "@${_signupController.selectUniv.value.email}",
-                      style: kmain,
+                      style: MyTextTheme.main(context),
                     ),
                   ),
                   if (_signupController.isReCertification == false)
@@ -161,7 +161,8 @@ class SignupEmailPwScreen extends StatelessWidget {
                     _signupController.isReCertification == false
                         ? "대학 웹메일 주소로 대학 인증 메일이 전송되며,\n이후 루프어스 로그인 아이디로 사용돼요"
                         : "대학이 변경된 경우, 변경된 대학 주소를 입력해주세요",
-                    style: kmainheight.copyWith(color: maingray),
+                    style: MyTextTheme.mainheight(context)
+                        .copyWith(color: AppColors.maingray),
                     textAlign: TextAlign.center,
                   ),
                 ],

@@ -26,11 +26,12 @@ class SignUpTextWidget extends StatelessWidget {
               text: TextSpan(children: [
             TextSpan(
               text: highlightText ?? "",
-              style: ktitle.copyWith(color: mainblue),
+              style: MyTextTheme.title(context)
+                  .copyWith(color: AppColors.mainblue),
             ),
             TextSpan(
               text: oneLinetext,
-              style: ktitle,
+              style: MyTextTheme.title(context),
             ),
           ])),
           const SizedBox(
@@ -40,11 +41,12 @@ class SignUpTextWidget extends StatelessWidget {
               text: TextSpan(children: [
             TextSpan(
               text: twohighlightText ?? "",
-              style: ktitle.copyWith(color: mainblue),
+              style: MyTextTheme.title(context)
+                  .copyWith(color: AppColors.mainblue),
             ),
             TextSpan(
               text: twoLinetext,
-              style: ktitle,
+              style: MyTextTheme.title(context),
             ),
           ])),
         ],

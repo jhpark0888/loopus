@@ -49,11 +49,13 @@ class Tagwidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border:
-                Border.all(color: isDark ? mainWhite : maingray, width: 0.5)),
+            border: Border.all(
+                color: isDark ? AppColors.mainWhite : AppColors.maingray,
+                width: 0.5)),
         child: Text(
           tag.tag,
-          style: kmain.copyWith(color: isDark ? mainWhite : null),
+          style: MyTextTheme.main(context)
+              .copyWith(color: isDark ? AppColors.mainWhite : null),
         ),
       ),
     );

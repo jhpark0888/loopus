@@ -5,29 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
-import 'package:loopus/app.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
-import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
-import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/search_focus_screen.dart';
-import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/utils/error_control.dart';
-import 'package:loopus/widget/custom_header_footer.dart';
-import 'package:loopus/widget/divide_widget.dart';
-import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
-import 'package:loopus/widget/search_student_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:underline_indicator/underline_indicator.dart';
-
-import '../api/tag_api.dart';
-import '../widget/disconnect_reload_widget.dart';
-import '../widget/error_reload_widget.dart';
 
 class SearchScreen extends StatelessWidget {
   final SearchController _searchController = Get.put(SearchController());
@@ -46,7 +31,7 @@ class SearchScreen extends StatelessWidget {
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
             systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarColor: mainWhite,
+              statusBarColor: AppColors.mainWhite,
               statusBarIconBrightness: Brightness.dark,
               statusBarBrightness: Brightness.light,
             ),
@@ -55,7 +40,7 @@ class SearchScreen extends StatelessWidget {
             centerTitle: false,
             titleSpacing: 0,
             elevation: 0,
-            backgroundColor: mainWhite,
+            backgroundColor: AppColors.mainWhite,
             title: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               width: MediaQuery.of(context).size.width,
@@ -96,9 +81,9 @@ class SearchScreen extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          const Text(
+                          Text(
                             "최근 검색",
-                            style: kmainbold,
+                            style: MyTextTheme.mainbold(context),
                           ),
                           const Spacer(),
                           if (_searchController.recentSearchList.isNotEmpty)
@@ -119,7 +104,8 @@ class SearchScreen extends StatelessWidget {
                               },
                               child: Text(
                                 "기록 전체 삭제",
-                                style: kmain.copyWith(color: mainblue),
+                                style: MyTextTheme.main(context)
+                                    .copyWith(color: AppColors.mainblue),
                               ),
                             ),
                         ],
@@ -144,7 +130,8 @@ class SearchScreen extends StatelessWidget {
                         : Center(
                             child: Text(
                               "검색한 기록이 없어요",
-                              style: kmain.copyWith(color: maingray),
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.maingray),
                             ),
                           ),
                   ),

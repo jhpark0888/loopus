@@ -22,7 +22,7 @@ class SignupCompleteScreen extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -54,11 +54,11 @@ class SignupCompleteScreen extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                const Text(
+                Text(
                   "이제 루프어스를 통해\n"
                   "본인만의 특별한 스토리를 완성하고\n"
                   "회원님을 기다리고 있는 기업들을 만나보세요",
-                  style: kmainheight,
+                  style: MyTextTheme.mainheight(context),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(

@@ -53,7 +53,7 @@ class HotUserWidget extends StatelessWidget {
                 ),
                 Text(
                   person.name,
-                  style: kmain,
+                  style: MyTextTheme.main(context),
                 )
               ],
             ),
@@ -63,13 +63,19 @@ class HotUserWidget extends StatelessWidget {
             RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(children: [
-                  TextSpan(text: "${person.univName}\n", style: kmainheight),
-                  TextSpan(text: "${person.department}\n", style: kmainheight),
+                  TextSpan(
+                      text: "${person.univName}\n",
+                      style: MyTextTheme.mainheight(context)),
+                  TextSpan(
+                      text: "${person.department}\n",
+                      style: MyTextTheme.mainheight(context)),
                   TextSpan(
                       text: "최근 포스트 ",
-                      style: kmainheight.copyWith(color: maingray)),
+                      style: MyTextTheme.mainheight(context)
+                          .copyWith(color: AppColors.maingray)),
                   TextSpan(
-                      text: "${person.resentPostCount}개", style: kmainheight),
+                      text: "${person.resentPostCount}개",
+                      style: MyTextTheme.mainheight(context)),
                 ]))
           ],
         ),

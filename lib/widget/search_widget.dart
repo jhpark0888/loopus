@@ -53,7 +53,7 @@ class SearchUserWidget extends StatelessWidget {
         }
       },
       behavior: HitTestBehavior.translucent,
-      // splashColor: kSplashColor,
+      // splashColor: AppColors.kSplashColor,
       child: Row(
         children: [
           const SizedBox(width: 16),
@@ -67,15 +67,15 @@ class SearchUserWidget extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(user.name, style: kmainbold),
+              Text(user.name, style: MyTextTheme.mainbold(context)),
               const SizedBox(height: 4),
               user.userType == UserType.student
                   ? Text(
                       '${(user as Person).univName} · ${(user as Person).department}',
-                      style: kmain)
+                      style: MyTextTheme.main(context))
                   : Text(
                       "${fieldList[(user as Company).fieldId]} · ${(user as Company).address}",
-                      style: kmain,
+                      style: MyTextTheme.main(context),
                       overflow: TextOverflow.ellipsis,
                     ),
             ],
@@ -96,7 +96,7 @@ class SearchTagWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _onTap(),
-      // splashColor: kSplashColor,
+      // splashColor: AppColors.kSplashColor,
       behavior: HitTestBehavior.translucent,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -110,7 +110,7 @@ class SearchTagWidget extends StatelessWidget {
             const Spacer(),
             Text(
               '${tag.count}회',
-              style: kmain,
+              style: MyTextTheme.main(context),
             )
           ],
         ),
@@ -142,14 +142,14 @@ class RecentSearchWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => _onTap(context),
       behavior: HitTestBehavior.translucent,
-      // splashColor: kSplashColor,
+      // splashColor: AppColors.kSplashColor,
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 3),
         child: Row(
           children: [
             _imageView(),
             const SizedBox(width: 8),
-            _textView(),
+            _textView(context),
             const Spacer(),
             GestureDetector(
               onTap: () async {
@@ -165,7 +165,7 @@ class RecentSearchWidget extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
                 child: SvgPicture.asset(
                   "assets/icons/widget_delete.svg",
-                  color: iconcolor,
+                  color: AppColors.iconcolor,
                 ),
               ),
             )
@@ -191,12 +191,12 @@ class RecentSearchWidget extends StatelessWidget {
                   "assets/icons/search_inactive.svg",
                   width: 13,
                   height: 13,
-                  color: mainblack,
+                  color: AppColors.mainblack,
                 ))
             : recentSearch.searchType == SearchType.tag
                 ? SvgPicture.asset(
                     "assets/icons/tag_icon.svg",
-                    color: mainblack,
+                    color: AppColors.mainblack,
                   )
                 : UserImageWidget(
                     imageUrl: (recentSearch.data as Company).profileImage,
@@ -205,19 +205,19 @@ class RecentSearchWidget extends StatelessWidget {
                     userType: UserType.company);
   }
 
-  Widget _textView() {
+  Widget _textView(BuildContext context) {
     return recentSearch.searchType == SearchType.profile
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 (recentSearch.data as Person).name,
-                style: kmainbold,
+                style: MyTextTheme.mainbold(context),
               ),
               const SizedBox(height: 4),
               Text(
                 "${(recentSearch.data as Person).univName} · ${(recentSearch.data as Person).department}",
-                style: kmain,
+                style: MyTextTheme.main(context),
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -227,19 +227,19 @@ class RecentSearchWidget extends StatelessWidget {
             : recentSearch.searchType == SearchType.tag
                 ? Text(
                     (recentSearch.data as Tag).tag,
-                    style: kmain,
+                    style: MyTextTheme.main(context),
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         (recentSearch.data as Company).name,
-                        style: kmainbold,
+                        style: MyTextTheme.mainbold(context),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         "${fieldList[(recentSearch.data as Company).fieldId]} · ${(recentSearch.data as Company).address}",
-                        style: kmain,
+                        style: MyTextTheme.main(context),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],

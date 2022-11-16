@@ -77,15 +77,15 @@
 //                   children: [
 //                     Container(
 //                       decoration: BoxDecoration(
-//                           border: Border.all(color: maingray, width: 1),
+//                           border: Border.all(color: AppColors.maingray, width: 1),
 //                           borderRadius: BorderRadius.circular(8),
-//                           color: maingray),
-//                       color: mainWhite,
+//                           color: AppColors.maingray),
+//                       color: AppColors.mainWhite,
 //                       child: Row(children: [
-//                         Text("지역", style: kmainbold),
+//                         Text("지역", style: MyTextTheme.mainbold(context)),
 //                         SizedBox(width: 7),
 //                         DropdownButton(
-//                           style: kmain,
+//                           style: MyTextTheme.main(context),
 //                           value: _selectedValue.value.isNotEmpty
 //                               ? _selectedValue.value
 //                               : null,
@@ -108,15 +108,15 @@
 //                     SizedBox(width: 14),
 //                     Container(
 //                       decoration: BoxDecoration(
-//                           border: Border.all(color: maingray, width: 1),
+//                           border: Border.all(color: AppColors.maingray, width: 1),
 //                           borderRadius: BorderRadius.circular(8),
-//                           color: maingray),
-//                       color: mainWhite,
+//                           color: AppColors.maingray),
+//                       color: AppColors.mainWhite,
 //                       child: Row(children: [
-//                         Text("분야", style: kmainbold),
+//                         Text("분야", style: MyTextTheme.mainbold(context)),
 //                         SizedBox(width: 7),
 //                         DropdownButton(
-//                           style: kmain,
+//                           style: MyTextTheme.main(context),
 //                           value: _secondselectedValue.value.isNotEmpty
 //                               ? _secondselectedValue.value
 //                               : null,
@@ -159,7 +159,7 @@
 //                         padding: const EdgeInsets.only(left: 14),
 //                         child: Text(
 //                           '검색',
-//                           style: kmain.copyWith(color: mainblue),
+//                           style: MyTextTheme.main(context).copyWith(color: AppColors.mainblue),
 //                         ),
 //                       ),
 //                     )

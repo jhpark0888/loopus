@@ -25,7 +25,7 @@
 //         child: Container(
 //             height: kBottomNavigationBarHeight,
 //             decoration: BoxDecoration(
-//               color: mainWhite,
+//               color: AppColors.mainWhite,
 //               border: Border(
 //                 top: BorderSide(
 //                   width: 1,
@@ -61,8 +61,8 @@
 //                 GestureDetector(
 //                   child: SvgPicture.asset('assets/icons/bullet_point.svg',
 //                       color: selectedType == SmartTextType.BULLET
-//                           ? mainblue
-//                           : mainblack),
+//                           ? AppColors.mainblue
+//                           : AppColors.mainblack),
 //                   onTap: () => onSelected(SmartTextType.BULLET),
 //                 ),
 //                 SizedBox(
@@ -71,7 +71,7 @@
 //                 GestureDetector(
 //                   child: SvgPicture.asset(
 //                     'assets/icons/image_icon.svg',
-//                     color: mainblack,
+//                     color: AppColors.mainblack,
 //                   ),
 //                   onTap: () async {
 //                     ImageController.to.isPostingImagePickerLoading.value = true;
@@ -87,8 +87,8 @@
 //                 GestureDetector(
 //                   child: SvgPicture.asset('assets/icons/Link.svg',
 //                       color: selectedType == SmartTextType.LINK
-//                           ? mainblue
-//                           : mainblack),
+//                           ? AppColors.mainblue
+//                           : AppColors.mainblack),
 //                   onTap: () {
 //                     editorController.linkonbutton(editorController.focus);
 //                   },

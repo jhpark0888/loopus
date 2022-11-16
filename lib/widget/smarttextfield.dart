@@ -11,20 +11,20 @@
 //       //     fontSize: 14,
 //       //     fontStyle: FontStyle.italic,
 //       //     fontWeight: FontWeight.w400,
-//       //     color: mainblack,
+//       //     color: AppColors.mainblack,
 //       //     height: 1.2,
 //       //   );
 //       case SmartTextType.H1:
 //         return const TextStyle(
 //           fontSize: 20,
-//           color: mainblack,
+//           color: AppColors.mainblack,
 //           fontWeight: FontWeight.w500,
 //           height: 1.5,
 //         );
 //       case SmartTextType.H2:
 //         return const TextStyle(
 //           fontSize: 16,
-//           color: mainblack,
+//           color: AppColors.mainblack,
 //           fontWeight: FontWeight.w500,
 //           height: 1.6,
 //         );
@@ -33,10 +33,10 @@
 //         return const TextStyle(
 //           fontSize: 16,
 //           fontWeight: FontWeight.w400,
-//           shadows: [Shadow(color: mainblue, offset: Offset(0, -5))],
+//           shadows: [Shadow(color: AppColors.mainblue, offset: Offset(0, -5))],
 //           color: Colors.transparent,
 //           decoration: TextDecoration.underline,
-//           decorationColor: mainblue,
+//           decorationColor: AppColors.mainblue,
 //           decorationThickness: 1.2,
 //           decorationStyle: TextDecorationStyle.solid,
 //         );
@@ -44,13 +44,13 @@
 //         return const TextStyle(
 //           fontSize: 12.0,
 //           fontWeight: FontWeight.w300,
-//           color: mainblack,
+//           color: AppColors.mainblack,
 //         );
 //       default:
 //         return const TextStyle(
 //           fontSize: 16.0,
 //           fontWeight: FontWeight.w300,
-//           color: mainblack,
+//           color: AppColors.mainblack,
 //           height: 1.6,
 //         );
 //     }
@@ -168,7 +168,7 @@
 //               autofocus: true,
 //               keyboardType: TextInputType.multiline,
 //               maxLines: null,
-//               cursorColor: mainblue,
+//               cursorColor: AppColors.mainblue,
 //               cursorWidth: 1.3,
 //               cursorRadius: const Radius.circular(500),
 //               textAlign: type.value.align,

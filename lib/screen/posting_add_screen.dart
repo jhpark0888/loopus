@@ -57,7 +57,7 @@ class PostingAddScreen extends StatelessWidget {
           bottomBorder: false,
           title: '포스트 작성',
           actions: [
-            Obx(() => Center(child: uploadButton())),
+            Obx(() => Center(child: uploadButton(context))),
             const SizedBox(
               width: 16,
             )
@@ -94,8 +94,10 @@ class PostingAddScreen extends StatelessWidget {
                                       child: GestureDetector(
                                           onTap: () => _imageChange(),
                                           child: Text('사진 수정하기',
-                                              style: kmain.copyWith(
-                                                  color: mainblue))),
+                                              style: MyTextTheme.main(context)
+                                                  .copyWith(
+                                                      color:
+                                                          AppColors.mainblue))),
                                       right: 16,
                                       bottom: 5)
                                 ]),
@@ -106,36 +108,32 @@ class PostingAddScreen extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Expanded(
-                                      child: addButton(
+                                      child: addButton(context,
                                           title: '이미지',
-                                          titleEng: 'image',
-                                          ontap: () async {
-                                            if (_imageController
-                                                .permissionState.isAuth) {
-                                              if (_imageController
-                                                  .albums.isNotEmpty) {
-                                                Get.to(() => UploadScreen());
-                                              } else {
-                                                showCustomDialog(
-                                                    "이미지가 없습니다", 1000);
-                                              }
-                                            } else {
-                                              showCustomDialog(
-                                                  "미디어 및 파일의 권한을 허용해주세요", 1000);
-                                            }
-                                          }),
+                                          titleEng: 'image', ontap: () async {
+                                        if (_imageController
+                                            .permissionState.isAuth) {
+                                          if (_imageController
+                                              .albums.isNotEmpty) {
+                                            Get.to(() => UploadScreen());
+                                          } else {
+                                            showCustomDialog("이미지가 없습니다", 1000);
+                                          }
+                                        } else {
+                                          showCustomDialog(
+                                              "미디어 및 파일의 권한을 허용해주세요", 1000);
+                                        }
+                                      }),
                                     ),
                                     const SizedBox(
                                       width: 8,
                                     ),
                                     Expanded(
-                                      child: addButton(
+                                      child: addButton(context,
                                           title: '링크',
-                                          titleEng: 'link',
-                                          ontap: () {
-                                            Get.to(
-                                                () => PostingAddLinkScreen());
-                                          }),
+                                          titleEng: 'link', ontap: () {
+                                        Get.to(() => PostingAddLinkScreen());
+                                      }),
                                     )
                                   ],
                                 ),
@@ -161,8 +159,9 @@ class PostingAddScreen extends StatelessWidget {
                                         Get.to(() => PostingAddLinkScreen());
                                       },
                                       child: Text('링크 수정하기',
-                                          style:
-                                              kmain.copyWith(color: mainblue))),
+                                          style: MyTextTheme.main(context)
+                                              .copyWith(
+                                                  color: AppColors.mainblue))),
                                   right: 16,
                                   bottom: 5)
                             ],
@@ -182,11 +181,12 @@ class PostingAddScreen extends StatelessWidget {
                             }),
                             Divider(key: keyController.viewKey, thickness: 0.5),
                             const SizedBox(height: 32),
-                            const Text('태그', style: kmainbold),
+                            Text('태그', style: MyTextTheme.mainbold(context)),
                             const SizedBox(height: 8),
                             Obx(() => tagController.selectedtaglist.isEmpty
                                 ? Text('입력시 기업에게 노출될 가능성이 높아져요',
-                                    style: kmain.copyWith(color: maingray))
+                                    style: MyTextTheme.main(context)
+                                        .copyWith(color: AppColors.maingray))
                                 : SizedBox(
                                     width: Get.width,
                                     child: Wrap(
@@ -201,7 +201,7 @@ class PostingAddScreen extends StatelessWidget {
                               controller: postingAddController
                                   .keyboardVisibilityController,
                               textfield: CustomTextField(
-                                style: kmainheight,
+                                style: MyTextTheme.mainheight(context),
                                 textController:
                                     tagController.tagsearchContoller,
                                 autofocus: false,
@@ -302,7 +302,7 @@ class PostingAddScreen extends StatelessWidget {
     );
   }
 
-  Widget addButton(
+  Widget addButton(BuildContext context,
       {required String title,
       required String titleEng,
       required Function()? ontap}) {
@@ -311,7 +311,7 @@ class PostingAddScreen extends StatelessWidget {
       child: Container(
         height: 42,
         decoration: BoxDecoration(
-            color: mainblue, borderRadius: BorderRadius.circular(8)),
+            color: AppColors.mainblue, borderRadius: BorderRadius.circular(8)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -319,7 +319,8 @@ class PostingAddScreen extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               '$title 첨부하기',
-              style: kmainbold.copyWith(color: mainWhite),
+              style: MyTextTheme.mainbold(context)
+                  .copyWith(color: AppColors.mainWhite),
             )
           ],
         ),
@@ -327,7 +328,7 @@ class PostingAddScreen extends StatelessWidget {
     );
   }
 
-  Widget uploadButton() {
+  Widget uploadButton(BuildContext context) {
     return IconButton(
       onPressed: () async {
         if (checkContent()) {
@@ -356,25 +357,19 @@ class PostingAddScreen extends StatelessWidget {
                 HomeController.to.scrollToTop();
               } else if (route == PostaddRoute.career) {
                 CareerDetailController careerController =
-                  Get.find(tag: project_id.toString());
+                    Get.find(tag: project_id.toString());
                 careerController.postList.add(post);
                 careerController.postList.refresh();
                 careerController.career.value.post_count!.value += 1;
                 careerController.career.value.updateDate = DateTime.now();
                 ProfileController.to.myProjectList
-                                      .where(
-                                          (p0) =>
-                                              p0.id ==
-                                              project_id
-                                                 )
-                                      .first.updateDate = DateTime.now();
+                    .where((p0) => p0.id == project_id)
+                    .first
+                    .updateDate = DateTime.now();
                 ProfileController.to.myProjectList
-                                      .where(
-                                          (p0) =>
-                                              p0.id ==
-                                              project_id
-                                                 )
-                                      .first.thumbnail = post.images.isEmpty ? "" : post.images.first;
+                    .where((p0) => p0.id == project_id)
+                    .first
+                    .thumbnail = post.images.isEmpty ? "" : post.images.first;
                 ProfileController.to.myProjectList.refresh();
               }
 
@@ -386,8 +381,9 @@ class PostingAddScreen extends StatelessWidget {
         }
       },
       icon: Text('업로드',
-          style: kNavigationTitle.copyWith(
-              color: checkContent() ? mainblue : maingray, fontSize: 17)),
+          style: MyTextTheme.navigationTitle(context).copyWith(
+              color: checkContent() ? AppColors.mainblue : AppColors.maingray,
+              fontSize: 17)),
       padding: EdgeInsets.zero,
     );
   }

@@ -48,7 +48,7 @@ class LogInScreen extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -117,7 +117,7 @@ class LogInScreen extends StatelessWidget {
                 //       _loginController.loginType.value == UserType.student,
                 //       _loginController.loginType.value == UserType.company
                 //     ],
-                //     textStyle: kmainbold,
+                //     textStyle: MyTextTheme.mainbold(context),
                 //     onPressed: (index) {
                 //       if (index == 0) {
                 //         _loginController.loginType(UserType.student);
@@ -125,10 +125,10 @@ class LogInScreen extends StatelessWidget {
                 //         _loginController.loginType(UserType.company);
                 //       }
                 //     },
-                //     fillColor: mainblue,
-                //     selectedColor: mainWhite,
-                //     selectedBorderColor: mainblue,
-                //     color: dividegray,
+                //     fillColor: AppColors.mainblue,
+                //     selectedColor: AppColors.mainWhite,
+                //     selectedBorderColor: AppColors.mainblue,
+                //     color: AppColors.dividegray,
                 //     splashColor: Colors.transparent,
                 //     borderRadius: BorderRadius.circular(8),
                 //   ),
@@ -166,8 +166,8 @@ class LogInScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "비밀번호를 잊으셨나요?",
-                        style: kmain.copyWith(
-                          color: maingray,
+                        style: MyTextTheme.main(context).copyWith(
+                          color: AppColors.maingray,
                         ),
                       ),
                     )),
