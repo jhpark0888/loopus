@@ -59,7 +59,6 @@ class MessageDetatilScreen extends StatelessWidget {
   late MessageDetailController controller = Get.put(
       MessageDetailController(partnerId: partner.userId),
       tag: partner.userId.toString());
-  // KeyBoardController keyBoardController = Get.put(KeyBoardController());
   Key centerKey = const ValueKey('QueryList');
   @override
   Widget build(BuildContext context) {
