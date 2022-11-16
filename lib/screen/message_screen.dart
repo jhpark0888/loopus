@@ -18,6 +18,8 @@ import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sqlite_viewer/sqlite_viewer.dart';
 
+import '../widget/custom_header_footer.dart';
+
 class MessageScreen extends StatelessWidget {
   MessageController messageController = Get.put(MessageController());
 
@@ -105,7 +107,22 @@ class MessageScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     messageController.searchRoomList.isNotEmpty
                         ? Obx(
-                            () => Expanded(
+                            () =>
+                                // ScrollNoneffectWidget(
+                                // child: SmartRefresher(
+                                //   physics: const BouncingScrollPhysics(),
+                                //   controller: messageController.refreshController,
+                                //   enablePullUp: (messageController
+                                //               .chatroomscreenstate.value ==
+                                //           ScreenState.loading)
+                                //       ? false
+                                //       : true,
+                                //   header: MyCustomHeader(),
+                                //   footer: const MyCustomFooter(),
+                                //   onRefresh: messageController.onChattingRefresh,
+                                //   onLoading: messageController.onChattingLoading,
+                                //   child:
+                                Expanded(
                               child: SlidableAutoCloseBehavior(
                                 closeWhenOpened: true,
                                 closeWhenTapped: true,

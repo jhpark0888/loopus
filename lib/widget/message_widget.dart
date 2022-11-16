@@ -82,13 +82,13 @@ class MessageWidget extends StatelessWidget {
                               message.content, MyTextTheme.mainheight(context))
                           ? Container(
                               constraints:
-                                  BoxConstraints(maxWidth: Get.width * (3 / 5)),
+                                  BoxConstraints(maxWidth: Get.width * (2 / 3)),
                               decoration: BoxDecoration(
                                   color: AppColors.mainblue,
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(16)),
                               child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 16),
+                                      vertical: 7, horizontal: 14),
                                   child: Text(
                                     message.content,
                                     style: MyTextTheme.mainheight(context)
@@ -104,10 +104,10 @@ class MessageWidget extends StatelessWidget {
                           : Container(
                               decoration: BoxDecoration(
                                   color: AppColors.mainblue,
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(16)),
                               child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 16),
+                                      vertical: 7, horizontal: 14),
                                   child: Text(
                                     message.content,
                                     style: MyTextTheme.mainheight(context)
@@ -131,7 +131,8 @@ class MessageWidget extends StatelessWidget {
                               ? Text(
                                   '읽음',
                                   textAlign: TextAlign.end,
-                                  style: MyTextTheme.mainheight(context),
+                                  style: MyTextTheme.caption(context)
+                                      .copyWith(color: Colors.black),
                                 )
                               : const SizedBox.shrink()
                         ])
@@ -179,17 +180,17 @@ class MessageWidget extends StatelessWidget {
                                       MyTextTheme.mainheight(context))
                                   ? Container(
                                       constraints: BoxConstraints(
-                                          maxWidth: Get.width * (3 / 5)),
+                                          maxWidth: Get.width * (2 / 3)),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                             color: AppColors.cardGray,
                                           ),
                                           color: AppColors.cardGray,
                                           borderRadius:
-                                              BorderRadius.circular(8)),
+                                              BorderRadius.circular(16)),
                                       child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 16),
+                                              vertical: 7, horizontal: 14),
                                           child: Text(
                                             message.content,
                                             style:
@@ -212,10 +213,10 @@ class MessageWidget extends StatelessWidget {
                                           ),
                                           color: AppColors.cardGray,
                                           borderRadius:
-                                              BorderRadius.circular(8)),
+                                              BorderRadius.circular(16)),
                                       child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 16),
+                                              vertical: 7, horizontal: 14),
                                           child: Text(
                                             message.content,
                                             style:

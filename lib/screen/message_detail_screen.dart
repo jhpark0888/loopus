@@ -320,7 +320,9 @@ class MessageDetatilScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8)),
                     contentPadding: const EdgeInsets.fromLTRB(16, 11, 16, 11),
                     isDense: true,
-                    hintText: partner.withdrawal.value == 0 ? '메세지 입력' : '대화가 불가능한 사용자에요',
+                    hintText: partner.withdrawal.value == 0
+                        ? '메세지 입력'
+                        : '대화가 불가능한 사용자에요',
                     counterText: "",
                     hintStyle: MyTextTheme.main(context)
                         .copyWith(color: AppColors.maingray)

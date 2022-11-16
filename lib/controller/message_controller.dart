@@ -25,6 +25,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
   Rx<ScreenState> chatroomscreenstate = ScreenState.loading.obs;
   RxBool activeTextfield = false.obs;
   RxList<Person> member = <Person>[].obs;
+
   @override
   void onInit() async {
     WidgetsBinding.instance!.addObserver(this);
@@ -78,6 +79,36 @@ class MessageController extends GetxController with WidgetsBindingObserver {
         .compareTo(a.chatRoom.value.message.value.date));
   }
 
+  // void onChattingRefresh() async {
+  //   chattingRoomList.value = [];
+  //   String? userId = await const FlutterSecureStorage().read(key: "id");
+  //   await getChatroomlist(int.parse(userId!));
+  //   chatroomscreenstate(ScreenState.success);
+  //   refreshController.refreshCompleted();
+  //   refresh();
+  // }
+
+  // void onChattingLoading() async {
+  //   String? userId = await const FlutterSecureStorage().read(key: "id");
+  //   await getChatroomlist(int.parse(userId!));
+  //   refresh();
+  //   refreshController.loadComplete();
+  // }
+
+  // void onChattingRefresh() {
+  //   chattingRoomLoad();
+  //   refreshController.refreshCompleted();
+  // }
+
+  // @override
+  // void chattingRoomLoad() async {
+  //
+  //     }
+  //     chatroomscreenstate.value = ScreenState.success;
+  //   });
+  //   refresh();
+  // }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
@@ -121,7 +152,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                   allUserList['profile']!.map((e) => User.fromJson(e)).toList();
               if (none.isNotEmpty) {
                 none.forEach((userId) {
-                  SQLController.to.updateUser('', '알수없음',1, userId);
+                  SQLController.to.updateUser('', '알수없음', 1, userId);
                   chattingRoomList
                       .where((p0) => p0.user.value.userId == userId)
                       .first
@@ -189,8 +220,8 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                             .value
                             .profileImage !=
                         user.profileImage) {
-                      SQLController.to
-                          .updateUser(user.profileImage, null,null, user.userId);
+                      SQLController.to.updateUser(
+                          user.profileImage, null, null, user.userId);
                     }
 
                     chattingRoomList
@@ -203,7 +234,8 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                         .where((messageRoom) =>
                             messageRoom.chatRoom.value.roomId == element.roomId)
                         .first
-                        .chatRoom.refresh();
+                        .chatRoom
+                        .refresh();
                     chattingRoomList
                         .where((messageRoom) =>
                             messageRoom.user.value.userId == user!.userId)
@@ -215,7 +247,8 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                         .where((messageRoom) =>
                             messageRoom.chatRoom.value.roomId == element.roomId)
                         .first
-                        .user.refresh();
+                        .user
+                        .refresh();
                   }
                 }
               });
