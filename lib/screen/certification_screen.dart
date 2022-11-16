@@ -53,7 +53,7 @@ class CertificationScreen extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -158,9 +158,9 @@ class CertificationScreen extends StatelessWidget {
             rightFunction: () {
               withDrawal(textController.text);
             },
-            leftBoxColor: mainblue,
-            rightBoxColor: maingray,
-            rightTextColor: rankred,
+            leftBoxColor: AppColors.mainblue,
+            rightBoxColor: AppColors.maingray,
+            rightTextColor: AppColors.rankred,
             textEditingController: textController,
           );
         }
@@ -181,7 +181,8 @@ class CertificationScreen extends StatelessWidget {
         .then((value) async {
       if (value.isError == false) {
         Get.back();
-        await userResign(HomeController.to.myProfile.value.userId,BanType.resign,null);
+        await userResign(
+            HomeController.to.myProfile.value.userId, BanType.resign, null);
         await logOut();
       } else {
         Get.back();

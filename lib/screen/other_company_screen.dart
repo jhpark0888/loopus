@@ -104,19 +104,20 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainblack,
+      backgroundColor: AppColors.mainblack,
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: mainblack,
+          statusBarColor: AppColors.mainblack,
           statusBarIconBrightness: Brightness.light,
           statusBarBrightness: Brightness.dark,
         ),
-        backgroundColor: mainblack,
+        backgroundColor: AppColors.mainblack,
         elevation: 0,
         centerTitle: true,
         title: Text(
           '${widget.companyName} 프로필',
-          style: kNavigationTitle.copyWith(color: mainWhite),
+          style: MyTextTheme.navigationTitle(context)
+              .copyWith(color: AppColors.mainWhite),
         ),
         leading: IconButton(
           onPressed: () {
@@ -124,7 +125,7 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
           },
           icon: SvgPicture.asset(
             'assets/icons/appbar_back.svg',
-            color: mainWhite,
+            color: AppColors.mainWhite,
           ),
         ),
         actions: [
@@ -197,20 +198,20 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                                       }
                                     });
                                   },
-                                  leftBoxColor: maingray,
-                                  rightBoxColor: rankred);
+                                  leftBoxColor: AppColors.maingray,
+                                  rightBoxColor: AppColors.rankred);
                             },
                             value1: '계정 차단하기',
                             value2: '계정 신고하기',
-                            buttonColor1: mainWhite,
-                            buttonColor2: rankred,
-                            textColor1: rankred,
+                            buttonColor1: AppColors.mainWhite,
+                            buttonColor2: AppColors.rankred,
+                            textColor1: AppColors.rankred,
                             isOne: false,
                           );
                         },
                         icon: SvgPicture.asset(
                           'assets/icons/more_option.svg',
-                          color: mainWhite,
+                          color: AppColors.mainWhite,
                         ),
                       ),
           ),
@@ -236,7 +237,7 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                       //       context),
                       //   sliver:
                       SliverAppBar(
-                        backgroundColor: mainWhite,
+                        backgroundColor: AppColors.mainWhite,
                         toolbarHeight: 44,
                         pinned: true,
                         primary: false,
@@ -302,8 +303,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                       func2: changeProfileImage,
                       value1: '기본 이미지로 변경',
                       value2: '사진첩에서 사진 선택',
-                      buttonColor1: maingray,
-                      buttonColor2: mainblue,
+                      buttonColor1: AppColors.maingray,
+                      buttonColor2: AppColors.mainblue,
                       isOne: false);
                 }
               },
@@ -320,7 +321,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
         Obx(
           () => Text(
             _controller.otherCompany.value.name,
-            style: kmainbold.copyWith(color: mainWhite),
+            style: MyTextTheme.mainbold(context)
+                .copyWith(color: AppColors.mainWhite),
           ),
         ),
         const SizedBox(
@@ -333,19 +335,21 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
               children: [
                 Text(
                   fieldList[_controller.otherCompany.value.fieldId]!,
-                  style: kmain.copyWith(color: mainWhite),
+                  style: MyTextTheme.main(context)
+                      .copyWith(color: AppColors.mainWhite),
                 ),
                 const SizedBox(
                   height: 9,
                   child: VerticalDivider(
                     thickness: 1,
                     width: 16,
-                    color: mainWhite,
+                    color: AppColors.mainWhite,
                   ),
                 ),
                 Text(
                   _controller.otherCompany.value.address,
-                  style: kmain.copyWith(color: mainWhite),
+                  style: MyTextTheme.main(context)
+                      .copyWith(color: AppColors.mainWhite),
                 ),
               ],
             ),
@@ -360,7 +364,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
           child: Obx(
             () => Text(
               _controller.otherCompany.value.homepage,
-              style: kmain.copyWith(color: mainblue),
+              style:
+                  MyTextTheme.main(context).copyWith(color: AppColors.mainblue),
             ),
           ),
         ),
@@ -419,13 +424,14 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                         children: [
                           Text(
                             "이 기업에 관심있는 프로필",
-                            style: kmainbold.copyWith(color: mainWhite),
+                            style: MyTextTheme.mainbold(context)
+                                .copyWith(color: AppColors.mainWhite),
                           ),
                           const SizedBox(width: 8),
                           Center(
                             child: SvgPicture.asset(
                               'assets/icons/information.svg',
-                              color: dividegray,
+                              color: AppColors.dividegray,
                             ),
                           ),
                           const Spacer(),
@@ -437,7 +443,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                             },
                             child: Text(
                               "전체보기",
-                              style: kmain.copyWith(color: mainblue),
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.mainblue),
                             ),
                           )
                         ],
@@ -472,7 +479,7 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
 
   Widget _tabView() {
     return Container(
-      color: mainblack,
+      color: AppColors.mainblack,
       child: Column(
         children: [
           Stack(
@@ -482,20 +489,22 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
               Container(
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: maingray, width: 2.0),
+                    bottom: BorderSide(color: AppColors.maingray, width: 2.0),
                   ),
                 ),
               ),
               TabBar(
                   controller: _tabController,
-                  labelStyle: kmainbold,
-                  labelColor: mainWhite,
-                  unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-                  unselectedLabelColor: dividegray,
+                  labelStyle: MyTextTheme.mainbold(context),
+                  labelColor: AppColors.mainWhite,
+                  unselectedLabelStyle: MyTextTheme.mainbold(context)
+                      .copyWith(color: AppColors.dividegray),
+                  unselectedLabelColor: AppColors.dividegray,
                   automaticIndicatorColorAdjustment: false,
                   indicator: const UnderlineIndicator(
                     strokeCap: StrokeCap.round,
-                    borderSide: BorderSide(width: 2, color: mainWhite),
+                    borderSide:
+                        BorderSide(width: 2, color: AppColors.mainWhite),
                   ),
                   isScrollable: false,
                   onTap: (index) {
@@ -507,8 +516,9 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                         height: 40,
                         icon: SvgPicture.asset(
                           'assets/icons/company_intro.svg',
-                          color:
-                              currentIndex.value == 0 ? mainWhite : dividegray,
+                          color: currentIndex.value == 0
+                              ? AppColors.mainWhite
+                              : AppColors.dividegray,
                         ),
                       ),
                     ),
@@ -517,8 +527,9 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                         height: 40,
                         icon: SvgPicture.asset(
                           'assets/icons/post_active.svg',
-                          color:
-                              currentIndex.value == 1 ? mainWhite : dividegray,
+                          color: currentIndex.value == 1
+                              ? AppColors.mainWhite
+                              : AppColors.dividegray,
                         ),
                       ),
                     ),
@@ -550,12 +561,12 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                             fit: BoxFit.cover,
                             placeholder: (context, string) {
                               return Container(
-                                color: maingray,
+                                color: AppColors.maingray,
                               );
                             },
                             errorWidget: (context, string, widget) {
                               return Container(
-                                color: maingray,
+                                color: AppColors.maingray,
                               );
                             },
                           ),
@@ -571,15 +582,16 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                                   ),
                                   Text(
                                     "기업소개",
-                                    style: kmainbold.copyWith(color: mainWhite),
+                                    style: MyTextTheme.mainbold(context)
+                                        .copyWith(color: AppColors.mainWhite),
                                   ),
                                   const SizedBox(
                                     height: 16,
                                   ),
                                   Text(
                                     "\"${_controller.otherCompany.value.slogan}\"",
-                                    style: kmainboldHeight.copyWith(
-                                        color: mainWhite),
+                                    style: MyTextTheme.mainboldheight(context)
+                                        .copyWith(color: AppColors.mainWhite),
                                   ),
                                 ],
                               ),
@@ -592,7 +604,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                               child: Text(
                                 _controller
                                     .otherCompany.value.images[index].imageInfo,
-                                style: kmainheight.copyWith(color: mainWhite),
+                                style: MyTextTheme.mainheight(context)
+                                    .copyWith(color: AppColors.mainWhite),
                               ),
                             )
                         ],
@@ -638,7 +651,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                   child: Text(
                     "루프어스에서 기업 정보를 조사하여 제공하는 페이지입니다."
                     "\n기업의 서비스 가입 유무는 다를 수 있습니다.",
-                    style: kcaption.copyWith(color: iconcolor),
+                    style: MyTextTheme.caption(context)
+                        .copyWith(color: AppColors.iconcolor),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -712,7 +726,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
           ),
           Text(
             user.name,
-            style: kmain.copyWith(color: mainWhite),
+            style:
+                MyTextTheme.main(context).copyWith(color: AppColors.mainWhite),
           )
         ],
       ),

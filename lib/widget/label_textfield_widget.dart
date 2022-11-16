@@ -45,7 +45,9 @@ class LabelTextFieldWidget extends StatelessWidget {
         children: [
           Text(
             label,
-            style: labelBold ? kmainbold : kmainheight,
+            style: labelBold
+                ? MyTextTheme.mainbold(context)
+                : MyTextTheme.mainheight(context),
           ),
           const SizedBox(
             height: 16,

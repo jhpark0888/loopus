@@ -35,7 +35,7 @@ class CareerWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         decoration: BoxDecoration(
-            color: career.thumbnail == "" ? cardGray : null,
+            color: career.thumbnail == "" ? AppColors.cardGray : null,
             borderRadius: BorderRadius.circular(8),
             image: career.thumbnail == ""
                 ? null
@@ -50,8 +50,10 @@ class CareerWidget extends StatelessWidget {
           children: [
             Text(
               career.careerName,
-              style: kmainbold.copyWith(
-                  color: career.thumbnail == "" ? mainblack : mainWhite),
+              style: MyTextTheme.mainbold(context).copyWith(
+                  color: career.thumbnail == ""
+                      ? AppColors.mainblack
+                      : AppColors.mainWhite),
             ),
             const SizedBox(
               height: 10,
@@ -60,32 +62,41 @@ class CareerWidget extends StatelessWidget {
               children: [
                 career.isPublic
                     ? SvgPicture.asset('assets/icons/group_career.svg',
-                        color: career.thumbnail == "" ? mainblack : mainWhite)
+                        color: career.thumbnail == ""
+                            ? AppColors.mainblack
+                            : AppColors.mainWhite)
                     : SvgPicture.asset('assets/icons/single_career.svg',
-                        color: career.thumbnail == "" ? mainblack : mainWhite),
+                        color: career.thumbnail == ""
+                            ? AppColors.mainblack
+                            : AppColors.mainWhite),
                 const SizedBox(
                   width: 8,
                 ),
                 Text(
                   career.isPublic ? "그룹 커리어" : "개인 커리어",
-                  style: kmain.copyWith(
-                      color: career.thumbnail == "" ? mainblack : mainWhite),
+                  style: MyTextTheme.main(context).copyWith(
+                      color: career.thumbnail == ""
+                          ? AppColors.mainblack
+                          : AppColors.mainWhite),
                 ),
                 const SizedBox(
                   width: 8,
                 ),
-                memberList(),
+                memberList(context),
                 const Spacer(),
-                career.updateDate != null ?
-                Text(
-                  "${lastPostCalculateDate(career.updateDate!)} 포스트",
-                  style: kmain.copyWith(
-                      color: career.thumbnail == "" ? mainblack : mainWhite),
-                ) : Container(
-          color: mainblack,
-          height: 2,
-          width: 6,
-        ),
+                career.updateDate != null
+                    ? Text(
+                        "${lastPostCalculateDate(career.updateDate!)} 포스트",
+                        style: MyTextTheme.main(context).copyWith(
+                            color: career.thumbnail == ""
+                                ? AppColors.mainblack
+                                : AppColors.mainWhite),
+                      )
+                    : Container(
+                        color: AppColors.mainblack,
+                        height: 2,
+                        width: 6,
+                      ),
                 // const Spacer(),
                 // Row(
                 //   children: [
@@ -97,8 +108,8 @@ class CareerWidget extends StatelessWidget {
                 //     ),
                 //     Text(
                 //       career.isPublic ? "그룹 커리어" : "개인 커리어",
-                //       style: kmainbold.copyWith(
-                //           color: career.thumbnail == "" ? mainblack : mainWhite),
+                //       style: MyTextTheme.mainbold(context).copyWith(
+                //           color: career.thumbnail == "" ? AppColors.mainblack : AppColors.mainWhite),
                 //     ),
                 //   ],
                 // )
@@ -116,7 +127,8 @@ class CareerWidget extends StatelessWidget {
         height: 24,
         margin: EdgeInsets.only(left: (17 * index).toDouble()),
         decoration: BoxDecoration(
-            border: Border.all(color: dividegray), shape: BoxShape.circle),
+            border: Border.all(color: AppColors.dividegray),
+            shape: BoxShape.circle),
         child: UserImageWidget(
           imageUrl: user.profileImage,
           width: 24,
@@ -125,7 +137,7 @@ class CareerWidget extends StatelessWidget {
         ));
   }
 
-  Widget memberList() {
+  Widget memberList(BuildContext context) {
     List<Person> memberList = career.members.length > 3
         ? career.members.sublist(0, 3)
         : career.members;
@@ -148,8 +160,10 @@ class CareerWidget extends StatelessWidget {
               if (career.members.length > 3)
                 Text(
                   "+${career.members.length - 3}",
-                  style: kmain.copyWith(
-                      color: career.thumbnail == "" ? mainblack : mainWhite),
+                  style: MyTextTheme.main(context).copyWith(
+                      color: career.thumbnail == ""
+                          ? AppColors.mainblack
+                          : AppColors.mainWhite),
                 )
             ],
           )

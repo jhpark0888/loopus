@@ -72,7 +72,7 @@ class CheckBoxPersonWidget extends StatelessWidget {
                     children: [
                       Text(
                         user.name,
-                        style: ktempFont,
+                        style: MyTextTheme.tempfont(context),
                       ),
                       SizedBox(
                         height: 8,

@@ -26,7 +26,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
-        color: mainWhite,
+        color: AppColors.mainWhite,
         elevation: 0,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -37,8 +37,8 @@ class SettingScreen extends StatelessWidget {
                       _userDeviceInfo.appInfoData.keys.first +
                           ' ' +
                           _userDeviceInfo.appInfoData.values.first,
-                      style: ktempFont.copyWith(
-                        color: mainblack.withOpacity(0.6),
+                      style: MyTextTheme.tempfont(context).copyWith(
+                        color: AppColors.mainblack.withOpacity(0.6),
                       ),
                     )
                   : Text(''),
@@ -58,7 +58,7 @@ class SettingScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-            _category("개인"),
+            _category(context, "개인"),
             if (HomeController.to.myProfile.value.userType == UserType.student)
               CustomListTile(
                 title: "개인 정보",
@@ -78,7 +78,7 @@ class SettingScreen extends StatelessWidget {
                 Get.to(() => BanPeopleScreen());
               },
             ),
-            _category("서비스"),
+            _category(context, "서비스"),
             CustomListTile(
               title: "서비스 이용약관",
               onTap: () {
@@ -101,7 +101,7 @@ class SettingScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _category("회원"),
+                  _category(context, "회원"),
                   CustomListTile(
                     title: "비밀번호 변경",
                     onTap: () {
@@ -126,14 +126,14 @@ class SettingScreen extends StatelessWidget {
                   ),
                   CustomListTile(
                     title: "회원탈퇴",
-                    titleColor: rankred,
+                    titleColor: AppColors.rankred,
                     onTap: () {
                       showButtonDialog2(
                           title: '정말 탈퇴하시겠어요?',
                           startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n',
                           highlightContent: " 이후 복구가 불가능",
                           endContent: "해요 \n 다시 한 번 신중하게 생각 후 \n 탈퇴를 진행해주세요",
-                          highlightColor: rankred,
+                          highlightColor: AppColors.rankred,
                           leftFunction: () => Get.back(),
                           rightFunction: () {
                             Get.to(() => CertificationScreen(
@@ -153,12 +153,13 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  Widget _category(String text) {
+  Widget _category(BuildContext context, String text) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       child: Text(
         text,
-        style: kmainbold.copyWith(color: maingray),
+        style:
+            MyTextTheme.mainbold(context).copyWith(color: AppColors.maingray),
       ),
     );
   }
@@ -192,20 +193,20 @@ class CustomListTile extends StatelessWidget {
           children: [
             Obx(
               () => Text(title,
-                  style: kmain.copyWith(
+                  style: MyTextTheme.main(context).copyWith(
                       color: _hoverController.isHover.value
                           ? titleColor != null
                               ? titleColor!.withOpacity(0.5)
-                              : maingray
-                          : titleColor ?? mainblack)),
+                              : AppColors.maingray
+                          : titleColor ?? AppColors.mainblack)),
             ),
             if (trailing != null)
               Obx(
                 () => Text(trailing!,
-                    style: kmain.copyWith(
+                    style: MyTextTheme.main(context).copyWith(
                         color: _hoverController.isHover.value
-                            ? maingray
-                            : mainblack)),
+                            ? AppColors.maingray
+                            : AppColors.mainblack)),
               ),
             // SvgPicture.asset('assets/icons/arrow_right.svg'),
           ],

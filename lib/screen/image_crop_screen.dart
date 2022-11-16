@@ -25,24 +25,25 @@ class ImageCropScreen extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           leading: Padding(
-            padding: const EdgeInsets.fromLTRB(12.5, 12.5, 0, 0),
+            padding: const EdgeInsets.fromLTRB(9.5, 9.5, 0, 0),
             child: GestureDetector(
                 onTap: () {
                   Get.back();
                 },
-                child: const Text(
+                child: Text(
                   "취소",
-                  style: kNavigationTitle,
+                  style: MyTextTheme.navigationTitle(context),
                 )),
           ),
           actions: [
             Padding(
-              padding: const EdgeInsets.all(12.5),
+              padding: const EdgeInsets.all(9.5),
               child: GestureDetector(
                   onTap: () => _cropImage(context),
                   child: Text(
                     "완료",
-                    style: kNavigationTitle.copyWith(color: mainblue),
+                    style: MyTextTheme.navigationTitle(context)
+                        .copyWith(color: AppColors.mainblue),
                   )),
             ),
           ],
@@ -66,7 +67,7 @@ class ImageCropScreen extends StatelessWidget {
             return builder(snapshot.data!);
           } else {
             return Container(
-              color: mainWhite,
+              color: AppColors.mainWhite,
             );
           }
         });
@@ -125,7 +126,7 @@ class ImageCropScreen extends StatelessWidget {
 //                 },
 //                 child: const Text(
 //                   "취소",
-//                   style: kNavigationTitle,
+//                   style: MyTextTheme.navigationTitle(context),
 //                 )),
 //           ),
 //           actions: [
@@ -135,7 +136,7 @@ class ImageCropScreen extends StatelessWidget {
 //                   onTap: () => _cropImage(context),
 //                   child: Text(
 //                     "완료",
-//                     style: kNavigationTitle.copyWith(color: mainblue),
+//                     style: MyTextTheme.navigationTitle(context).copyWith(color: AppColors.mainblue),
 //                   )),
 //             ),
 //           ],
@@ -152,7 +153,7 @@ class ImageCropScreen extends StatelessWidget {
 //                 );
 //               } else {
 //                 return Container(
-//                   color: dividegray,
+//                   color: AppColors.dividegray,
 //                 );
 //               }
 //             }));

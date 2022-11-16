@@ -36,7 +36,8 @@ class ProjectAddCompanyScreen extends StatelessWidget {
             ),
             Text(
               "어떤 기업과 함께했나요?",
-              style: kmain.copyWith(color: maingray),
+              style:
+                  MyTextTheme.main(context).copyWith(color: AppColors.maingray),
             ),
             const SizedBox(
               height: 16,
@@ -106,9 +107,9 @@ class ProjectAddCompanyScreen extends StatelessWidget {
                                               //           },
                                               //           child: Text(
                                               //               "입력한 기업으로 등록하기",
-                                              //               style: kmain.copyWith(
+                                              //               style: MyTextTheme.main(context).copyWith(
                                               //                   color:
-                                              //                       mainblue)),
+                                              //                       AppColors.mainblue)),
                                               //         ),
                                               //       )
                                               //     : Container())
@@ -147,8 +148,8 @@ class ProjectAddCompanyScreen extends StatelessWidget {
                                                 //       },
                                                 //       child: Text(
                                                 //           "입력한 기업으로 등록하기",
-                                                //           style: kmain.copyWith(
-                                                //               color: mainblue)),
+                                                //           style: MyTextTheme.main(context).copyWith(
+                                                //               color: AppColors.mainblue)),
                                                 //     ),
                                                 //   );
                                                 // }
@@ -178,7 +179,7 @@ class ProjectAddCompanyScreen extends StatelessWidget {
                                                 height: 24,
                                               ),
                                               itemCount: _controller
-                                                      .searchCompanyList.length,
+                                                  .searchCompanyList.length,
                                             ),
                                           ),
                                   ),
@@ -196,7 +197,7 @@ class ProjectAddCompanyScreen extends StatelessWidget {
             //           Get.back();
             //         },
             //         child: Text("입력한 기업으로 등록하기",
-            //             style: kmain.copyWith(color: mainblue)),
+            //             style: MyTextTheme.main(context).copyWith(color: AppColors.mainblue)),
             //       )
             //     : Container()),
             // const SizedBox(

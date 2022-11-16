@@ -74,7 +74,9 @@ class LikePeopleScreen extends StatelessWidget {
                                       child: Obx(
                                         () => Text(
                                           "좋아요 ${_controller.likeUserList.length}개",
-                                          style: kmain.copyWith(color: maingray),
+                                          style: MyTextTheme.main(context)
+                                              .copyWith(
+                                                  color: AppColors.maingray),
                                         ),
                                       ),
                                     ),

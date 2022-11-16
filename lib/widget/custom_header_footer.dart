@@ -14,7 +14,7 @@ class MyCustomHeader extends StatelessWidget {
       spacing: 0.0,
       height: 60,
       completeDuration: const Duration(milliseconds: 600),
-      textStyle: const TextStyle(color: mainblack),
+      textStyle: const TextStyle(color: AppColors.mainblack),
       refreshingText: '',
       releaseText: "",
       completeText: "",
@@ -36,7 +36,7 @@ class MyCustomHeader extends StatelessWidget {
       ),
       completeIcon: const Icon(
         Icons.check_rounded,
-        color: mainblue,
+        color: AppColors.mainblue,
       ),
       idleIcon: Image.asset(
         'assets/icons/loading.gif',

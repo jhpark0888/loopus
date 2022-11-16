@@ -28,6 +28,7 @@ class Post {
       required this.date,
       required this.project,
       required this.comments,
+      required this.commentCount,
       required this.likeCount,
       required this.isLiked,
       required this.isMarked,
@@ -43,6 +44,7 @@ class Post {
   RxList<Tag> tags;
   DateTime date;
   Project? project;
+  RxInt commentCount;
   RxInt likeCount;
   RxInt isLiked;
   RxInt isMarked;
@@ -59,6 +61,7 @@ class Post {
     RxList<Tag>? tags,
     DateTime? date,
     Project? project,
+    RxInt? commentCount,
     RxInt? likeCount,
     RxInt? isLiked,
     RxInt? isMarked,
@@ -75,6 +78,7 @@ class Post {
           tags: tags ?? <Tag>[].obs,
           date: date ?? DateTime.now(),
           project: project ?? Project.defaultProject(),
+          commentCount: commentCount ?? 0.obs,
           likeCount: likeCount ?? 0.obs,
           isLiked: isLiked ?? 0.obs,
           isMarked: isMarked ?? 0.obs,
@@ -116,6 +120,9 @@ class Post {
               project: json["project"] != null
                   ? Project.fromJson(json["project"])
                   : null,
+              commentCount: json['comment_count'] != null
+                  ? RxInt(json['comment_count'])
+                  : RxInt(0),
               likeCount: json["like_count"] != null
                   ? RxInt(json["like_count"])
                   : RxInt(0),

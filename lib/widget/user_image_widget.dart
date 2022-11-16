@@ -34,10 +34,11 @@ class UserImageWidget extends StatelessWidget {
         elevation: 0,
         clipBehavior: Clip.hardEdge,
         shape: userType == UserType.student
-            ? CircleBorder(side: BorderSide(width: 0.5, color: dividegray))
+            ? CircleBorder(
+                side: BorderSide(width: 0.5, color: AppColors.dividegray))
             : RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
-                side: BorderSide(width: 0.5, color: dividegray)),
+                side: BorderSide(width: 0.5, color: AppColors.dividegray)),
         child: imageUrl == ""
             ? Image.asset(
                 userType == UserType.student
@@ -58,7 +59,7 @@ class UserImageWidget extends StatelessWidget {
                   return Container(
                     height: height ?? 50,
                     width: width ?? 50,
-                    color: dividegray,
+                    color: AppColors.dividegray,
                   );
                 },
                 errorWidget: (context, string, widget) {

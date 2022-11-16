@@ -37,7 +37,7 @@ class SignupUserInfoScreen extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -135,7 +135,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   (year - index).toString(),
-                                  style: kmainbold,
+                                  style: MyTextTheme.mainbold(context),
                                 ),
                               ),
                           onItemTapCallback: (index) {
@@ -157,7 +157,8 @@ class SignupUserInfoScreen extends StatelessWidget {
                 ),
                 Text(
                   "대학 인증을 위해 정확한 정보를 입력해주세요",
-                  style: kmain.copyWith(color: maingray),
+                  style: MyTextTheme.main(context)
+                      .copyWith(color: AppColors.maingray),
                 ),
                 const SizedBox(
                   height: 24,

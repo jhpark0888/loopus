@@ -114,7 +114,7 @@ Future<HTTPResponse> userResign(int userid, BanType type, int? otherId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
 
-    final Uri uri = Uri.parse("$serverUri/user_api/ban?id=$userid&type=${type.name}&${otherId != null ?"other_id=$otherId":""}");
+    final Uri uri = Uri.parse("$chatServerUri/user_api/ban?id=$userid&type=${type.name}${otherId != null ?"&other_id=$otherId":""}");
 
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.delete(

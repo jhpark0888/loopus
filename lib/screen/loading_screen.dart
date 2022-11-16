@@ -15,7 +15,7 @@ class LoadingScreen extends StatelessWidget {
       child: Container(
         height: Get.height,
         width: Get.width,
-        color: mainblack.withOpacity(0.3),
+        color: AppColors.mainblack.withOpacity(0.3),
         child: const LoadingWidget(),
       ),
     );

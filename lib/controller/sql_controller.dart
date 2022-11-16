@@ -27,10 +27,10 @@ class SQLController extends GetxController {
     return openDatabase(
       // 데이터베이스 경로를 지정합니다. 참고: `path` 패키지의 `join` 함수를 사용하는 것이
       // 각 플랫폼 별로 경로가 제대로 생성됐는지 보장할 수 있는 가장 좋은 방법입니다.
-      join(await getDatabasesPath(), 'MY_database$myId.db'),
+      join(await getDatabasesPath(), 'MY_database_ver_1_$myId.db'),
       onCreate: (db, version) {
         db.execute(
-          "CREATE TABLE user(user_id INTEGER PRIMARY KEY, real_name TEXT, profile_image TEXT)",
+          "CREATE TABLE user(user_id INTEGER PRIMARY KEY, real_name TEXT, profile_image TEXT, withdrawal INTEGER)",
         );
         db.execute(
           "CREATE TABLE chatroom(room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER , alarm_active INTEGER)",
@@ -51,7 +51,8 @@ class SQLController extends GetxController {
       {
         "real_name": user.name,
         "user_id": user.userId,
-        "profile_image": user.profileImage
+        "profile_image": user.profileImage,
+        "withdrawal" : user.withdrawal.value
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -291,7 +292,7 @@ class SQLController extends GetxController {
     }
   }
 
-  Future<void> updateUser(String? image,String? name, int userId) async {
+  Future<void> updateUser(String? image,String? name,int? withdrawal, int userId) async {
     final Database db = await database!;
     if(image != null){
     await db.rawUpdate(
@@ -299,6 +300,10 @@ class SQLController extends GetxController {
     if(name != null){
       await db.rawUpdate(
         'UPDATE user SET real_name = ? WHERE user_id = ?', [name, userId]);
+    }
+    if(withdrawal != null){
+      await db.rawUpdate(
+        'UPDATE user SET withdrawal = ? WHERE user_id = ?', [withdrawal, userId]);
     }
   }
 

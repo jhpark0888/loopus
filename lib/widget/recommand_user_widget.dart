@@ -15,7 +15,7 @@ class RecommandUserWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       decoration: BoxDecoration(
-        color: cardGray,
+        color: AppColors.cardGray,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

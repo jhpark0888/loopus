@@ -13,9 +13,7 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/career_model.dart';
 import 'package:loopus/utils/error_control.dart';
-import 'package:loopus/widget/careertile_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';

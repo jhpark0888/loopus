@@ -24,7 +24,7 @@ class SignupCompanyScreen extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -63,8 +63,8 @@ class SignupCompanyScreen extends StatelessWidget {
                                     buttonFunction: () {
                                       dialogBack();
                                     },
-                                    btnColor: mainblue,
-                                    btnTextColor: mainWhite,
+                                    btnColor: AppColors.mainblue,
+                                    btnTextColor: AppColors.mainWhite,
                                     buttonText: "확인");
                               } else {
                                 errorSituation(value);
@@ -106,7 +106,8 @@ class SignupCompanyScreen extends StatelessWidget {
                 ),
                 Text(
                   "입력해주신 메일 주소를 통해\n루프어스 가입을 위한 절차 메일을 보내드릴게요",
-                  style: kmainheight.copyWith(color: maingray),
+                  style: MyTextTheme.mainheight(context)
+                      .copyWith(color: AppColors.maingray),
                   textAlign: TextAlign.center,
                 ),
               ],

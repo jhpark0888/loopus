@@ -52,7 +52,8 @@ class CareerArrangeScreen extends StatelessWidget {
               },
               child: Text(
                 "확인",
-                style: kNavigationTitle.copyWith(color: mainblue),
+                style: MyTextTheme.navigationTitle(context)
+                    .copyWith(color: AppColors.mainblue),
               ))
         ],
       ),
@@ -68,7 +69,8 @@ class CareerArrangeScreen extends StatelessWidget {
                     children: [
                       Text(
                         "커리어를 선택해 원하는 위치로 변경할 수 있어요",
-                        style: kmain.copyWith(color: maingray),
+                        style: MyTextTheme.main(context)
+                            .copyWith(color: AppColors.maingray),
                       ),
                       const SizedBox(
                         height: 16,
@@ -95,7 +97,8 @@ class CareerArrangeScreen extends StatelessWidget {
                                     'assets/icons/career_add.svg')),
                             const SizedBox(width: 8),
                             Text('커리어 추가하기',
-                                style: kmain.copyWith(color: mainblue))
+                                style: MyTextTheme.main(context)
+                                    .copyWith(color: AppColors.mainblue))
                           ],
                         ),
                       ),
@@ -166,7 +169,7 @@ class CareerArrangeWidget extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             decoration: BoxDecoration(
-                color: career.thumbnail == "" ? cardGray : null,
+                color: career.thumbnail == "" ? AppColors.cardGray : null,
                 borderRadius: BorderRadius.circular(8),
                 image: career.thumbnail == ""
                     ? null
@@ -181,8 +184,10 @@ class CareerArrangeWidget extends StatelessWidget {
               children: [
                 Text(
                   career.careerName,
-                  style: kmainbold.copyWith(
-                      color: career.thumbnail == "" ? mainblack : mainWhite),
+                  style: MyTextTheme.mainbold(context).copyWith(
+                      color: career.thumbnail == ""
+                          ? AppColors.mainblack
+                          : AppColors.mainWhite),
                 ),
                 const SizedBox(
                   height: 10,
@@ -191,19 +196,22 @@ class CareerArrangeWidget extends StatelessWidget {
                   children: [
                     career.isPublic
                         ? SvgPicture.asset('assets/icons/group_career.svg',
-                            color:
-                                career.thumbnail == "" ? mainblack : mainWhite)
+                            color: career.thumbnail == ""
+                                ? AppColors.mainblack
+                                : AppColors.mainWhite)
                         : SvgPicture.asset('assets/icons/single_career.svg',
-                            color:
-                                career.thumbnail == "" ? mainblack : mainWhite),
+                            color: career.thumbnail == ""
+                                ? AppColors.mainblack
+                                : AppColors.mainWhite),
                     const SizedBox(
                       width: 7,
                     ),
                     Text(
                       career.isPublic ? "그룹 커리어" : "개인 커리어",
-                      style: kmain.copyWith(
-                          color:
-                              career.thumbnail == "" ? mainblack : mainWhite),
+                      style: MyTextTheme.main(context).copyWith(
+                          color: career.thumbnail == ""
+                              ? AppColors.mainblack
+                              : AppColors.mainWhite),
                     ),
                   ],
                 )

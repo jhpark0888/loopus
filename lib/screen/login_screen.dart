@@ -48,7 +48,7 @@ class LogInScreen extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          color: mainWhite,
+          color: AppColors.mainWhite,
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -117,7 +117,7 @@ class LogInScreen extends StatelessWidget {
                 //       _loginController.loginType.value == UserType.student,
                 //       _loginController.loginType.value == UserType.company
                 //     ],
-                //     textStyle: kmainbold,
+                //     textStyle: MyTextTheme.mainbold(context),
                 //     onPressed: (index) {
                 //       if (index == 0) {
                 //         _loginController.loginType(UserType.student);
@@ -125,10 +125,10 @@ class LogInScreen extends StatelessWidget {
                 //         _loginController.loginType(UserType.company);
                 //       }
                 //     },
-                //     fillColor: mainblue,
-                //     selectedColor: mainWhite,
-                //     selectedBorderColor: mainblue,
-                //     color: dividegray,
+                //     fillColor: AppColors.mainblue,
+                //     selectedColor: AppColors.mainWhite,
+                //     selectedBorderColor: AppColors.mainblue,
+                //     color: AppColors.dividegray,
                 //     splashColor: Colors.transparent,
                 //     borderRadius: BorderRadius.circular(8),
                 //   ),
@@ -166,8 +166,8 @@ class LogInScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "비밀번호를 잊으셨나요?",
-                        style: kmain.copyWith(
-                          color: maingray,
+                        style: MyTextTheme.main(context).copyWith(
+                          color: AppColors.maingray,
                         ),
                       ),
                     )),
@@ -197,10 +197,12 @@ void login(
       int isStudent = jsonDecode(response.body)['is_student'];
 
       if (isStudent == 1) {
-        String strSchoolId = jsonDecode(response.body)['school_id'];
-        String strDeptId = jsonDecode(response.body)['department_id'];
-        List<int> groupTpList =
-            List.from(jsonDecode(response.body)['topic_list']);
+        String strSchoolId =
+            jsonDecode(response.body)['school_id']; //school학교id
+        String strDeptId =
+            jsonDecode(response.body)['department_id']; // department학과id
+        List<int> groupTpList = List.from(
+            jsonDecode(response.body)['topic_list']); //ex) [34, 53, 64]
 
         storage.write(key: 'strSchoolId', value: strSchoolId);
         storage.write(key: 'strDeptId', value: strDeptId);

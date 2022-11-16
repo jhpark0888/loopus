@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/trash_bin/bookmark_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/divide_widget.dart';

@@ -21,8 +21,6 @@ import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
-import 'package:loopus/trash_bin/project_screen.dart';
-import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
@@ -112,7 +110,7 @@ class NotificationWidget extends StatelessWidget {
                       });
                     },
                     label: '삭제',
-                    backgroundColor: rankred,
+                    backgroundColor: AppColors.rankred,
                   )
                 ],
               ),
@@ -135,17 +133,18 @@ class NotificationWidget extends StatelessWidget {
                       child: RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: notification.user.name, style: kmainbold),
+                            text: notification.user.name,
+                            style: MyTextTheme.mainbold(context)),
                         TextSpan(
                           text: notiText(),
-                          style:
-                              kmainheight.copyWith(fontWeight: FontWeight.w400),
+                          style: MyTextTheme.mainheight(context)
+                              .copyWith(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(
                           text:
                               ' · ${alarmDurationCaculate(startDate: notification.date)}',
-                          style: kmainheight.copyWith(
-                            color: maingray,
+                          style: MyTextTheme.mainheight(context).copyWith(
+                            color: AppColors.maingray,
                             fontWeight: FontWeight.w400,
                           ),
                         )
@@ -193,7 +192,7 @@ class NotificationWidget extends StatelessWidget {
                       });
                     },
                     label: '삭제',
-                    backgroundColor: rankred,
+                    backgroundColor: AppColors.rankred,
                   )
                 ],
               ),
@@ -227,25 +226,26 @@ class NotificationWidget extends StatelessWidget {
                                 clickprofile();
                               },
                             text: notification.user.name,
-                            style: kmainbold),
+                            style: MyTextTheme.mainbold(context)),
                         TextSpan(
                           text: "님이 ",
-                          style:
-                              kmainheight.copyWith(fontWeight: FontWeight.w400),
+                          style: MyTextTheme.mainheight(context)
+                              .copyWith(fontWeight: FontWeight.w400),
                         ),
                         // TextSpan(
                         //     text: notification.content,
                         //     style: kSubTitle1Style),
                         TextSpan(
                           text: notiText(),
-                          style:
-                              kmainheight.copyWith(fontWeight: FontWeight.w400),
+                          style: MyTextTheme.mainheight(context)
+                              .copyWith(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(
                             text: ' · ${alarmDurationCaculate(
                               startDate: notification.date,
                             )}',
-                            style: kmainheight.copyWith(color: maingray))
+                            style: MyTextTheme.mainheight(context)
+                                .copyWith(color: AppColors.maingray))
                       ])),
                     ),
                   ],
@@ -283,7 +283,8 @@ class NotificationWidget extends StatelessWidget {
     if (notification.user.userType == UserType.student) {
       Get.to(
           () => OtherProfileScreen(
-              userid: notification.user.userId, realname: notification.user.name),
+              userid: notification.user.userId,
+              realname: notification.user.name),
           preventDuplicates: false);
     } else {
       Get.to(
@@ -321,14 +322,14 @@ class NotificationWidget extends StatelessWidget {
         notification.type == NotificationType.groupCareerPost ||
         notification.type == NotificationType.schoolNoti) {
       Get.to(
-          () => PostingScreen(
-                post: null,
-                postid: notification.targetId,
-                // likecount: 0.obs,
-                // isLiked: 0.obs,
-              ),
-          preventDuplicates: false,
-          opaque: false);
+        () => PostingScreen(
+          post: null,
+          postid: notification.targetId,
+          // likecount: 0.obs,
+          // isLiked: 0.obs,
+        ),
+        preventDuplicates: false,
+      );
     } else if (notification.type == NotificationType.follow) {
       if (notification.user.userType == UserType.student) {
         Get.to(

@@ -9,29 +9,15 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/contact_content_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/notification_controller.dart';
-import 'package:loopus/controller/notification_detail_controller.dart';
-import 'package:loopus/controller/other_profile_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
-import 'package:loopus/controller/withdrawal_controller.dart';
-import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/httpresponse_model.dart';
-import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/sns_model.dart';
-
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/start_screen.dart';
-import 'package:loopus/widget/notification_widget.dart';
-import 'package:loopus/widget/project_widget.dart';
-
 import '../constant.dart';
-import '../controller/error_controller.dart';
 import '../controller/home_controller.dart';
-import '../controller/search_controller.dart';
 
 Future<HTTPResponse> getProfile(int userId) async {
   ConnectivityResult result = await initConnectivity();

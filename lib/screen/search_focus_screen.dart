@@ -35,15 +35,16 @@ class SearchFocusScreen extends StatelessWidget {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: mainWhite,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,),
+            statusBarColor: AppColors.mainWhite,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
           automaticallyImplyLeading: false,
           toolbarHeight: 50,
           centerTitle: false,
           titleSpacing: 0,
           elevation: 0,
-          backgroundColor: mainWhite,
+          backgroundColor: AppColors.mainWhite,
           title: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             width: MediaQuery.of(context).size.width,
@@ -63,11 +64,12 @@ class SearchFocusScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: AppController.to.willPopAction,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 9),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
                     child: Text(
                       '취소',
-                      style: kmainbold.copyWith(color: mainblue),
+                      style: MyTextTheme.mainbold(context)
+                          .copyWith(color: AppColors.mainblue),
                     ),
                   ),
                 )
@@ -86,7 +88,7 @@ class SearchFocusScreen extends StatelessWidget {
                     sliver: SliverSafeArea(
                       top: false,
                       sliver: SliverAppBar(
-                        backgroundColor: mainWhite,
+                        backgroundColor: AppColors.mainWhite,
                         toolbarHeight: 44,
                         pinned: true,
                         elevation: 0,
@@ -289,7 +291,7 @@ class SearchEmptyWidget extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       child: Text(
         '"${SearchController.to.searchtextcontroller.text}"에 대한 검색 결과가 없습니다',
-        style: kmain,
+        style: MyTextTheme.main(context),
       ),
     );
   }

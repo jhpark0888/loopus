@@ -29,14 +29,12 @@ import 'package:loopus/screen/personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/profile_sns_add_screen.dart';
-import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/career_analysis_widget.dart';
 import 'package:loopus/widget/career_widget.dart';
-import 'package:loopus/widget/careertile_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
@@ -72,16 +70,16 @@ class MyProfileScreen extends StatelessWidget {
         preferredSize: Size.fromHeight(44),
         child: AppBar(
           systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: mainWhite,
+            statusBarColor: AppColors.mainWhite,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),
           titleSpacing: 0,
           elevation: 0,
           centerTitle: false,
-          title: const Text(
+          title: Text(
             '프로필',
-            style: kNavigationTitle,
+            style: MyTextTheme.navigationTitle(context),
           ),
           leading: IconButton(
               padding: EdgeInsets.zero,
@@ -105,7 +103,7 @@ class MyProfileScreen extends StatelessWidget {
               },
               icon: SvgPicture.asset(
                 'assets/icons/setting.svg',
-                color: mainblack,
+                color: AppColors.mainblack,
               ),
             ),
           ],
@@ -136,7 +134,7 @@ class MyProfileScreen extends StatelessWidget {
           //     delegate: _SliverTabBarViewDelegate(child: _tabView()),
           //   ),
           //   // SliverAppBar(
-          //   //   backgroundColor: mainWhite,
+          //   //   backgroundColor: AppColors.mainWhite,
           //   //   toolbarHeight: 44,
           //   //   pinned: true,
           //   //   primary: false,
@@ -166,7 +164,7 @@ class MyProfileScreen extends StatelessWidget {
               //       context),
               //   sliver:
               SliverAppBar(
-                backgroundColor: mainWhite,
+                backgroundColor: AppColors.mainWhite,
                 toolbarHeight: 44,
                 pinned: true,
                 primary: false,
@@ -237,10 +235,10 @@ class MyProfileScreen extends StatelessWidget {
                     () => Text(
                       profileController.myUserInfo.value.followerCount.value
                           .toString(),
-                      style: kmainbold.copyWith(
+                      style: MyTextTheme.mainbold(context).copyWith(
                           color: _hoverController.isHover.value
-                              ? mainblack.withOpacity(0.6)
-                              : mainblack),
+                              ? AppColors.mainblack.withOpacity(0.6)
+                              : AppColors.mainblack),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -249,7 +247,8 @@ class MyProfileScreen extends StatelessWidget {
                   ),
                   Text(
                     '팔로워',
-                    style: kmain.copyWith(color: maingray),
+                    style: MyTextTheme.main(context)
+                        .copyWith(color: AppColors.maingray),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -267,8 +266,8 @@ class MyProfileScreen extends StatelessWidget {
                           func2: changeProfileImage,
                           value1: '기본 이미지로 변경',
                           value2: '사진첩에서 사진 선택',
-                          buttonColor1: maingray,
-                          buttonColor2: mainblue,
+                          buttonColor1: AppColors.maingray,
+                          buttonColor2: AppColors.mainblue,
                           isOne: false),
                       child: UserImageWidget(
                         imageUrl:
@@ -287,12 +286,12 @@ class MyProfileScreen extends StatelessWidget {
                           func2: changeProfileImage,
                           value1: '기본 이미지로 변경',
                           value2: '사진첩에서 사진 선택',
-                          buttonColor1: maingray,
-                          buttonColor2: mainblue,
+                          buttonColor1: AppColors.maingray,
+                          buttonColor2: AppColors.mainblue,
                           isOne: false),
                       child: Container(
                         decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: mainWhite),
+                            shape: BoxShape.circle, color: AppColors.mainWhite),
                         child: SvgPicture.asset(
                           "assets/icons/profile_image.svg",
                           width: 28,
@@ -322,10 +321,10 @@ class MyProfileScreen extends StatelessWidget {
                     () => Text(
                       profileController.myUserInfo.value.followingCount.value
                           .toString(),
-                      style: kmainbold.copyWith(
+                      style: MyTextTheme.mainbold(context).copyWith(
                           color: _hoverController.isHover.value
-                              ? mainblack.withOpacity(0.6)
-                              : mainblack),
+                              ? AppColors.mainblack.withOpacity(0.6)
+                              : AppColors.mainblack),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -334,7 +333,8 @@ class MyProfileScreen extends StatelessWidget {
                   ),
                   Text(
                     '팔로잉',
-                    style: kmain.copyWith(color: maingray),
+                    style: MyTextTheme.main(context)
+                        .copyWith(color: AppColors.maingray),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -348,7 +348,7 @@ class MyProfileScreen extends StatelessWidget {
         Obx(
           () => Text(
             profileController.myUserInfo.value.name,
-            style: kmainbold,
+            style: MyTextTheme.mainbold(context),
           ),
         ),
         const SizedBox(
@@ -369,31 +369,31 @@ class MyProfileScreen extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   profileController.myUserInfo.value.univName,
-                  style: kmain,
+                  style: MyTextTheme.main(context),
                 ),
                 const SizedBox(
                   height: 9,
                   child: VerticalDivider(
                     thickness: 1,
                     width: 16,
-                    color: mainblack,
+                    color: AppColors.mainblack,
                   ),
                 ),
                 Text(
                   profileController.myUserInfo.value.department,
-                  style: kmain,
+                  style: MyTextTheme.main(context),
                 ),
                 const SizedBox(
                   height: 9,
                   child: VerticalDivider(
                     thickness: 1,
                     width: 16,
-                    color: mainblack,
+                    color: AppColors.mainblack,
                   ),
                 ),
                 Text(
                   "${profileController.myUserInfo.value.admissionYear.substring(2)}년도 입학",
-                  style: kmain,
+                  style: MyTextTheme.main(context),
                 ),
               ],
             ),
@@ -439,7 +439,7 @@ class MyProfileScreen extends StatelessWidget {
                     "assets/icons/home_add.svg",
                     width: 28,
                     height: 28,
-                    color: mainblue,
+                    color: AppColors.mainblue,
                   ),
                 ),
                 Obx(() => profileController.myUserInfo.value.snsList.isNotEmpty
@@ -455,7 +455,8 @@ class MyProfileScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 8),
                           child: Text(
                             "SNS를 등록해주세요",
-                            style: kmain.copyWith(color: mainblue),
+                            style: MyTextTheme.main(context)
+                                .copyWith(color: AppColors.mainblue),
                           ),
                         ),
                       ))
@@ -489,8 +490,9 @@ class MyProfileScreen extends StatelessWidget {
             height: 40,
             icon: SvgPicture.asset(
               'assets/icons/list_active.svg',
-              color:
-                  profileController.currentIndex.value == 0 ? null : dividegray,
+              color: profileController.currentIndex.value == 0
+                  ? null
+                  : AppColors.dividegray,
             ),
           ),
         ),
@@ -499,8 +501,9 @@ class MyProfileScreen extends StatelessWidget {
             height: 40,
             icon: SvgPicture.asset(
               'assets/icons/post_active.svg',
-              color:
-                  profileController.currentIndex.value == 1 ? null : dividegray,
+              color: profileController.currentIndex.value == 1
+                  ? null
+                  : AppColors.dividegray,
             ),
           ),
         ),
@@ -537,7 +540,7 @@ class MyProfileScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                         '${profileController.myUserInfo.value.name}님과 관련있는 기업',
-                                        style: kmainbold),
+                                        style: MyTextTheme.mainbold(context)),
                                     const SizedBox(width: 8),
                                     SizedBox(
                                       width: 20,
@@ -574,8 +577,10 @@ class MyProfileScreen extends StatelessWidget {
                                         primary: false,
                                         scrollDirection: Axis.horizontal,
                                         itemBuilder: (context, index) {
-                                          return companyTile(profileController
-                                              .interestedCompanies[index]);
+                                          return companyTile(
+                                              context,
+                                              profileController
+                                                  .interestedCompanies[index]);
                                         },
                                         itemCount: profileController
                                             .interestedCompanies.length,
@@ -586,7 +591,8 @@ class MyProfileScreen extends StatelessWidget {
                                     )
                                   : Text(
                                       '아직 ${profileController.myUserInfo.value.name}님과 관련있는 기업이 없어요',
-                                      style: kmain.copyWith(color: maingray),
+                                      style: MyTextTheme.main(context)
+                                          .copyWith(color: AppColors.maingray),
                                     )),
                               const SizedBox(height: 16),
                               Padding(
@@ -595,7 +601,8 @@ class MyProfileScreen extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Text('커리어', style: kmainbold),
+                                    Text('커리어',
+                                        style: MyTextTheme.mainbold(context)),
                                     const SizedBox(width: 8),
                                     CareerAnalysisWidget(
                                       field: fieldList[profileController
@@ -639,7 +646,9 @@ class MyProfileScreen extends StatelessWidget {
                                       },
                                       child: Text(
                                         "수정하기",
-                                        style: kmain.copyWith(color: mainblue),
+                                        style: MyTextTheme.main(context)
+                                            .copyWith(
+                                                color: AppColors.mainblue),
                                       ),
                                     )
                                   ],
@@ -705,74 +714,74 @@ class MyProfileScreen extends StatelessWidget {
           ));
   }
 
-  Widget _tagView() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              '상위 태그',
-              style: kmain.copyWith(color: maingray),
-            ),
-            const SizedBox(
-              width: 7,
-            ),
-            Obx(
-              () => Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: profileController.myUserInfo.value.profileTag
-                      .map((tag) => Row(children: [
-                            Tagwidget(
-                              tag: tag,
-                            ),
-                            profileController.myUserInfo.value.profileTag
-                                        .indexOf(tag) !=
-                                    profileController.myUserInfo.value
-                                            .profileTag.length -
-                                        1
-                                ? const SizedBox(
-                                    width: 8,
-                                  )
-                                : Container()
-                          ]))
-                      .toList()),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: CustomExpandedButton(
-                onTap: () {
-                  tagController.selectedtaglist.clear();
-                  tagController.tagsearchContoller.text = "";
-                  for (var tag
-                      in profileController.myUserInfo.value.profileTag) {
-                    tagController.selectedtaglist.add(SelectedTagWidget(
-                      id: tag.tagId,
-                      text: tag.tag,
-                      selecttagtype: SelectTagtype.interesting,
-                      tagtype: Tagtype.profile,
-                    ));
-                  }
-                  Get.to(() => ProfileTagChangeScreen());
-                },
-                isBlue: false,
-                isBig: false,
-                title: '관심 태그 변경하기',
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+  // Widget _tagView() {
+  //   return Column(
+  //     children: [
+  //       Row(
+  //         children: [
+  //           Text(
+  //             '상위 태그',
+  //             style: MyTextTheme.main(context).copyWith(color: AppColors.maingray),
+  //           ),
+  //           const SizedBox(
+  //             width: 7,
+  //           ),
+  //           Obx(
+  //             () => Row(
+  //                 mainAxisAlignment: MainAxisAlignment.start,
+  //                 children: profileController.myUserInfo.value.profileTag
+  //                     .map((tag) => Row(children: [
+  //                           Tagwidget(
+  //                             tag: tag,
+  //                           ),
+  //                           profileController.myUserInfo.value.profileTag
+  //                                       .indexOf(tag) !=
+  //                                   profileController.myUserInfo.value
+  //                                           .profileTag.length -
+  //                                       1
+  //                               ? const SizedBox(
+  //                                   width: 8,
+  //                                 )
+  //                               : Container()
+  //                         ]))
+  //                     .toList()),
+  //           ),
+  //         ],
+  //       ),
+  //       const SizedBox(
+  //         height: 16,
+  //       ),
+  //       Row(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Expanded(
+  //             child: CustomExpandedButton(
+  //               onTap: () {
+  //                 tagController.selectedtaglist.clear();
+  //                 tagController.tagsearchContoller.text = "";
+  //                 for (var tag
+  //                     in profileController.myUserInfo.value.profileTag) {
+  //                   tagController.selectedtaglist.add(SelectedTagWidget(
+  //                     id: tag.tagId,
+  //                     text: tag.tag,
+  //                     selecttagtype: SelectTagtype.interesting,
+  //                     tagtype: Tagtype.profile,
+  //                   ));
+  //                 }
+  //                 Get.to(() => ProfileTagChangeScreen());
+  //               },
+  //               isBlue: false,
+  //               isBig: false,
+  //               title: '관심 태그 변경하기',
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Widget companyTile(Company company) {
+  Widget companyTile(BuildContext context, Company company) {
     return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       UserImageWidget(
           width: 36,
@@ -786,11 +795,12 @@ class MyProfileScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(company.name, style: kmain),
+            Text(company.name, style: MyTextTheme.main(context)),
             const SizedBox(height: 4),
             Text(
               fieldList[company.fieldId]!,
-              style: kmain.copyWith(color: maingray),
+              style:
+                  MyTextTheme.main(context).copyWith(color: AppColors.maingray),
             )
           ],
         ),

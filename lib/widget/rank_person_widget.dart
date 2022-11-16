@@ -51,7 +51,7 @@
 //                 TextSpan(
 //                     text: '최근 포스트 ',
 //                     style:
-//                         k15normal.copyWith(color: maingray.withOpacity(0.5))),
+//                         k15normal.copyWith(color: AppColors.maingray.withOpacity(0.5))),
 //                 TextSpan(
 //                     text: '${user.resentPostCount.toString()}개',
 //                     style: k15normal)
@@ -73,8 +73,8 @@
 //                   elevation: 0.0,
 //                   color: user.looped.value == FollowState.normal ||
 //                           user.looped.value == FollowState.follower
-//                       ? mainblue
-//                       : cardGray,
+//                       ? AppColors.mainblue
+//                       : AppColors.cardGray,
 //                   child: Center(
 //                     child: Text(
 //                       user.looped.value == FollowState.normal ||
@@ -88,8 +88,8 @@
 //                           fontFamily: 'SUIT',
 //                           color: user.looped.value == FollowState.normal ||
 //                                   user.looped.value == FollowState.follower
-//                               ? mainWhite
-//                               : mainblack),
+//                               ? AppColors.mainWhite
+//                               : AppColors.mainblack),
 //                     ),
 //                   ),
 //                   shape: RoundedRectangleBorder(
@@ -119,7 +119,7 @@
 //     const SizedBox(width: 2),
 //     if (variance != 0)
 //       Text('${variance.abs()}',
-//           style: kcaption.copyWith(color: variance >= 1 ? rankred : rankblue)),
+//           style: MyTextTheme.caption(context).copyWith(color: variance >= 1 ? AppColors.rankred : AppColors.rankblue)),
 //   ]);
 // }
 

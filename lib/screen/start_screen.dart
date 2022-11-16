@@ -22,7 +22,7 @@ class StartScreen extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
-        color: mainWhite,
+        color: AppColors.mainWhite,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -48,8 +48,8 @@ class StartScreen extends StatelessWidget {
                     () => LogInScreen(),
                   );
                 },
-                boxColor: cardGray,
-                textColor: mainblack,
+                boxColor: AppColors.cardGray,
+                textColor: AppColors.mainblack,
                 isBlue: false,
                 isBig: true,
                 title: '이미 계정이 있어요',
@@ -62,30 +62,34 @@ class StartScreen extends StatelessWidget {
                   text: TextSpan(children: [
                     TextSpan(
                         text: "시작할 경우 ",
-                        style: kcaption.copyWith(color: maingray)),
+                        style: MyTextTheme.caption(context)
+                            .copyWith(color: AppColors.maingray)),
                     TextSpan(
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Get.to(() => WebViewScreen(url: kPrivacyPolicy));
                           },
                         text: "개인정보처리방침 ",
-                        style: kcaption.copyWith(
-                            color: maingray,
+                        style: MyTextTheme.caption(context).copyWith(
+                            color: AppColors.maingray,
                             decoration: TextDecoration.underline)),
                     TextSpan(
-                        text: "및 ", style: kcaption.copyWith(color: maingray)),
+                        text: "및 ",
+                        style: MyTextTheme.caption(context)
+                            .copyWith(color: AppColors.maingray)),
                     TextSpan(
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Get.to(() => WebViewScreen(url: kTermsOfService));
                           },
                         text: "이용약관",
-                        style: kcaption.copyWith(
-                            color: maingray,
+                        style: MyTextTheme.caption(context).copyWith(
+                            color: AppColors.maingray,
                             decoration: TextDecoration.underline)),
                     TextSpan(
                         text: "에 동의됩니다",
-                        style: kcaption.copyWith(color: maingray)),
+                        style: MyTextTheme.caption(context)
+                            .copyWith(color: AppColors.maingray)),
                   ])),
               const SizedBox(
                 height: 14,
@@ -98,7 +102,7 @@ class StartScreen extends StatelessWidget {
         child: Container(
           width: Get.width,
           height: Get.height,
-          color: mainWhite,
+          color: AppColors.mainWhite,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -112,8 +116,8 @@ class StartScreen extends StatelessWidget {
               // ),
               // RichText(
               //     text: TextSpan(children: [
-              //   const TextSpan(text: "내 모든 일상이 포트폴리오가 되다,", style: kmain),
-              //   TextSpan(text: " 루프어스", style: kmain.copyWith(color: mainblue))
+              //   const TextSpan(text: "내 모든 일상이 포트폴리오가 되다,", style: MyTextTheme.main(context)),
+              //   TextSpan(text: " 루프어스", style: MyTextTheme.main(context).copyWith(color: AppColors.mainblue))
               // ]))
             ],
           ),

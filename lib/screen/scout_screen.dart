@@ -55,7 +55,7 @@ class ScoutScreen extends StatelessWidget {
                 color: _scontroller.colors.isNotEmpty
                     ? _scontroller
                         .colors[_scontroller.curRcmdCompIndex.value].color
-                    : mainblue,
+                    : AppColors.mainblue,
               ),
               Scaffold(
                 appBar: AppBar(
@@ -63,7 +63,7 @@ class ScoutScreen extends StatelessWidget {
                     statusBarColor: _scontroller.colors.isNotEmpty
                         ? _scontroller
                             .colors[_scontroller.curRcmdCompIndex.value].color
-                        : mainblue,
+                        : AppColors.mainblue,
                     statusBarIconBrightness: Brightness.light,
                     statusBarBrightness: Brightness.dark,
                   ),
@@ -73,12 +73,13 @@ class ScoutScreen extends StatelessWidget {
                   backgroundColor: _scontroller.colors.isNotEmpty
                       ? _scontroller
                           .colors[_scontroller.curRcmdCompIndex.value].color
-                      : mainblue,
+                      : AppColors.mainblue,
                   title: Row(
                     children: [
                       Text(
                         '스카우트 중인 기업',
-                        style: ktitle.copyWith(color: mainWhite),
+                        style: MyTextTheme.title(context)
+                            .copyWith(color: AppColors.mainWhite),
                       ),
                       const SizedBox(width: 8),
                       SizedBox(
@@ -130,7 +131,7 @@ class ScoutScreen extends StatelessWidget {
                               ? _scontroller
                                   .colors[_scontroller.curRcmdCompIndex.value]
                                   .color
-                              : mainblue,
+                              : AppColors.mainblue,
                         ),
                         footer: const MyCustomFooter(),
                         enablePullUp: true,
@@ -143,9 +144,9 @@ class ScoutScreen extends StatelessWidget {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                companyRecImages(),
+                                companyRecImages(context),
                                 Container(
-                                  color: mainWhite,
+                                  color: AppColors.mainWhite,
                                   child: ListView.separated(
                                     primary: false,
                                     shrinkWrap: true,
@@ -166,7 +167,8 @@ class ScoutScreen extends StatelessWidget {
                                                 Text(
                                                   fieldList[_scontroller
                                                       .fieldIdList[index]]!,
-                                                  style: kmainbold,
+                                                  style: MyTextTheme.mainbold(
+                                                      context),
                                                 ),
                                                 const Spacer(),
                                                 GestureDetector(
@@ -181,8 +183,11 @@ class ScoutScreen extends StatelessWidget {
                                                   },
                                                   child: Text(
                                                     "전체보기",
-                                                    style: kmain.copyWith(
-                                                        color: mainblue),
+                                                    style: MyTextTheme.main(
+                                                            context)
+                                                        .copyWith(
+                                                            color: AppColors
+                                                                .mainblue),
                                                   ),
                                                 )
                                               ],
@@ -238,9 +243,12 @@ class ScoutScreen extends StatelessWidget {
                                                             ),
                                                             Text(
                                                               "더 많은 기업 보기",
-                                                              style: kmain.copyWith(
-                                                                  color:
-                                                                      mainblue),
+                                                              style: MyTextTheme
+                                                                      .main(
+                                                                          context)
+                                                                  .copyWith(
+                                                                      color: AppColors
+                                                                          .mainblue),
                                                             )
                                                           ],
                                                         ),
@@ -289,11 +297,11 @@ class ScoutScreen extends StatelessWidget {
         ));
   }
 
-  Widget companyRecImages() {
+  Widget companyRecImages(BuildContext context) {
     return Container(
       color: _scontroller.colors.isNotEmpty
           ? _scontroller.colors[_scontroller.curRcmdCompIndex.value].color
-          : mainblue,
+          : AppColors.mainblue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -304,7 +312,8 @@ class ScoutScreen extends StatelessWidget {
                 AppController.to.userType == UserType.company
                     ? "회원님의 기업과 유사한 기업"
                     : "당신에게 '집중'하고 있는 추천 기업",
-                style: kmainbold.copyWith(color: mainWhite)),
+                style: MyTextTheme.mainbold(context)
+                    .copyWith(color: AppColors.mainWhite)),
           ),
           const SizedBox(height: 8),
           Padding(
@@ -317,7 +326,8 @@ class ScoutScreen extends StatelessWidget {
                         .replaceAll('\r\n', " ")
                     : "",
                 overflow: TextOverflow.ellipsis,
-                style: kNavigationTitle.copyWith(color: mainWhite)),
+                style: MyTextTheme.navigationTitle(context)
+                    .copyWith(color: AppColors.mainWhite)),
           ),
           const SizedBox(height: 8),
           Padding(
@@ -329,7 +339,8 @@ class ScoutScreen extends StatelessWidget {
                         .name
                     : "",
                 maxLines: 1,
-                style: kmainbold.copyWith(color: mainWhite)),
+                style: MyTextTheme.mainbold(context)
+                    .copyWith(color: AppColors.mainWhite)),
           ),
           const SizedBox(height: 16),
           Obx(
@@ -375,7 +386,7 @@ class ScoutScreen extends StatelessWidget {
                               fit: BoxFit.cover,
                               errorWidget: (context, string, widget) {
                                 return Container(
-                                  color: maingray,
+                                  color: AppColors.maingray,
                                 );
                               },
                             ),
@@ -384,7 +395,7 @@ class ScoutScreen extends StatelessWidget {
                       },
                     )
                   : Container(
-                      color: mainblue,
+                      color: AppColors.mainblue,
                     ),
             ),
           ),
@@ -407,7 +418,7 @@ class ScoutScreen extends StatelessWidget {
               width: 28,
               indent: 14,
               endIndent: 14,
-              color: dividegray,
+              color: AppColors.dividegray,
             )
         ],
       ),

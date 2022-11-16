@@ -59,7 +59,7 @@ class PwFindScreen extends StatelessWidget {
         },
         child: Scaffold(
           bottomNavigationBar: BottomAppBar(
-            color: mainWhite,
+            color: AppColors.mainWhite,
             elevation: 0,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -68,7 +68,7 @@ class PwFindScreen extends StatelessWidget {
                 children: [
                   Obx(() => _pwChangeController.pwcertification.value ==
                           Emailcertification.waiting
-                      ? _pwChangeController.timer.timerDisplay()
+                      ? _pwChangeController.timer.timerDisplay(context)
                       : Container()),
                   const SizedBox(
                     height: 24,
@@ -170,9 +170,9 @@ class PwFindScreen extends StatelessWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  const Text(
+                  Text(
                     "위 웹메일 주소에서 인증번호를 확인해주세요",
-                    style: kmain,
+                    style: MyTextTheme.main(context),
                   ),
                   const SizedBox(
                     height: 24,
@@ -235,7 +235,8 @@ class PwFindScreen extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 "인증번호가 다릅니다. 다시 확인해주세요",
-                                style: kmain.copyWith(color: rankred),
+                                style: MyTextTheme.main(context)
+                                    .copyWith(color: AppColors.rankred),
                               ),
                             ),
                           )

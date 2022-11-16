@@ -42,8 +42,6 @@ import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/screen/signup_complete_screen.dart';
 import 'package:loopus/screen/signup_email_pw_screen.dart';
 import 'package:loopus/screen/signup_fail_screen.dart';
-import 'package:loopus/trash_bin/project_screen.dart';
-import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/utils/error_control.dart';
@@ -108,13 +106,11 @@ class NotificationController extends GetxController {
       int type = int.parse(json['type'].toString());
       int senderId = int.parse(json['sender_id']);
       if (type == 4 || type == 7 || type == 9 || type == 11) {
-        Get.to(() => PostingScreen(postid: id),
-            opaque: false, preventDuplicates: false);
+        Get.to(() => PostingScreen(postid: id), preventDuplicates: false);
       } else if (type == 5 || type == 6 || type == 8) {
         int? postId =
             json['post_id'] != null ? int.parse(json['post_id']) : null;
-        Get.to(() => PostingScreen(postid: postId!),
-            opaque: false, preventDuplicates: false);
+        Get.to(() => PostingScreen(postid: postId!), preventDuplicates: false);
       } else if (type == 2) {
         Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'),
             preventDuplicates: false);
@@ -160,8 +156,8 @@ class NotificationController extends GetxController {
       } else {
         Map<String, dynamic> json = event.data;
         if (Platform.isAndroid) {
-        localNotificaition.sampleNotification(
-            event.notification!.title!, event.notification!.body!, json);
+          localNotificaition.sampleNotification(
+              event.notification!.title!, event.notification!.body!, json);
         }
 
         if (event.data["type"] == "msg" || event.data['type'] == 'no_msg') {

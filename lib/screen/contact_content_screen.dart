@@ -39,8 +39,8 @@ class ContactContentScreen extends StatelessWidget {
             },
             child: Text(
               '확인',
-              style: kNavigationTitle.copyWith(
-                  color: isBlue ? mainblue : maingray),
+              style: MyTextTheme.navigationTitle(context).copyWith(
+                  color: isBlue ? AppColors.mainblue : AppColors.maingray),
             ),
           ),
         ],
@@ -53,7 +53,7 @@ class ContactContentScreen extends StatelessWidget {
           children: [
             Text(
               '답변 받으실 이메일 주소',
-              style: kmainbold.copyWith(height: 1.5),
+              style: MyTextTheme.mainbold(context).copyWith(height: 1.5),
             ),
             SizedBox(
               height: 16,
@@ -72,7 +72,7 @@ class ContactContentScreen extends StatelessWidget {
             ),
             Text(
               '문의 내용',
-              style: kmainbold.copyWith(height: 1.5),
+              style: MyTextTheme.mainbold(context).copyWith(height: 1.5),
             ),
             SizedBox(
               height: 16,
@@ -100,7 +100,7 @@ class ContactContentScreen extends StatelessWidget {
             //               ' ' +
             //               _userDeviceInfo.appInfoData.values.first,
             //           style: kCaptionStyle.copyWith(
-            //             color: mainblack.withOpacity(0.6),
+            //             color: AppColors.mainblack.withOpacity(0.6),
             //           ),
             //         )
             //       : Text(''),

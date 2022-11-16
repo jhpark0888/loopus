@@ -25,21 +25,24 @@ class TabBarWidget extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: maingray, width: 2.0),
+                  bottom: BorderSide(color: AppColors.maingray, width: 2.0),
                 ),
               ),
             ),
             TabBar(
                 controller: tabController,
-                labelStyle: kmainbold,
-                labelColor: isDark ? mainWhite : mainblack,
-                unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-                unselectedLabelColor: dividegray,
+                labelStyle: MyTextTheme.mainbold(context),
+                labelColor: isDark ? AppColors.mainWhite : AppColors.mainblack,
+                unselectedLabelStyle: MyTextTheme.mainbold(context)
+                    .copyWith(color: AppColors.dividegray),
+                unselectedLabelColor: AppColors.dividegray,
                 automaticIndicatorColorAdjustment: false,
                 indicator: UnderlineIndicator(
                   strokeCap: StrokeCap.round,
                   borderSide: BorderSide(
-                      width: 2, color: isDark ? mainWhite : mainblack),
+                      width: 2,
+                      color:
+                          isDark ? AppColors.mainWhite : AppColors.mainblack),
                 ),
                 isScrollable: false,
                 tabs: tabs),

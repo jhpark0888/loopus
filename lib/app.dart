@@ -31,7 +31,7 @@ class App extends StatelessWidget {
             );
           }),
       Container(
-        color: mainblack.withOpacity(0.25),
+        color: AppColors.mainblack.withOpacity(0.25),
       ),
       // Container(),
       ScoutScreen(),
@@ -59,7 +59,7 @@ class App extends StatelessWidget {
                 // ),
                 boxShadow: [
                   BoxShadow(
-                    color: mainblack.withOpacity(0.1),
+                    color: AppColors.mainblack.withOpacity(0.1),
                     blurRadius: 1,
                     offset: const Offset(
                       0.0,
@@ -77,7 +77,7 @@ class App extends StatelessWidget {
                 //   bottomRight: Radius.circular(0),
                 // ),
                 child: BottomNavigationBar(
-                  backgroundColor: mainWhite,
+                  backgroundColor: Theme.of(context).canvasColor,
                   selectedFontSize: 0,
                   unselectedFontSize: 0,
                   type: BottomNavigationBarType.fixed,

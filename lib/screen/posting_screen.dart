@@ -111,10 +111,11 @@ class PostingScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildTextComposer() {
+  Widget _buildTextComposer(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: dividegray, width: 1))),
+          border:
+              Border(top: BorderSide(color: AppColors.dividegray, width: 1))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -130,10 +131,12 @@ class PostingScreen extends StatelessWidget {
                             text: TextSpan(children: [
                           TextSpan(
                               text: '@${controller.tagUser.value.name}',
-                              style: kmainbold.copyWith(color: maingray)),
+                              style: MyTextTheme.mainbold(context)
+                                  .copyWith(color: AppColors.maingray)),
                           TextSpan(
                               text: '님에게 대댓글 남기는중',
-                              style: kmain.copyWith(color: maingray))
+                              style: MyTextTheme.main(context)
+                                  .copyWith(color: AppColors.maingray))
                         ])),
                         SizedBox(
                           width: 8,
@@ -155,7 +158,7 @@ class PostingScreen extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              color: mainWhite,
+              color: AppColors.mainWhite,
             ),
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -169,7 +172,7 @@ class PostingScreen extends StatelessWidget {
                     enableSuggestions: false,
                     cursorWidth: 1.2,
                     style: const TextStyle(decoration: TextDecoration.none),
-                    cursorColor: mainblack,
+                    cursorColor: AppColors.mainblack,
                     controller: controller.commentController,
                     focusNode: controller.commentFocus,
                     autofocus: autofocus,
@@ -190,8 +193,9 @@ class PostingScreen extends StatelessWidget {
                         ),
                       ),
                       hintText: "댓글 입력",
-                      hintStyle: kmain.copyWith(color: maingray),
-                      fillColor: lightcardgray,
+                      hintStyle: MyTextTheme.main(context)
+                          .copyWith(color: AppColors.maingray),
+                      fillColor: AppColors.lightcardgray,
                       filled: true,
                     ),
                   ),
@@ -251,243 +255,230 @@ class PostingScreen extends StatelessWidget {
       onTap: () {
         controller.commentFocus.unfocus();
       },
-      child: Obx(
-        () => controller.postscreenstate.value == ScreenState.loading
-            ? const LoadingScreen()
-            : controller.postscreenstate.value == ScreenState.normal
-                ? Container()
-                : controller.postscreenstate.value == ScreenState.disconnect
-                    ? DisconnectReloadWidget(reload: () {})
-                    : controller.postscreenstate.value == ScreenState.error
-                        ? ErrorReloadWidget(reload: () {})
-                        : Scaffold(
-                            // resizeToAvoidBottomInset: false,
-                            appBar: AppBarWidget(
-                              bottomBorder: false,
-                              leading: IconButton(
-                                padding: EdgeInsets.zero,
-                                onPressed: () {
+      child: Scaffold(
+          // resizeToAvoidBottomInset: false,
+          appBar: AppBarWidget(
+            bottomBorder: false,
+            leading: IconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                Get.back();
+              },
+              icon: SvgPicture.asset('assets/icons/appbar_back.svg'),
+            ),
+            title: '포스트',
+            actions: [
+              Obx(
+                () => controller.postscreenstate.value == ScreenState.success
+                    ? GestureDetector(
+                        onTap: controller.post.value.isuser == 1
+                            ? () {
+                                showBottomdialog(context, func1: () {
+                                  Get.to(() => PostUpdateScreen(
+                                        post: controller.post.value,
+                                      ));
+                                }, func2: () {
                                   Get.back();
-                                },
-                                icon: SvgPicture.asset(
-                                    'assets/icons/appbar_back.svg'),
-                              ),
-                              title: '포스트',
-                              actions: [
-                                GestureDetector(
-                                  onTap: controller.post.value.isuser == 1
-                                      ? () {
-                                          showBottomdialog(context, func1: () {
-                                            Get.to(() => PostUpdateScreen(
-                                                  post: controller.post.value,
-                                                ));
-                                          }, func2: () {
+                                  showButtonDialog(
+                                      leftText: '취소',
+                                      rightText: '삭제',
+                                      title: '포스트 삭제하기',
+                                      startContent:
+                                          '정말 포스트를 삭제하시겠어요?\n이후 복구할 수 없어요.',
+                                      leftFunction: () => Get.back(),
+                                      rightFunction: () async {
+                                        dialogBack(modalIOS: true);
+                                        loading();
+                                        // await Future.delayed(
+                                        //         Duration(milliseconds: 1000))
+                                        //     .then((value) {
+                                        //   getbacks(2);
+                                        //   showCustomDialog("포스팅이 삭제되었습니다", 1400);
+                                        // });
+                                        deleteposting(
+                                                controller.post.value.id,
+                                                controller
+                                                    .post.value.project!.id)
+                                            .then((value) {
+                                          Get.back();
+                                          if (value.isError == false) {
                                             Get.back();
-                                            showButtonDialog(
-                                                leftText: '취소',
-                                                rightText: '삭제',
-                                                title: '포스트 삭제하기',
-                                                startContent:
-                                                    '정말 포스트를 삭제하시겠어요?\n이후 복구할 수 없어요.',
-                                                leftFunction: () => Get.back(),
-                                                rightFunction: () async {
-                                                  dialogBack(modalIOS: true);
-                                                  loading();
-                                                  // await Future.delayed(
-                                                  //         Duration(milliseconds: 1000))
-                                                  //     .then((value) {
-                                                  //   getbacks(2);
-                                                  //   showCustomDialog("포스팅이 삭제되었습니다", 1400);
-                                                  // });
-                                                  deleteposting(
-                                                          controller
-                                                              .post.value.id,
+                                            if (Get.isRegistered<
+                                                CareerDetailController>()) {
+                                              Post tempPost =
+                                                  CareerDetailController
+                                                      .to.postList
+                                                      .where((p0) =>
+                                                          p0.id == postid)
+                                                      .first;
+                                              CareerDetailController.to.postList
+                                                  .remove(tempPost);
+                                              CareerDetailController.to.postList
+                                                  .refresh();
+                                            } else if (Get.isRegistered<
+                                                ProfileController>()) {
+                                              Project project =
+                                                  ProfileController
+                                                      .to.myProjectList
+                                                      .where((career) =>
+                                                          career.id ==
                                                           controller.post.value
                                                               .project!.id)
-                                                      .then((value) {
-                                                    Get.back();
-                                                    if (value.isError ==
-                                                        false) {
-                                                      Get.back();
-                                                      if (Get.isRegistered<
-                                                          CareerDetailController>()) {
-                                                        Post tempPost =
-                                                            CareerDetailController
-                                                                .to.postList
-                                                                .where((p0) =>
-                                                                    p0.id ==
-                                                                    postid)
-                                                                .first;
-                                                        CareerDetailController
-                                                            .to.postList
-                                                            .remove(tempPost);
-                                                        CareerDetailController
-                                                            .to.postList
-                                                            .refresh();
-                                                      } else if (Get.isRegistered<
-                                                          ProfileController>()) {
-                                                        Project project =
-                                                            ProfileController.to
-                                                                .myProjectList
-                                                                .where((career) =>
-                                                                    career.id ==
-                                                                    controller
-                                                                        .post
-                                                                        .value
-                                                                        .project!
-                                                                        .id)
-                                                                .first;
-                                                        project.posts
-                                                            .removeWhere(
-                                                                (post) =>
-                                                                    post.id ==
-                                                                    controller
-                                                                        .post
-                                                                        .value
-                                                                        .id);
-                                                        project.post_count!
-                                                            .value -= 1;
-                                                        if (project.post_count!
-                                                                .value ==
-                                                            0) {
-                                                          project.thumbnail =
-                                                              '';
-                                                        } else {
-                                                          // project.thumbnail = project.thumbnail.
-                                                        }
-                                                      }
-                                                      HomeController.to
-                                                          .postingRemove(
-                                                              controller.post
-                                                                  .value.id);
+                                                      .first;
+                                              project.posts.removeWhere(
+                                                  (post) =>
+                                                      post.id ==
+                                                      controller.post.value.id);
+                                              project.post_count!.value -= 1;
+                                              if (project.post_count!.value ==
+                                                  0) {
+                                                project.thumbnail = '';
+                                              } else {
+                                                // project.thumbnail = project.thumbnail.
+                                              }
+                                            }
+                                            HomeController.to.postingRemove(
+                                                controller.post.value.id);
 
-                                                      showCustomDialog(
-                                                          "포스트가 삭제되었습니다", 1400);
-                                                    } else {
-                                                      errorSituation(value);
-                                                    }
+                                            showCustomDialog(
+                                                "포스트가 삭제되었습니다", 1400);
+                                          } else {
+                                            errorSituation(value);
+                                          }
 
-                                                    // HomeController.to.recommandpostingResult.value.postingitems
-                                                    //     .removeWhere((post) => post.id == postid);
-                                                    // HomeController.to.latestpostingResult.value.postingitems
-                                                    //     .removeWhere((post) => post.id == postid);
-                                                  });
-                                                });
-                                          },
-                                              value1: '포스트 수정하기',
-                                              value2: '포스트 삭제하기',
-                                              isOne: false,
-                                              buttonColor1: mainWhite,
-                                              buttonColor2: rankred,
-                                              textColor1: mainblack);
-                                        }
-                                      : () {
-                                          showBottomdialog(context, func1: () {
-                                            TextEditingController
-                                                reportController =
-                                                TextEditingController();
+                                          // HomeController.to.recommandpostingResult.value.postingitems
+                                          //     .removeWhere((post) => post.id == postid);
+                                          // HomeController.to.latestpostingResult.value.postingitems
+                                          //     .removeWhere((post) => post.id == postid);
+                                        });
+                                      });
+                                },
+                                    value1: '포스트 수정하기',
+                                    value2: '포스트 삭제하기',
+                                    isOne: false,
+                                    buttonColor1: AppColors.mainWhite,
+                                    buttonColor2: AppColors.rankred,
+                                    textColor1: AppColors.mainblack);
+                              }
+                            : () {
+                                showBottomdialog(context, func1: () {
+                                  TextEditingController reportController =
+                                      TextEditingController();
 
-                                            showTextFieldDialog(
-                                                title: '포스트 신고하기',
-                                                hintText:
-                                                    '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
-                                                rightText: '신고하기',
-                                                rightBoxColor: rankred,
-                                                leftBoxColor: maingray,
-                                                textEditingController:
-                                                    reportController,
-                                                leftFunction: () {
-                                                  Get.back();
+                                  showTextFieldDialog(
+                                      title: '포스트 신고하기',
+                                      hintText:
+                                          '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
+                                      rightText: '신고하기',
+                                      rightBoxColor: AppColors.rankred,
+                                      leftBoxColor: AppColors.maingray,
+                                      textEditingController: reportController,
+                                      leftFunction: () {
+                                        Get.back();
+                                      },
+                                      rightFunction: () {
+                                        contentreport(controller.post.value.id,
+                                                contentType.post)
+                                            .then((value) {
+                                          if (value.isError == false) {
+                                            getbacks(2);
+                                            showCustomDialog(
+                                                "신고가 접수되었습니다", 1000);
+                                          } else {
+                                            errorSituation(value);
+                                          }
+                                        });
+                                      });
+                                },
+                                    func2: () {},
+                                    value1: '포스트 신고하기',
+                                    value2: '',
+                                    isOne: true,
+                                    buttonColor1: AppColors.rankred);
+                              },
+                        child: SvgPicture.asset(
+                            'assets/icons/appbar_more_option.svg'),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+            ],
+          ),
+          // bottomNavigationBar: Transform.translate(
+          //   offset:
+          //       Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+          //   child: BottomAppBar(
+          //     elevation: 0,
+          //     child: _buildTextComposer(),
+          //   ),
+          // ),
+          body: SafeArea(
+            child: Obx(
+              () => controller.postscreenstate.value == ScreenState.loading
+                  ? const Center(child: LoadingWidget())
+                  : controller.postscreenstate.value == ScreenState.normal
+                      ? Container()
+                      : controller.postscreenstate.value ==
+                              ScreenState.disconnect
+                          ? DisconnectReloadWidget(reload: () {
+                              controller.postingLoad();
+                            })
+                          : controller.postscreenstate.value ==
+                                  ScreenState.error
+                              ? ErrorReloadWidget(reload: () {
+                                  controller.postingLoad();
+                                })
+                              : Column(
+                                  children: [
+                                    Expanded(
+                                      child: SmartRefresher(
+                                        controller: refreshController,
+                                        enablePullUp: true,
+                                        enablePullDown: false,
+                                        footer: const MyCustomFooter(),
+                                        onLoading: commentListLoad,
+                                        child: SingleChildScrollView(
+                                          child: Column(children: [
+                                            Obx(
+                                              () => PostingWidget(
+                                                item: controller.post.value,
+                                                type: PostingWidgetType.detail,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 16),
+                                            Obx(
+                                              () => ListView.separated(
+                                                // key: controller.commentListKey,
+                                                primary: false,
+                                                shrinkWrap: true,
+                                                itemBuilder: (context, index) {
+                                                  return PostCommentWidget(
+                                                    comment: controller.post
+                                                        .value.comments[index],
+                                                    postid: postid,
+                                                  );
                                                 },
-                                                rightFunction: () {
-                                                  contentreport(
-                                                          controller
-                                                              .post.value.id,
-                                                          contentType.post)
-                                                      .then((value) {
-                                                    if (value.isError ==
-                                                        false) {
-                                                      getbacks(2);
-                                                      showCustomDialog(
-                                                          "신고가 접수되었습니다", 1000);
-                                                    } else {
-                                                      errorSituation(value);
-                                                    }
-                                                  });
-                                                });
-                                          },
-                                              func2: () {},
-                                              value1: '포스트 신고하기',
-                                              value2: '',
-                                              isOne: true,
-                                              buttonColor1: rankred);
-                                        },
-                                  child: SvgPicture.asset(
-                                      'assets/icons/appbar_more_option.svg'),
-                                ),
-                              ],
-                            ),
-                            // bottomNavigationBar: Transform.translate(
-                            //   offset:
-                            //       Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-                            //   child: BottomAppBar(
-                            //     elevation: 0,
-                            //     child: _buildTextComposer(),
-                            //   ),
-                            // ),
-                            body: SafeArea(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: SmartRefresher(
-                                      controller: refreshController,
-                                      enablePullUp: true,
-                                      enablePullDown: false,
-                                      footer: const MyCustomFooter(),
-                                      onLoading: commentListLoad,
-                                      child: SingleChildScrollView(
-                                        child: Column(children: [
-                                          Obx(
-                                            () => PostingWidget(
-                                              item: controller.post.value,
-                                              type: PostingWidgetType.detail,
+                                                separatorBuilder:
+                                                    (context, index) {
+                                                  return const SizedBox(
+                                                    height: 16,
+                                                  );
+                                                },
+                                                itemCount: controller
+                                                    .post.value.comments.length,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 16),
-                                          Obx(
-                                            () => ListView.separated(
-                                              // key: controller.commentListKey,
-                                              primary: false,
-                                              shrinkWrap: true,
-                                              itemBuilder: (context, index) {
-                                                return PostCommentWidget(
-                                                  comment: controller.post.value
-                                                      .comments[index],
-                                                  postid: postid,
-                                                );
-                                              },
-                                              separatorBuilder:
-                                                  (context, index) {
-                                                return const SizedBox(
-                                                  height: 16,
-                                                );
-                                              },
-                                              itemCount: controller
-                                                  .post.value.comments.length,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          )
-                                        ]),
+                                            const SizedBox(
+                                              height: 10,
+                                            )
+                                          ]),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  _buildTextComposer()
-                                ],
-                              ),
-                            )),
-      ),
+                                    _buildTextComposer(context)
+                                  ],
+                                ),
+            ),
+          )),
     );
   }
 

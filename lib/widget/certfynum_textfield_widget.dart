@@ -13,8 +13,8 @@ class CertfyTextFieldWidget extends StatelessWidget {
         controller: controller,
         maxLength: 6,
         maxLines: 1,
-        style: kmain,
-        cursorColor: mainblack,
+        style: MyTextTheme.main(context),
+        cursorColor: AppColors.mainblack,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
           FilteringTextInputFormatter.digitsOnly
@@ -24,7 +24,7 @@ class CertfyTextFieldWidget extends StatelessWidget {
         decoration: InputDecoration(
           counterText: "",
           filled: true,
-          fillColor: cardGray,
+          fillColor: AppColors.cardGray,
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(8)),
@@ -34,7 +34,8 @@ class CertfyTextFieldWidget extends StatelessWidget {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
           hintText: "인증번호 6자리 입력",
-          hintStyle: kmain.copyWith(color: maingray),
+          hintStyle:
+              MyTextTheme.main(context).copyWith(color: AppColors.maingray),
         ));
   }
 }

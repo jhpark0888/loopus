@@ -25,7 +25,7 @@ class TagSearchWidget extends StatelessWidget {
             children: [
               Text(
                 '선택한 태그',
-                style: ktempFont,
+                style: MyTextTheme.main(context),
               ),
               SizedBox(
                 width: 4,
@@ -33,10 +33,10 @@ class TagSearchWidget extends StatelessWidget {
               Obx(
                 () => Text(
                   '(${tagController.selectedtaglist.length} / 3)',
-                  style: ktempFont.copyWith(
+                  style: MyTextTheme.main(context).copyWith(
                       color: tagController.selectedtaglist.length < 3
-                          ? rankred
-                          : mainblack),
+                          ? AppColors.rankred
+                          : AppColors.mainblack),
                 ),
               ),
             ],
@@ -70,7 +70,7 @@ class TagSearchWidget extends StatelessWidget {
             autofocus: true,
             focusNode: tagController.tagsearchfocusNode,
             controller: tagController.tagsearchContoller,
-            style: ktempFont,
+            style: MyTextTheme.main(context),
             cursorColor: Colors.grey,
             cursorWidth: 1.2,
             cursorRadius: Radius.circular(5.0),
@@ -80,7 +80,7 @@ class TagSearchWidget extends StatelessWidget {
             // selectionHeightStyle: BoxHeightStyle.tight,
             decoration: InputDecoration(
               filled: true,
-              fillColor: lightcardgray,
+              fillColor: AppColors.lightcardgray,
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(8)),
@@ -90,8 +90,8 @@ class TagSearchWidget extends StatelessWidget {
               // focusColor: Colors.black,
               // border: OutlineInputBorder(borderSide: BorderSide.none),
               contentPadding: EdgeInsets.only(right: 16),
-              hintStyle: ktempFont.copyWith(
-                  color: mainblack.withOpacity(0.38), height: 1.5),
+              hintStyle: MyTextTheme.main(context).copyWith(
+                  color: AppColors.mainblack.withOpacity(0.38), height: 1.5),
               isDense: true,
               hintText: "예) 봉사, 기계공학과, 서포터즈",
               prefixIcon: Padding(
@@ -100,7 +100,7 @@ class TagSearchWidget extends StatelessWidget {
                   "assets/icons/search_inactive.svg",
                   width: 16,
                   height: 16,
-                  color: mainblack.withOpacity(0.6),
+                  color: AppColors.mainblack.withOpacity(0.6),
                 ),
               ),
             ),
@@ -128,7 +128,7 @@ class TagSearchWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
-                        color: mainblue.withOpacity(0.6),
+                        color: AppColors.mainblue.withOpacity(0.6),
                       ),
                     ),
                   ],

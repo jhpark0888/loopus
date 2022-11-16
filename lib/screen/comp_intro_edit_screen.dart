@@ -63,10 +63,10 @@ class CompanyIntroEditScreen extends StatelessWidget {
                 child: Obx(
                   () => Text(
                     "확인",
-                    style: kNavigationTitle.copyWith(
+                    style: MyTextTheme.navigationTitle(context).copyWith(
                         color: _controller.isEmailCheck.value
-                            ? mainblue
-                            : maingray),
+                            ? AppColors.mainblue
+                            : AppColors.maingray),
                   ),
                 )),
           ],
@@ -90,7 +90,8 @@ class CompanyIntroEditScreen extends StatelessWidget {
                   "\ncompany@loopus.co.kr로 발송되며,"
                   "\n수정 사항을 작성하여 메일 답장을 보내주시면, 빠른 시일"
                   "\n내 수정해 드리겠습니다. (평균 2~3일 내외)",
-                  style: kmainheight.copyWith(color: maingray),
+                  style: MyTextTheme.mainheight(context)
+                      .copyWith(color: AppColors.maingray),
                 ),
               ),
             ],

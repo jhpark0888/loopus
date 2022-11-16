@@ -31,6 +31,7 @@ class Company extends User {
           followerCount: followerCount,
           followingCount: followingCount,
           userType: UserType.company,
+          withdrawal:0.obs
         );
 
   RxInt contactcount;
@@ -86,7 +87,9 @@ class Company extends User {
           ? json["company_logo"].runtimeType == String
               ? json["company_logo"]
               : json["company_logo"]["logo"] ?? ""
-          : json["logo"] != null ? json['logo'] : '',
+          : json["logo"] != null
+              ? json['logo']
+              : '',
       name: json['company_name'] != null
           ? json['company_name']
           : json["company_logo"] != null

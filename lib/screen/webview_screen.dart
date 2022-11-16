@@ -33,14 +33,14 @@ class WebViewScreen extends StatelessWidget {
                         : url! == kPrivacyPolicy
                             ? '개인정보 처리방침'
                             : '',
-                style: kNavigationTitle,
+                style: MyTextTheme.navigationTitle(context),
               )
             : Text(
                 //TODO : LINK 패턴 관리
                 url!.contains('http://')
                     ? url!.replaceFirst('http://', '')
                     : url!.replaceFirst('https://', ''),
-                style: kNavigationTitle,
+                style: MyTextTheme.navigationTitle(context),
               ),
         centerTitle: true,
         bottom: PreferredSize(
@@ -55,7 +55,7 @@ class WebViewScreen extends StatelessWidget {
                   Obx(
                     () => Container(
                       decoration: const BoxDecoration(
-                        color: mainblue,
+                        color: AppColors.mainblue,
                         borderRadius: BorderRadius.only(
                           topRight: Radius.circular(2),
                           bottomRight: Radius.circular(2),
@@ -72,7 +72,7 @@ class WebViewScreen extends StatelessWidget {
         ),
         automaticallyImplyLeading: false,
         elevation: 0,
-        backgroundColor: mainWhite,
+        backgroundColor: AppColors.mainWhite,
         leading: IconButton(
           onPressed: () {
             Get.back();
@@ -139,16 +139,16 @@ class WebViewScreen extends StatelessWidget {
                     child: Text(
                       '이 버튼만 클릭해서 잘못된 링크인 걸 알려주세요',
                       textAlign: TextAlign.center,
-                      style: ktempFont.copyWith(
-                        color: mainblue,
+                      style: MyTextTheme.tempfont(context).copyWith(
+                        color: AppColors.mainblue,
                       ),
                     ),
                   ),
                   Text(
                     '상대방은 누가 버튼을 클릭했는지 알 수 없어요',
                     textAlign: TextAlign.center,
-                    style: ktempFont.copyWith(
-                      color: mainblack.withOpacity(0.6),
+                    style: MyTextTheme.tempfont(context).copyWith(
+                      color: AppColors.mainblack.withOpacity(0.6),
                     ),
                   ),
                 ],

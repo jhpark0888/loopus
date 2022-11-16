@@ -155,8 +155,8 @@ class MessageDetatilScreen extends StatelessWidget {
                         hintText:
                             '신고 내용을 입력해주세요. 관리자 확인 \n 이후 관련 약관에 따라 처리됩니다.\n ',
                         rightText: '신고하기 ',
-                        rightBoxColor: rankred,
-                        leftBoxColor: maingray,
+                        rightBoxColor: AppColors.rankred,
+                        leftBoxColor: AppColors.maingray,
                         leftFunction: () => Get.back(),
                         rightFunction: () {
                           userreport(controller.partnerId).then((value) {
@@ -171,11 +171,11 @@ class MessageDetatilScreen extends StatelessWidget {
                   },
                       value1: '메세지 나가기',
                       value2: '계정 신고하기',
-                      isOne: false,
-                      buttonColor1: mainWhite,
-                      buttonColor2: rankred,
-                      textColor1: rankred,
-                      textColor2: mainWhite);
+                      isOne: partner.withdrawal.value == 0 ? false : true,
+                      buttonColor1: AppColors.mainWhite,
+                      buttonColor2: AppColors.rankred,
+                      textColor1: AppColors.rankred,
+                      textColor2: AppColors.mainWhite);
                 },
                 child: SizedBox(
                     height: 44,
@@ -189,7 +189,7 @@ class MessageDetatilScreen extends StatelessWidget {
           bottomNavigationBar: Padding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: sendField()),
+              child: sendField(context)),
           body: SafeArea(
             child: Obx(
               () => controller.screenState.value == ScreenState.loading
@@ -284,12 +284,13 @@ class MessageDetatilScreen extends StatelessWidget {
     );
   }
 
-  Widget sendField() {
+  Widget sendField(BuildContext context) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.fromLTRB(16, 6.5, 16, 6.5),
         decoration: BoxDecoration(
-            border: Border(top: BorderSide(width: 1, color: dividegray))),
+            border:
+                Border(top: BorderSide(width: 1, color: AppColors.dividegray))),
         child: Row(
           children: [
             Expanded(
@@ -301,16 +302,16 @@ class MessageDetatilScreen extends StatelessWidget {
                   minLines: 1,
                   maxLines: 3,
                   autocorrect: false,
-                  readOnly: false,
-                  style: kmainheight,
-                  cursorColor: mainblack,
+                  readOnly: partner.withdrawal.value == 0 ? false : true,
+                  style: MyTextTheme.mainheight(context),
+                  cursorColor: AppColors.mainblack,
                   cursorWidth: 1.2,
                   cursorRadius: Radius.circular(5.0),
                   autofocus: false,
                   // textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: cardGray,
+                    fillColor: AppColors.cardGray,
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(8)),
@@ -319,10 +320,13 @@ class MessageDetatilScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8)),
                     contentPadding: const EdgeInsets.fromLTRB(16, 11, 16, 11),
                     isDense: true,
-                    hintText: '메세지 입력',
+                    hintText: partner.withdrawal.value == 0
+                        ? '메세지 입력'
+                        : '대화가 불가능한 사용자에요',
                     counterText: "",
-                    hintStyle:
-                        kmain.copyWith(color: maingray).copyWith(height: 1.4),
+                    hintStyle: MyTextTheme.main(context)
+                        .copyWith(color: AppColors.maingray)
+                        .copyWith(height: 1.4),
                   )),
             ),
             const SizedBox(width: 14),

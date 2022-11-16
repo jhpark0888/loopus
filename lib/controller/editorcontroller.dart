@@ -49,7 +49,7 @@
 //         return Text(
 //           '큰 제목',
 //           style: TextStyle(
-//             color: mainblue,
+//             color: AppColors.mainblue,
 //             fontSize: 16,
 //           ),
 //         );
@@ -57,7 +57,7 @@
 //         return Text(
 //           '작은 제목',
 //           style: TextStyle(
-//             color: mainblue,
+//             color: AppColors.mainblue,
 //             fontSize: 16,
 //           ),
 //         );
@@ -65,7 +65,7 @@
 //       //   return Text(
 //       //     '본문',
 //       //     style: TextStyle(
-//       //       color: mainblue,
+//       //       color: AppColors.mainblue,
 //       //       fontWeight: FontWeight.bold,
 //       //       fontSize: 16,
 //       //     ),
@@ -74,7 +74,7 @@
 //         return Text(
 //           '본문',
 //           style: TextStyle(
-//             color: mainblack,
+//             color: AppColors.mainblack,
 //             fontSize: 16,
 //           ),
 //         );

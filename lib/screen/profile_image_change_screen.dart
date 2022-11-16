@@ -44,9 +44,9 @@ class ProfileImageChangeScreen extends StatelessWidget {
             icon: SvgPicture.asset(
               'assets/icons/appbar_back.svg',
             )),
-        title: const Text(
+        title: Text(
           '프로필 사진',
-          style: kNavigationTitle,
+          style: MyTextTheme.navigationTitle(context),
         ),
         centerTitle: true,
         actions: [
@@ -92,8 +92,10 @@ class ProfileImageChangeScreen extends StatelessWidget {
                 child: Obx(
                   () => Text(
                     '확인',
-                    style: kNavigationTitle.copyWith(
-                        color: _controller.isSelect.value ? mainblue : maingray),
+                    style: MyTextTheme.navigationTitle(context).copyWith(
+                        color: _controller.isSelect.value
+                            ? AppColors.mainblue
+                            : AppColors.maingray),
                   ),
                 ),
               ),
@@ -113,7 +115,8 @@ class ProfileImageChangeScreen extends StatelessWidget {
                       child: Container(
                           width: Get.width,
                           height: Get.width,
-                          decoration: const BoxDecoration(color: mainWhite),
+                          decoration:
+                              const BoxDecoration(color: AppColors.mainWhite),
                           child: _controller.isSelect.value
                               ? Obx(
                                   () => CustomCrop(
@@ -127,10 +130,10 @@ class ProfileImageChangeScreen extends StatelessWidget {
                                     circleShape: true,
                                   ),
                                 )
-                              : const Center(
+                              : Center(
                                   child: Text(
                                   '이미지를 선택해주세요',
-                                  style: kmainheight,
+                                  style: MyTextTheme.mainheight(context),
                                 ))),
                     ),
                   ),
@@ -208,7 +211,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
                               //                                     height: 100,
                               //                                     width: 100,
                               //                                     color:
-                              //                                         dividegray,
+                              //                                         AppColors.dividegray,
                               //                                     child: _controller
                               //                                             .titleImageList[
                               //                                                 index]
@@ -230,7 +233,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
                               //                                                 Text(
                               //                                               "이미지 없음",
                               //                                               style:
-                              //                                                   kmain,
+                              //                                                   MyTextTheme.main(context),
                               //                                             ),
                               //                                           ),
                               //                                   ),
@@ -242,12 +245,12 @@ class ProfileImageChangeScreen extends StatelessWidget {
                               //                                             index]
                               //                                         .name,
                               //                                     style:
-                              //                                         kmainbold,
+                              //                                         MyTextTheme.mainbold(context),
                               //                                   ),
                               //                                   const Spacer(),
                               //                                   Text(
                               //                                     '${_controller.albums[index].assetCount.toString()}개',
-                              //                                     style: kmain,
+                              //                                     style: MyTextTheme.main(context),
                               //                                   ),
                               //                                 ],
                               //                               ),
@@ -273,7 +276,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
                                     Obx(
                                       () => Text(
                                         _controller.headerTitle.value,
-                                        style: kmain,
+                                        style: MyTextTheme.main(context),
                                       ),
                                     ),
                                     const SizedBox(width: 7),
@@ -378,7 +381,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
             return builder(snapshot.data!);
           } else {
             return Container(
-              color: mainWhite,
+              color: AppColors.mainWhite,
             );
           }
         });
