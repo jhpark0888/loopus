@@ -82,6 +82,8 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                 children: [
                   joinCompany(context),
                   Padding(
+                    // padding: const EdgeInsets.symmetric(
+                    //           vertical: 24, horizontal: 30.5),
                     padding: const EdgeInsets.symmetric(
                         vertical: 24, horizontal: 16),
                     child: Row(
