@@ -43,7 +43,7 @@ class OtherProfileController extends GetxController
   RxList<Person> otherlooplist = <Person>[].obs;
  RxList<Company> interestedCompanies = <Company>[].obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
-
+  RxString userUnivName = ''.obs;
   KeyController keycontroller = Get.put(KeyController(isTextField: false.obs));
   RxBool isBanned = false.obs;
   // 진짜 : 0, 공식계정 : 1, 가짜 : 2
@@ -78,6 +78,7 @@ class OtherProfileController extends GetxController
       });
       _getinterestedCompany(userid);
       getOtherPosting(userid);
+      userUnivName.value = (otherUser.value.univName).replaceAll('학교', '');
     }
   }
 

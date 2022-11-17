@@ -437,7 +437,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  _controller.otherUser.value.univName,
+                  _controller.userUnivName.value,
                   style: MyTextTheme.main(context),
                 ),
                 const SizedBox(
@@ -656,30 +656,26 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
   Widget _careerView(BuildContext context) {
     return SafeArea(
         child: Obx(() => _controller.otherProjectList.isEmpty
-            ? Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      if (_controller.isOfficial.value == 2)
-                        Expanded(child: EmptyContentWidget(text: '아직 커리어가 없어요'))
-                      else
-                        EmptyContentWidget(text: '아직 커리어가 없어요'),
-                      if (_controller.isOfficial.value == 2)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 24),
-                          child: Center(
-                            child: Text(
-                              "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
-                              "\n실제 서비스 가입 유무는 다를 수 있습니다.",
-                              style: MyTextTheme.caption(context)
-                                  .copyWith(color: AppColors.popupGray),
-                              textAlign: TextAlign.center,
-                            ),
+            ? CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
+                      child: EmptyContentWidget(text: '아직 커리어가 없어요')),
+                  if (_controller.isOfficial.value == 2)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        child: Center(
+                          child: Text(
+                            "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
+                            "\n실제 서비스 가입 유무는 다를 수 있습니다.",
+                            style: MyTextTheme.caption(context)
+                                .copyWith(color: AppColors.popupGray),
+                            textAlign: TextAlign.center,
                           ),
-                        )
-                    ],
-                  ),
-                ),
+                        ),
+                      ),
+                    )
+                ],
               )
             : Builder(
                 builder: (context) {
@@ -857,6 +853,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                       _controller.otherProjectList.length,
                                 ),
                               ),
+
                               const SizedBox(height: 24),
 
                               if (_controller.isOfficial.value == 2)
@@ -877,6 +874,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                             ],
                           ),
                         ),
+
                         // ),
                       ]);
                 },
@@ -906,15 +904,13 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
   Widget companyTile(Company company) {
     return GestureDetector(
       onTap: () {
-        if (company.userId != 0) {
-          Get.to(
-              () => OtherCompanyScreen(
-                    company: company,
-                    companyId: company.userId,
-                    companyName: company.name,
-                  ),
-              preventDuplicates: false);
-        }
+        Get.to(
+            () => OtherCompanyScreen(
+                  company: company,
+                  companyId: company.userId,
+                  companyName: company.name,
+                ),
+            preventDuplicates: false);
       },
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         UserImageWidget(

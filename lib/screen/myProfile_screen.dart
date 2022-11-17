@@ -369,7 +369,7 @@ class MyProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  profileController.myUserInfo.value.univName,
+                  profileController.myUnivName.value,
                   style: MyTextTheme.main(context),
                 ),
                 const SizedBox(
@@ -785,11 +785,13 @@ class MyProfileScreen extends StatelessWidget {
   Widget companyTile(BuildContext context, Company company) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => OtherCompanyScreen(
-              companyId: company.userId,
-              companyName: company.name,
-              company: company,
-            ));
+        Get.to(
+            () => OtherCompanyScreen(
+                  company: company,
+                  companyId: company.userId,
+                  companyName: company.name,
+                ),
+            preventDuplicates: false);
       },
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         UserImageWidget(
