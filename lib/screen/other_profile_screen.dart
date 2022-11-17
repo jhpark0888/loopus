@@ -437,7 +437,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  _controller.otherUser.value.univName,
+                  _controller.userUnivName.value,
                   style: MyTextTheme.main(context),
                 ),
                 const SizedBox(
@@ -905,7 +905,6 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
   Widget companyTile(Company company) {
     return GestureDetector(
       onTap: () {
-        if (company.userId != 0) {
           Get.to(
               () => OtherCompanyScreen(
                     company: company,
@@ -913,7 +912,6 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                     companyName: company.name,
                   ),
               preventDuplicates: false);
-        }
       },
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         UserImageWidget(

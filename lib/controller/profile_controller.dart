@@ -33,7 +33,7 @@ class ProfileController extends GetxController
       RefreshController(initialRefresh: false);
 
   RxList<Project> myProjectList = <Project>[].obs;
-
+  RxString myUnivName = ''.obs;
   Rx<File> profileimage = File('').obs;
   Rx<Person> myUserInfo = Person.defaultuser().obs;
   RxList<Post> allPostList = <Post>[].obs;
@@ -102,6 +102,7 @@ class ProfileController extends GetxController
       _getinterestedCompany(int.parse(userId));
       _getPosting(int.parse(userId));
     }
+    myUnivName.value = (myUserInfo.value.univName).replaceAll('학교', '');
   }
 
   void _getPosting(int userId) async {
