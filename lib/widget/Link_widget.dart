@@ -194,7 +194,13 @@ class LinkWidget extends StatelessWidget {
                       ScrapCard(
                         child: Column(
                           children: [
-                            if (linkController.info.value.image != "")
+                            if (url.contains("inu.ac.kr"))
+                              Image.asset(
+                                "assets/illustrations/inu_symbol_image.png",
+                                height: 200,
+                                fit: BoxFit.cover,
+                              )
+                            else if (linkController.info.value.image != "")
                               CachedNetworkImage(
                                 imageUrl: linkController.info.value.image,
                                 height: 200,
@@ -309,7 +315,14 @@ class LinkSmallWidget extends StatelessWidget {
                     height: height,
                     child: Column(
                       children: [
-                        if (linkController.info.value.image != "")
+                        if (url.contains("inu.ac.kr"))
+                          Image.asset(
+                            "assets/illustrations/inu_symbol_image.png",
+                            height: 120,
+                            width: width,
+                            fit: BoxFit.cover,
+                          )
+                        else if (linkController.info.value.image != "")
                           CachedNetworkImage(
                             imageUrl: linkController.info.value.image,
                             height: 120,

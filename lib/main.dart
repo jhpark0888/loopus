@@ -132,8 +132,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "루프어스",
       theme: MyThemes.lightTheme,
-      darkTheme: MyThemes.darkTheme,
-      themeMode: ThemeMode.system,
+      // darkTheme: MyThemes.darkTheme,
+      themeMode: ThemeMode.light,
       scrollBehavior: NoGlowScrollBehavior(),
       // const ScrollBehavior(
       //     androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),

@@ -726,7 +726,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              _controller.interestedCompanies.isNotEmpty
+                              Obx(() => _controller
+                                      .interestedCompanies.isNotEmpty
                                   ? SizedBox(
                                       width: Get.width,
                                       height: 44,
@@ -751,7 +752,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                       '아직 ${_controller.otherUser.value.name}님과 관련있는 기업이 없어요',
                                       style: MyTextTheme.main(context)
                                           .copyWith(color: AppColors.maingray),
-                                    ),
+                                    )),
                               // CareerAnalysisWidget(
                               //   field: fieldList[
                               //       _controller.otherUser.value.fieldId]!,

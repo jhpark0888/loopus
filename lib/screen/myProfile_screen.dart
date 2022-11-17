@@ -25,6 +25,7 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/career_arrange_screen.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
@@ -782,30 +783,39 @@ class MyProfileScreen extends StatelessWidget {
   // }
 
   Widget companyTile(BuildContext context, Company company) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      UserImageWidget(
-          width: 36,
-          height: 36,
-          imageUrl: company.profileImage,
-          userType: company.userType),
-      const SizedBox(width: 8),
-      Container(
-        constraints: const BoxConstraints(minWidth: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(company.name, style: MyTextTheme.main(context)),
-            const SizedBox(height: 4),
-            Text(
-              fieldList[company.fieldId]!,
-              style:
-                  MyTextTheme.main(context).copyWith(color: AppColors.maingray),
-            )
-          ],
-        ),
-      )
-    ]);
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => OtherCompanyScreen(
+              companyId: company.userId,
+              companyName: company.name,
+              company: company,
+            ));
+      },
+      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        UserImageWidget(
+            width: 36,
+            height: 36,
+            imageUrl: company.profileImage,
+            userType: company.userType),
+        const SizedBox(width: 8),
+        Container(
+          constraints: const BoxConstraints(minWidth: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(company.name, style: MyTextTheme.main(context)),
+              const SizedBox(height: 4),
+              Text(
+                fieldList[company.fieldId]!,
+                style: MyTextTheme.main(context)
+                    .copyWith(color: AppColors.maingray),
+              )
+            ],
+          ),
+        )
+      ]),
+    );
   }
 }
 
