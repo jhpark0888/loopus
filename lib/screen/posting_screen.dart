@@ -171,7 +171,8 @@ class PostingScreen extends StatelessWidget {
                     autocorrect: false,
                     enableSuggestions: false,
                     cursorWidth: 1.2,
-                    style: const TextStyle(decoration: TextDecoration.none),
+                    style: MyTextTheme.main(context)
+                        .copyWith(decoration: TextDecoration.none),
                     cursorColor: AppColors.mainblack,
                     controller: controller.commentController,
                     focusNode: controller.commentFocus,
