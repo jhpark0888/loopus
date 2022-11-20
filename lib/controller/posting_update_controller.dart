@@ -6,15 +6,20 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:rich_text_controller/rich_text_controller.dart';
 
 class PostingUpdateController extends GetxController {
   static PostingUpdateController get to => Get.find();
   PostingUpdateController({required this.post});
   ScrollController scrollController = ScrollController();
-  TextEditingController textcontroller = TextEditingController();
+  RichTextController textcontroller = RichTextController(patternMatchMap: {
+    CheckValidate.urlRegExp:
+        MyTextTheme.main(Get.context!).copyWith(color: AppColors.mainblue),
+  }, onMatch: (match) {});
   TextEditingController tagcontroller = TextEditingController();
 
   RxInt lines = 0.obs;

@@ -20,6 +20,7 @@ const _kCropHandleHitSize = 48.0;
 const _kCropMinFraction = 0.8;
 
 enum _CropAction { none, moving, cropping, scaling }
+
 enum _CropHandleSide { none, topLeft, topRight, bottomLeft, bottomRight }
 
 class CustomCrop extends StatefulWidget {

@@ -8,16 +8,22 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
+import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:rich_text_controller/rich_text_controller.dart';
 
 class PostingAddController extends GetxController {
   static PostingAddController get to => Get.find();
   PostingAddController({required this.route});
   ScrollController scrollController = ScrollController();
-  TextEditingController textcontroller = TextEditingController();
+  RichTextController textcontroller = RichTextController(patternMatchMap: {
+    CheckValidate.urlRegExp:
+        MyTextTheme.main(Get.context!).copyWith(color: AppColors.mainblue),
+  }, onMatch: (match) {});
+
   TextEditingController tagcontroller = TextEditingController();
   TextEditingController linkcontroller = TextEditingController();
   KeyboardVisibilityController keyboardVisibilityController =

@@ -69,7 +69,7 @@ class NotificationWidget extends StatelessWidget {
       case NotificationType.reply:
         return "회원님의 댓글에 답변을 남겼습니다.";
       case NotificationType.schoolNoti:
-        return "에서 '${notification.contents}'에 공지를 업로드 했습니다.";
+        return "'${notification.contents}'에 공지를 업로드 했습니다.";
       case NotificationType.rankUpdate:
         return "사용자 랭킹이 업데이트 되었습니다.";
       case NotificationType.groupCareerPost:
@@ -228,7 +228,9 @@ class NotificationWidget extends StatelessWidget {
                             text: notification.user.name,
                             style: MyTextTheme.mainbold(context)),
                         TextSpan(
-                          text: "님이 ",
+                          text: notification.type != NotificationType.schoolNoti
+                              ? "님이 "
+                              : "에서 ",
                           style: MyTextTheme.mainheight(context)
                               .copyWith(fontWeight: FontWeight.w400),
                         ),

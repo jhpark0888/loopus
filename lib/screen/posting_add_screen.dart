@@ -235,42 +235,46 @@ class PostingAddScreen extends StatelessWidget {
                                     TagController controller =
                                         Get.find<TagController>(
                                             tag: Tagtype.Posting.toString());
-                                    print(controller.searchtaglist.where(
-                                        (element) => element.tag == string));
+
                                     // if (controller.selectedtaglist.length < 3) {
-                                    if (controller.searchtaglist
+                                    if (controller.selectedtaglist
                                         .where(
-                                            (element) => element.tag == string)
-                                        .isNotEmpty) {
-                                      controller.selectedtaglist.add(
-                                          SelectedTagWidget(
-                                              id: controller.searchtaglist
-                                                  .where((element) =>
-                                                      element.tag == string)
-                                                  .first
-                                                  .id,
-                                              text: string,
-                                              selecttagtype:
-                                                  SelectTagtype.interesting,
-                                              tagtype: Tagtype.Posting));
-                                      controller.tagsearchContoller.clear();
-                                      controller.searchtaglist.removeWhere(
-                                          (element) =>
-                                              element.id ==
-                                              controller.searchtaglist
-                                                  .where((element) =>
-                                                      element.tag == string)
-                                                  .first
-                                                  .id);
-                                    } else {
-                                      controller.selectedtaglist.add(
-                                          SelectedTagWidget(
-                                              id: 0,
-                                              text: string,
-                                              selecttagtype:
-                                                  SelectTagtype.interesting,
-                                              tagtype: Tagtype.Posting));
-                                      controller.tagsearchContoller.clear();
+                                            (element) => element.text == string)
+                                        .isEmpty) {
+                                      if (controller.searchtaglist
+                                          .where((element) =>
+                                              element.tag == string)
+                                          .isNotEmpty) {
+                                        controller.selectedtaglist.add(
+                                            SelectedTagWidget(
+                                                id: controller.searchtaglist
+                                                    .where((element) =>
+                                                        element.tag == string)
+                                                    .first
+                                                    .id,
+                                                text: string,
+                                                selecttagtype:
+                                                    SelectTagtype.interesting,
+                                                tagtype: Tagtype.Posting));
+                                        controller.tagsearchContoller.clear();
+                                        controller.searchtaglist.removeWhere(
+                                            (element) =>
+                                                element.id ==
+                                                controller.searchtaglist
+                                                    .where((element) =>
+                                                        element.tag == string)
+                                                    .first
+                                                    .id);
+                                      } else {
+                                        controller.selectedtaglist.add(
+                                            SelectedTagWidget(
+                                                id: 0,
+                                                text: string,
+                                                selecttagtype:
+                                                    SelectTagtype.interesting,
+                                                tagtype: Tagtype.Posting));
+                                        controller.tagsearchContoller.clear();
+                                      }
                                     }
                                   }
                                 },
