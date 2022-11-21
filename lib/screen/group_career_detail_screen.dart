@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
@@ -751,11 +754,24 @@ class _leading extends StatelessWidget {
     );
   }
 
-  void deleteCareer(Project career) {
+  void deleteCareer(Project career) async {
     if (Get.isRegistered<ProfileController>()) {
       ProfileController controller = Get.find<ProfileController>();
       controller.myProjectList.removeWhere((element) => element == career);
       controller.myProjectList.refresh();
     }
+
+    FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+    int careerId = career.id;
+    String? strGroupTpList = await secureStorage.read(key: "groupTpList");
+    List<int> groupTpList = [];
+
+    if (strGroupTpList != null) {
+      groupTpList = json.decode(strGroupTpList).cast<int>();
+    }
+    groupTpList.remove(careerId);
+
+    secureStorage.write(key: "groupTpList", value: json.encode(groupTpList));
+    await FirebaseMessaging.instance.unsubscribeFromTopic("project$careerId");
   }
 }

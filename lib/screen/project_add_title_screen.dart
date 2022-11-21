@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -71,6 +75,27 @@ class ProjectAddTitleScreen extends StatelessWidget {
                               // addCompany(project.id, _controller.selectCompany.value.userId);
                             }
                             project.is_user = 1;
+
+                            if (project.isPublic == true) {
+                              FlutterSecureStorage secureStorage =
+                                  const FlutterSecureStorage();
+                              int careerId = project.id;
+                              String? strGroupTpList =
+                                  await secureStorage.read(key: "groupTpList");
+                              List<int> groupTpList = [];
+
+                              if (strGroupTpList != null) {
+                                groupTpList =
+                                    json.decode(strGroupTpList).cast<int>();
+                              }
+                              groupTpList.add(careerId);
+
+                              secureStorage.write(
+                                  key: "groupTpList",
+                                  value: json.encode(groupTpList));
+                              await FirebaseMessaging.instance
+                                  .subscribeToTopic("project$careerId");
+                            }
                             SelectProjectController.to.selectprojectlist
                                 .insert(0, project);
                             if (Get.isRegistered<ProfileController>()) {
