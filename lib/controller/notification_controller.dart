@@ -229,8 +229,8 @@ class NotificationController extends GetxController {
         } else {
           if (event.data["type"] ==
               NotificationType.careerTag.index.toString()) {
-            FlutterSecureStorage secureStorage = FlutterSecureStorage();
-            int careerId = event.data["id"];
+            FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+            int careerId = int.parse(event.data["id"]);
             String? strGroupTpList =
                 await secureStorage.read(key: "groupTpList");
             List<int> groupTpList = [];

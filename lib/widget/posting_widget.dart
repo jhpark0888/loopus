@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
@@ -20,6 +21,7 @@ import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
+import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
@@ -126,8 +128,19 @@ class PostingWidget extends StatelessWidget {
                         () => Column(
                           children: [
                             type == PostingWidgetType.detail
-                                ? Text(item.content.value,
-                                    style: MyTextTheme.mainheight(context))
+                                ? Linkify(
+                                    options:
+                                        const LinkifyOptions(humanize: false),
+                                    text: item.content.value,
+                                    onOpen: (url) {
+                                      Get.to(() => WebViewScreen(url: url.url));
+                                    },
+                                    style: MyTextTheme.mainheight(context),
+                                    linkStyle: MyTextTheme.mainheight(context)
+                                        .copyWith(color: AppColors.mainblue),
+                                  )
+                                // Text(item.content.value,
+                                //     style: MyTextTheme.mainheight(context))
                                 : ExpandableText(
                                     textSpan: TextSpan(
                                         text: item.content.value,

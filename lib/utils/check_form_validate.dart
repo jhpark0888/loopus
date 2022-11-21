@@ -100,6 +100,9 @@ class CheckValidate {
       }
     }
   }
+
+  static RegExp urlRegExp =
+      RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.+&]+\.[\w/\-?=%.+&]+');
 }
 
 double getAspectRatioinUrl(String url) {

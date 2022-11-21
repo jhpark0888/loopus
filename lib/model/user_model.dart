@@ -220,60 +220,58 @@ class Person extends User {
           banned: banned ?? BanState.normal.obs);
 
   factory Person.fromJson(Map<String, dynamic> json) => Person(
-        userId: json["user_id"],
-        name: json["real_name"],
-        type: json["type"] ?? 0,
-        profileImage: json["profile_image"] ?? "",
-        followerCount: json["follower_count"] != null
-            ? RxInt(json["follower_count"])
-            : 0.obs,
-        followingCount: json["following_count"] != null
-            ? RxInt(json["following_count"])
-            : 0.obs,
-        totalposting: json["total_post_count"] ?? 0,
-        resentPostCount: json["recent_post_count"] ?? 0,
-        rank: json["rank"] != null ? json["rank"] as int : 0,
-        lastRank: json["last_rank"] != null ? json["last_rank"] as int : 0,
-        schoolRank:
-            json["school_rank"] != null ? json["school_rank"] as int : 0,
-        schoolLastRank: json["school_last_rank"] != null
-            ? json["school_last_rank"] as int
-            : 0,
-        groupRatio:
-            json["group_ratio"] != null ? json["group_ratio"] as double : 0,
-        schoolRatio:
-            json["school_ratio"] != null ? json["school_ratio"] as double : 0,
-        groupRatioVariance: json["group_rank_variance"] != null
-            ? json["group_rank_variance"] as double
-            : 0,
-        schoolRatioVariance: json["school_rank_variance"] != null
-            ? json["school_rank_variance"] as double
-            : 0,
-        profileTag: json["profile_tag"] != null
-            ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
-            : [],
-        fieldId: json["group"] != null ? json["group"].toString() : "16",
-        univName: json["school"] != null
-            ? json['school']['school_name']
-            : json["school_name"] ?? '',
-        univlogo: json["school"] != null ? json['school']['logo'] : '',
-        department: json["department"] ?? '',
-        isuser: json["is_user"] ?? 0,
-        admissionYear: json["admission"] ?? "2000",
-        snsList: json["user_sns"] != null
-            ? List.from(json["user_sns"])
-                .map((sns) => SNS.fromJson(sns))
-                .toList()
-                .obs
-            : <SNS>[].obs,
-        followed: json["looped"] != null
-            ? FollowState.values[json["looped"]].obs
-            : FollowState.normal.obs,
-        banned: json["is_banned"] != null
-            ? BanState.values[json["is_banned"]].obs
-            : BanState.normal.obs,
-        withdrawal: 0.obs
-      );
+      userId: json["user_id"],
+      name: json["real_name"],
+      type: json["type"] ?? 0,
+      profileImage: json["profile_image"] ?? "",
+      followerCount: json["follower_count"] != null
+          ? RxInt(json["follower_count"])
+          : 0.obs,
+      followingCount: json["following_count"] != null
+          ? RxInt(json["following_count"])
+          : 0.obs,
+      totalposting: json["total_post_count"] ?? 0,
+      resentPostCount: json["recent_post_count"] ?? 0,
+      rank: json["rank"] != null ? json["rank"] as int : 0,
+      lastRank: json["last_rank"] != null ? json["last_rank"] as int : 0,
+      schoolRank: json["school_rank"] != null ? json["school_rank"] as int : 0,
+      schoolLastRank: json["school_last_rank"] != null
+          ? json["school_last_rank"] as int
+          : 0,
+      groupRatio:
+          json["group_ratio"] != null ? json["group_ratio"] as double : 0,
+      schoolRatio:
+          json["school_ratio"] != null ? json["school_ratio"] as double : 0,
+      groupRatioVariance: json["group_rank_variance"] != null
+          ? json["group_rank_variance"] as double
+          : 0,
+      schoolRatioVariance: json["school_rank_variance"] != null
+          ? json["school_rank_variance"] as double
+          : 0,
+      profileTag: json["profile_tag"] != null
+          ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
+          : [],
+      fieldId: json["group"] != null ? json["group"].toString() : "16",
+      univName: json["school"] != null
+          ? json['school']['school_name']
+          : json["school_name"] ?? '',
+      univlogo: json["school"] != null ? json['school']['logo'] : '',
+      department: json["department"] ?? '',
+      isuser: json["is_user"] ?? 0,
+      admissionYear: json["admission"] ?? "2000",
+      snsList: json["user_sns"] != null
+          ? List.from(json["user_sns"])
+              .map((sns) => SNS.fromJson(sns))
+              .toList()
+              .obs
+          : <SNS>[].obs,
+      followed: json["looped"] != null
+          ? FollowState.values[json["looped"]].obs
+          : FollowState.normal.obs,
+      banned: json["is_banned"] != null
+          ? BanState.values[json["is_banned"]].obs
+          : BanState.normal.obs,
+      withdrawal: 0.obs);
 
   void copywith(Map<String, dynamic> json) {
     userId = json["user_id"] ?? userId;

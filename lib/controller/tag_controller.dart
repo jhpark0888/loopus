@@ -61,10 +61,7 @@ class TagController extends GetxController {
         List<Tag> taglist = List.from(value.data["results"])
             .map((map) => Tag.fromJson(map))
             .toList();
-            if(_searchword.value != ''){
-        taglist.add(Tag(tag: _searchword.value, tagId: 0, count: 0));}
 
-        print(taglist);
         if (taglist
             .where((element) => element.tag == _searchword.value)
             .isNotEmpty) {
@@ -79,12 +76,10 @@ class TagController extends GetxController {
               tagtype: tagtype,
             );
           }).toList());
-
-          for (var selectedtag in selectedtaglist) {
-            searchtaglist
-                .removeWhere((element) => element.tag == selectedtag.text);
-          }
         } else {
+          if (_searchword.value != '') {
+            taglist.add(Tag(tag: _searchword.value, tagId: 0, count: 0));
+          }
           searchtaglist.clear();
 
           searchtaglist(taglist.map((element) {
@@ -96,25 +91,13 @@ class TagController extends GetxController {
               tagtype: tagtype,
             );
           }).toList());
-          // if (tagsearchword != '' &&
-          //     tagController.selectedtaglist
-          //         .where((tag) => tag.text == tagsearchword)
-          //         .isEmpty) {
-          //   tagController.searchtaglist.insert(
-          //       0,
-          //       SearchTagWidget(
-          //         id: 0,
-          //         tag: "처음으로 '${tagsearchword}' 태그 사용하기",
-          //         isSearch: 0,
-          //         tagtype: tagtype,
-          //       ));
-          // }
-
-          selectedtaglist.forEach((selectedtag) {
-            searchtaglist
-                .removeWhere((element) => element.tag == selectedtag.text);
-          });
         }
+
+        for (var selectedtag in selectedtaglist) {
+          searchtaglist
+              .removeWhere((element) => element.tag == selectedtag.text);
+        }
+
         tagsearchstate(ScreenState.success);
       } else {
         tagsearchstate(ScreenState.error);

@@ -417,7 +417,7 @@ class _leading extends StatelessWidget {
                       if (value.isError == false) {
                         deleteCareer(career!);
                         Get.back();
-                        showCustomDialog("포스팅이 삭제되었습니다", 1400);
+                        showCustomDialog("커리어가 삭제되었습니다", 1400);
                       } else {
                         errorSituation(value);
                       }
