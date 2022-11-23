@@ -91,8 +91,8 @@ class GroupCareerDetailScreen extends StatelessWidget {
                       children: [
                         joinCompany(context),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 24, horizontal: 30.5),
+                          padding:
+                              const EdgeInsets.fromLTRB(30.5, 23, 30.5, 21),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

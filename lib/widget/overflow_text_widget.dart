@@ -71,8 +71,13 @@ class _ExpandableTextState extends State<ExpandableText> {
           if (ellipsizedText.measure(context, constraints).length <= maxLines) {
             return ellipsizedText;
           } else {
-            final fixedEllipsizedText = croppedText.characters.getRange(
-                0, croppedText.characters.length - _lineEnding.length);
+            Characters fixedEllipsizedText;
+            if (croppedText.characters.length - _lineEnding.length <= 0) {
+              fixedEllipsizedText = croppedText.characters;
+            } else {
+              fixedEllipsizedText = croppedText.characters.getRange(
+                  0, croppedText.characters.length - _lineEnding.length);
+            }
 
             return _buildEllipsizedText(
               fixedEllipsizedText.string,

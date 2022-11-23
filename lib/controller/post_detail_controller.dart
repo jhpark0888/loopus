@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
@@ -34,6 +37,7 @@ class PostingDetailController extends GetxController {
 
   GlobalKey commentListKey = GlobalKey();
   bool autoFocus;
+  ReceivePort _port = ReceivePort();
 
   @override
   void onInit() async {
@@ -55,7 +59,18 @@ class PostingDetailController extends GetxController {
     //           user: Person.defaultuser())
     //       .obs;
     // }
-    postingLoad();
+    await postingLoad();
+    if (post.value.files.isNotEmpty) {
+      IsolateNameServer.registerPortWithName(
+          _port.sendPort, 'downloader_send_port');
+      _port.listen((dynamic data) {
+        String id = data[0];
+        DownloadTaskStatus status = data[1];
+        int progress = data[2];
+      });
+
+      FlutterDownloader.registerCallback(downloadCallback);
+    }
     commentController.addListener(() {
       if (tagUser.value.userId != 0 && commentController.text == '') {
         tagdelete();
@@ -76,7 +91,14 @@ class PostingDetailController extends GetxController {
     super.onReady();
   }
 
-  void postingLoad() async {
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+  }
+
+  Future postingLoad() async {
     await getposting(postid).then((value) async {
       if (value.isError == false) {
         post.value.copywith(value.data);
@@ -91,6 +113,15 @@ class PostingDetailController extends GetxController {
   void tagdelete() {
     tagUser(User.defaultuser());
     selectedCommentId(0);
+  }
+
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    final SendPort send =
+        IsolateNameServer.lookupPortByName('downloader_send_port')!;
+    send.send([id, status, progress]);
   }
 
   // void commentToList() {

@@ -9,7 +9,6 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/profile_image_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/image_controller.dart';

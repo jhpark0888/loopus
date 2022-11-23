@@ -78,50 +78,52 @@ class MessageWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      hasTextOverflow(
-                              message.content, MyTextTheme.mainheight(context))
-                          ? Container(
-                              constraints:
-                                  BoxConstraints(maxWidth: Get.width * (2 / 3)),
-                              decoration: BoxDecoration(
-                                  color: AppColors.mainblue,
-                                  borderRadius: BorderRadius.circular(16)),
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 7, horizontal: 14),
-                                  child: Text(
-                                    message.content,
-                                    style: MyTextTheme.mainheight(context)
-                                        .copyWith(color: AppColors.mainWhite),
-                                    textHeightBehavior:
-                                        const TextHeightBehavior(
-                                            applyHeightToFirstAscent: true,
-                                            applyHeightToLastDescent: true,
-                                            leadingDistribution:
-                                                TextLeadingDistribution.even),
-                                  )),
-                            )
-                          : Container(
-                              decoration: BoxDecoration(
-                                  color: AppColors.mainblue,
-                                  borderRadius: BorderRadius.circular(16)),
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 7, horizontal: 14),
-                                  child: Text(
-                                    message.content,
-                                    style: MyTextTheme.mainheight(context)
-                                        .copyWith(
-                                      color: AppColors.mainWhite,
-                                    ),
-                                    textHeightBehavior:
-                                        const TextHeightBehavior(
-                                            applyHeightToFirstAscent: true,
-                                            applyHeightToLastDescent: true,
-                                            leadingDistribution:
-                                                TextLeadingDistribution.even),
-                                  )),
-                            ),
+                      Flexible(
+                        child: hasTextOverflow(message.content,
+                                MyTextTheme.mainheight(context))
+                            ? Container(
+                                // constraints:
+                                //     BoxConstraints(maxWidth: Get.width * (2 / 3)),
+                                decoration: BoxDecoration(
+                                    color: AppColors.mainblue,
+                                    borderRadius: BorderRadius.circular(16)),
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 7, horizontal: 14),
+                                    child: Text(
+                                      message.content,
+                                      style: MyTextTheme.mainheight(context)
+                                          .copyWith(color: AppColors.mainWhite),
+                                      textHeightBehavior:
+                                          const TextHeightBehavior(
+                                              applyHeightToFirstAscent: true,
+                                              applyHeightToLastDescent: true,
+                                              leadingDistribution:
+                                                  TextLeadingDistribution.even),
+                                    )),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                    color: AppColors.mainblue,
+                                    borderRadius: BorderRadius.circular(16)),
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 7, horizontal: 14),
+                                    child: Text(
+                                      message.content,
+                                      style: MyTextTheme.mainheight(context)
+                                          .copyWith(
+                                        color: AppColors.mainWhite,
+                                      ),
+                                      textHeightBehavior:
+                                          const TextHeightBehavior(
+                                              applyHeightToFirstAscent: true,
+                                              applyHeightToLastDescent: true,
+                                              leadingDistribution:
+                                                  TextLeadingDistribution.even),
+                                    )),
+                              ),
+                      ),
                     ],
                   ),
                   Obx(() => isFirst.value
@@ -162,90 +164,98 @@ class MessageWidget extends StatelessWidget {
                       const SizedBox(
                         width: 10,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            partner.name,
-                            style: MyTextTheme.mainbold(context),
-                          ),
-                          const SizedBox(
-                            height: 7,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              hasTextOverflow(message.content,
-                                      MyTextTheme.mainheight(context))
-                                  ? Container(
-                                      constraints: BoxConstraints(
-                                          maxWidth: Get.width * (2 / 3)),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColors.cardGray,
-                                          ),
-                                          color: AppColors.cardGray,
-                                          borderRadius:
-                                              BorderRadius.circular(16)),
-                                      child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 7, horizontal: 14),
-                                          child: Text(
-                                            message.content,
-                                            style:
-                                                MyTextTheme.mainheight(context),
-                                            textHeightBehavior:
-                                                const TextHeightBehavior(
-                                                    applyHeightToFirstAscent:
-                                                        true,
-                                                    applyHeightToLastDescent:
-                                                        true,
-                                                    leadingDistribution:
-                                                        TextLeadingDistribution
-                                                            .even),
-                                          )),
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColors.cardGray,
-                                          ),
-                                          color: AppColors.cardGray,
-                                          borderRadius:
-                                              BorderRadius.circular(16)),
-                                      child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 7, horizontal: 14),
-                                          child: Text(
-                                            message.content,
-                                            style:
-                                                MyTextTheme.mainheight(context),
-                                            softWrap: true,
-                                            textHeightBehavior:
-                                                const TextHeightBehavior(
-                                                    applyHeightToFirstAscent:
-                                                        true,
-                                                    applyHeightToLastDescent:
-                                                        true,
-                                                    leadingDistribution:
-                                                        TextLeadingDistribution
-                                                            .even),
-                                          )),
-                                    ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    8.0, 18.0, 12.0, 0.0),
-                                child: Text(
-                                  messageDurationCalculate(message.date),
-                                  style: MyTextTheme.mainheight(context)
-                                      .copyWith(color: AppColors.maingray),
-                                  textAlign: TextAlign.end,
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              partner.name,
+                              style: MyTextTheme.mainbold(context),
+                            ),
+                            const SizedBox(
+                              height: 7,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Flexible(
+                                  child: hasTextOverflow(message.content,
+                                          MyTextTheme.mainheight(context))
+                                      ? Container(
+                                          // constraints: BoxConstraints(
+                                          //     maxWidth: Get.width * (2 / 3)),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: AppColors.cardGray,
+                                              ),
+                                              color: AppColors.cardGray,
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
+                                          child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 7,
+                                                      horizontal: 14),
+                                              child: Text(
+                                                message.content,
+                                                style: MyTextTheme.mainheight(
+                                                    context),
+                                                textHeightBehavior:
+                                                    const TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            true,
+                                                        applyHeightToLastDescent:
+                                                            true,
+                                                        leadingDistribution:
+                                                            TextLeadingDistribution
+                                                                .even),
+                                              )),
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: AppColors.cardGray,
+                                              ),
+                                              color: AppColors.cardGray,
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
+                                          child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 7,
+                                                      horizontal: 14),
+                                              child: Text(
+                                                message.content,
+                                                style: MyTextTheme.mainheight(
+                                                    context),
+                                                softWrap: true,
+                                                textHeightBehavior:
+                                                    const TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            true,
+                                                        applyHeightToLastDescent:
+                                                            true,
+                                                        leadingDistribution:
+                                                            TextLeadingDistribution
+                                                                .even),
+                                              )),
+                                        ),
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      8.0, 18.0, 12.0, 0.0),
+                                  child: Text(
+                                    messageDurationCalculate(message.date),
+                                    style: MyTextTheme.mainheight(context)
+                                        .copyWith(color: AppColors.maingray),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

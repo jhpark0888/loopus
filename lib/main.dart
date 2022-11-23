@@ -8,8 +8,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +27,9 @@ import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loopus/utils/local_notification.dart';
 import 'package:loopus/utils/no_scroll_behavior.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'controller/notification_controller.dart';
+import 'package:loopus/utils/custom_new_version_plus.dart';
 
 //백그라운드 메세지 왔을 때
 @pragma('vm:entry-point')
@@ -58,9 +62,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // debugPrintGestureArenaDiagnostics = true;
+  await FlutterDownloader.initialize(debug: true);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -73,6 +79,7 @@ void main() async {
   //   systemNavigationBarIconBrightness: Brightness.dark,
   //   statusBarColor: AppColors.mainWhite, // status bar color
   // ));
+
   try {
     if (Platform.isIOS || Platform.isAndroid) {
       Intl.systemLocale = await findSystemLocale();
@@ -81,20 +88,41 @@ void main() async {
     print(e);
   }
 
+  // 토큰 여부 확인
   String? temptoken = await const FlutterSecureStorage().read(key: 'token');
+
+  // 업데이트 여부 확인
+  bool isRequiredUpdate = false;
+  final newVersionPlus = CustomNewVersionPlus(
+    androidId: "com.loopus.loopus",
+    iOSId: "com.loopus.loopusfrontend",
+  );
+  VersionStatus? status;
+  try {
+    status = await newVersionPlus.getVersionStatus();
+  } catch (e) {
+    status = null;
+  }
+  if (status != null) {
+    if (Platform.isIOS
+        ? status.localVersion != status.appStoreLink
+        : status.localVersion != status.storeVersion) {
+      isRequiredUpdate = true;
+    }
+  }
+
   await GetStorage.init();
 
-  // KakaoContext.clientId = '3e0e4823d8dd690cfb48b8bcd5ad7e6c';
-  // FlutterError.onError = (FlutterErrorDetails details) {
-  //   FlutterError.presentError(details);
-  //   print('error catch');
-  //   // if (kReleaseMode) exit(1);
-  // };
   runApp(
     // DevicePreview(
     // enabled: !kReleaseMode,
     // builder: (context) =>
-    MyApp(token: temptoken), // Wrap your app
+    MyApp(
+      token: temptoken,
+      newVersionPlus: newVersionPlus,
+      status: status,
+      isRequiredUpdate: isRequiredUpdate,
+    ), // Wrap your app
     // )
   );
   // runApp(MyApp());
@@ -102,10 +130,19 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final String? token;
-  MyApp({Key? key, required this.token}) : super(key: key);
+  MyApp(
+      {Key? key,
+      required this.token,
+      required this.newVersionPlus,
+      required this.status,
+      required this.isRequiredUpdate})
+      : super(key: key);
   final GAController _gaController = Get.put(GAController());
   final NotificationController notificationController =
       Get.put(NotificationController());
+  CustomNewVersionPlus newVersionPlus;
+  VersionStatus? status;
+  bool isRequiredUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +163,11 @@ class MyApp extends StatelessWidget {
         Locale('ko'),
       ],
       navigatorObservers: [_gaController.getAnalyticsObserver()],
-      home: token == null ? StartScreen() : App(),
+      home: isRequiredUpdate
+          ? UpdateScreen(newVersionPlus: newVersionPlus, status: status)
+          : token == null
+              ? StartScreen()
+              : App(),
       // WelcomeScreen(token: token),
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
@@ -141,7 +182,11 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: "/",
-          page: token != null ? () => App() : () => StartScreen(),
+          page: () => isRequiredUpdate
+              ? UpdateScreen(newVersionPlus: newVersionPlus, status: status)
+              : token != null
+                  ? App()
+                  : StartScreen(),
         ),
         // GetPage(
         //   name: '/search',
@@ -168,17 +213,38 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    localNotificaition.requestPermission();
-    Future.delayed(
-      const Duration(seconds: 1),
-      () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder:
-              token == null ? (context) => StartScreen() : (context) => App(),
-        ),
-      ),
-    );
+    // localNotificaition.requestPermission();
+    // Future.delayed(const Duration(seconds: 1), () async {
+    //   final newVersionPlus = CustomNewVersionPlus(
+    //     androidId: "com.loopus.loopus",
+    //     iOSId: "com.loopus.loopusfrontend",
+    //   );
+
+    //   final status = await newVersionPlus.getVersionStatus();
+
+    //   if (status != null) {
+    //     if (Platform.isIOS
+    //         ? status.localVersion != status.appStoreLink
+    //         : status.localVersion != status.storeVersion) {
+    //       newVersionPlus.showUpdateDialog(
+    //           context: context,
+    //           versionStatus: status,
+    //           dialogText: "루프어스의 새로운 업데이트가 준비되어 있습니다.",
+    //           dialogTitle: "새로운 업데이트",
+    //           allowDismissal: false,
+    //           updateButtonText: "업데이트");
+    //     } else {
+    //       Navigator.pushReplacement(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: token == null
+    //               ? (context) => StartScreen()
+    //               : (context) => App(),
+    //         ),
+    //       );
+    //     }
+    //   }
+    // });
   }
 
   // Future logAppOpen() async {
@@ -188,27 +254,76 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Generated By LOOP',
-              textAlign: TextAlign.center,
-              style: MyTextTheme.main(context),
-            ),
-            SizedBox(
-              height: 32,
-            ),
-          ],
+      // bottomNavigationBar: BottomAppBar(
+      //   elevation: 0,
+      //   child: Column(
+      //     mainAxisSize: MainAxisSize.min,
+      //     children: [
+      //       Text(
+      //         'Generated By LOOP',
+      //         textAlign: TextAlign.center,
+      //         style: MyTextTheme.main(context),
+      //       ),
+      //       SizedBox(
+      //         height: 32,
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      // backgroundColor: Theme.of(context).backgroundColor,
+      body: Center(
+        child: SizedBox(
+          width: Get.width / 2,
+          child: Image.asset(
+            'assets/illustrations/loop_splash.png',
+            fit: BoxFit.contain,
+          ),
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      // ),
+    );
+  }
+}
+
+class UpdateScreen extends StatefulWidget {
+  UpdateScreen({Key? key, required this.newVersionPlus, required this.status})
+      : super(key: key);
+  CustomNewVersionPlus newVersionPlus;
+  VersionStatus? status;
+
+  @override
+  State<UpdateScreen> createState() => _UpdateScreenState();
+}
+
+class _UpdateScreenState extends State<UpdateScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (_) {
+        // Execute callback if page is mounted
+        widget.newVersionPlus.showUpdateDialog(
+            context: context,
+            versionStatus: widget.status!,
+            dialogText: "루프어스의 새로운 업데이트가 준비되어 있습니다.",
+            dialogTitle: "새로운 업데이트",
+            allowDismissal: false,
+            updateButtonText: "업데이트");
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: Get.width / 2,
-          child: Image.asset('assets/illustrations/splash.png'),
+          child: Image.asset(
+            'assets/illustrations/loop_splash.png',
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );

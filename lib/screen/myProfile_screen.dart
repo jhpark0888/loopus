@@ -12,7 +12,6 @@ import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
-import 'package:loopus/controller/profile_image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';

@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'dart:math';
 import 'dart:ui' as ui;
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,6 +30,7 @@ import 'package:loopus/widget/no_ul_textfield_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
+import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import '../controller/modal_controller.dart';
 
@@ -84,10 +88,11 @@ class PostingAddScreen extends StatelessWidget {
                                         swiperType: SwiperType.file,
                                         aspectRatio: postingAddController
                                             .cropAspectRatio.value,
+                                        isAdd: true,
                                       ),
                                       if (postingAddController.images.length ==
                                           1)
-                                        const SizedBox(height: 20)
+                                        const SizedBox(height: 21.5)
                                     ],
                                   ),
                                   Positioned(
@@ -99,12 +104,12 @@ class PostingAddScreen extends StatelessWidget {
                                                       color:
                                                           AppColors.mainblue))),
                                       right: 16,
-                                      bottom: 5)
+                                      bottom: 11)
                                 ]),
                               )
                             : Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(16, 16, 16, 32),
+                                    const EdgeInsets.fromLTRB(16, 16, 16, 8),
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -113,15 +118,21 @@ class PostingAddScreen extends StatelessWidget {
                                           titleEng: 'image', ontap: () async {
                                         if (_imageController
                                             .permissionState.isAuth) {
-                                          if (_imageController
-                                              .albums.isNotEmpty) {
-                                            Get.to(() => UploadScreen());
-                                          } else {
-                                            showCustomDialog("이미지가 없습니다", 1000);
-                                          }
+                                          _imagePermissionAllow();
                                         } else {
-                                          showCustomDialog(
-                                              "미디어 및 파일의 권한을 허용해주세요", 1000);
+                                          _imageController.permissionState =
+                                              await PhotoManager
+                                                  .requestPermissionExtend();
+                                          if (_imageController
+                                              .permissionState.isAuth) {
+                                            PhotoManager.addChangeCallback(
+                                                _imageController.changeNotify);
+                                            PhotoManager.startChangeNotify();
+                                            await _imageController.loadPhotos();
+                                            _imagePermissionAllow();
+                                          } else {
+                                            _permissionDenied();
+                                          }
                                         }
                                       }),
                                     ),
@@ -147,10 +158,11 @@ class PostingAddScreen extends StatelessWidget {
                                         .map((linkwidget) => linkwidget.url)
                                         .toList(),
                                     swiperType: SwiperType.link,
+                                    isAdd: true,
                                   ),
                                   if (postingAddController.scrapList.length ==
                                       1)
-                                    const SizedBox(height: 20)
+                                    const SizedBox(height: 21.5)
                                 ],
                               ),
                               Positioned(
@@ -163,9 +175,93 @@ class PostingAddScreen extends StatelessWidget {
                                               .copyWith(
                                                   color: AppColors.mainblue))),
                                   right: 16,
-                                  bottom: 5)
+                                  bottom: 11)
                             ],
                           ),
+                    Obx(
+                      () => postingAddController.files.isEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                              child: addButton(context, ontap: () async {
+                                if (_imageController.permissionState.isAuth) {
+                                  _filePermissionAllow();
+                                } else {
+                                  _imageController.permissionState =
+                                      await PhotoManager
+                                          .requestPermissionExtend();
+                                  if (_imageController.permissionState.isAuth) {
+                                    PhotoManager.addChangeCallback(
+                                        _imageController.changeNotify);
+                                    PhotoManager.startChangeNotify();
+                                    await _imageController.loadPhotos();
+                                    _filePermissionAllow();
+                                  } else {
+                                    _permissionDenied();
+                                  }
+                                }
+                              }, title: "파일", titleEng: ""),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: SizedBox(
+                                height: 42,
+                                child: ListView.separated(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      if (index ==
+                                          postingAddController.files.length) {
+                                        return GestureDetector(
+                                          onTap: () async {
+                                            if (_imageController
+                                                .permissionState.isAuth) {
+                                              _filePermissionAllow();
+                                            } else {
+                                              _imageController.permissionState =
+                                                  await PhotoManager
+                                                      .requestPermissionExtend();
+                                              if (_imageController
+                                                  .permissionState.isAuth) {
+                                                PhotoManager.addChangeCallback(
+                                                    _imageController
+                                                        .changeNotify);
+                                                PhotoManager
+                                                    .startChangeNotify();
+                                                await _imageController
+                                                    .loadPhotos();
+                                                _filePermissionAllow();
+                                              } else {
+                                                _permissionDenied();
+                                              }
+                                            }
+                                          },
+                                          behavior: HitTestBehavior.translucent,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 11),
+                                            child: Text(
+                                              "추가하기",
+                                              style: MyTextTheme.main(context)
+                                                  .copyWith(
+                                                      color:
+                                                          AppColors.mainblue),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return _fileWidget(context,
+                                          postingAddController.files[index]);
+                                    },
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                    itemCount:
+                                        postingAddController.files.length + 1),
+                              ),
+                            ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                       child: Column(
@@ -306,6 +402,48 @@ class PostingAddScreen extends StatelessWidget {
     );
   }
 
+  void _imagePermissionAllow() {
+    if (_imageController.albums.isNotEmpty) {
+      Get.to(() => UploadScreen());
+    } else {
+      showCustomDialog("이미지가 없습니다", 1000);
+    }
+  }
+
+  void _filePermissionAllow() async {
+    //30MB로 제한
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: true);
+    List<File> files = [];
+    if (result != null) {
+      files = result.paths.map((path) => File(path!)).toList();
+
+      int filesSize = files
+          .map((file) => file.lengthSync())
+          .reduce((total, bytes) => total + bytes);
+
+      double filesSizeToMB =
+          double.parse((filesSize / pow(1024, 2)).toStringAsFixed(2));
+
+      print("fileSize: $filesSizeToMB MB");
+
+      if (filesSizeToMB <= 30) {
+        postingAddController.files.addAll(files);
+      } else {
+        showPopUpDialog(
+          "최대 업로드 용량 초과",
+          "파일은 총 합 30MB의 크기를 넘을 수 없어요",
+        );
+      }
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  void _permissionDenied() {
+    showCustomDialog("사진 및 파일을 첨부하려면 \n미디어 및 파일의 권한을 허용해주세요", 1000);
+  }
+
   Widget addButton(BuildContext context,
       {required String title,
       required String titleEng,
@@ -319,11 +457,16 @@ class PostingAddScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset('assets/icons/add_$titleEng.svg'),
+            title == "파일"
+                ? SvgPicture.asset(
+                    'assets/icons/file_icon.svg',
+                    color: AppColors.mainWhite,
+                  )
+                : SvgPicture.asset('assets/icons/add_$titleEng.svg'),
             const SizedBox(width: 8),
             Text(
-              '$title 첨부하기',
-              style: MyTextTheme.mainbold(context)
+              '$title 첨부하기' + (title == "파일" ? " (최대 30MB)" : ""),
+              style: MyTextTheme.main(context)
                   .copyWith(color: AppColors.mainWhite),
             )
           ],
@@ -389,6 +532,45 @@ class PostingAddScreen extends StatelessWidget {
               color: checkContent() ? AppColors.mainblue : AppColors.maingray,
               fontSize: 17)),
       padding: EdgeInsets.zero,
+    );
+  }
+
+  Widget _fileWidget(BuildContext context, File file) {
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 240),
+      decoration: BoxDecoration(
+          border: Border.all(color: AppColors.dividegray, width: 1),
+          borderRadius: BorderRadius.circular(8)),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset('assets/icons/file_icon.svg'),
+          const SizedBox(
+            width: 8,
+          ),
+          Flexible(
+            child: Text(
+              basename(file.path),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: MyTextTheme.main(context),
+            ),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          GestureDetector(
+            onTap: () {
+              postingAddController.files.remove(file);
+            },
+            child: SvgPicture.asset(
+              "assets/icons/widget_delete.svg",
+              color: AppColors.iconcolor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

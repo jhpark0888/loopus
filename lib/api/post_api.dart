@@ -54,6 +54,15 @@ Future<HTTPResponse> addposting(int projectId, double aspectRatio) async {
       print(multipartFile.filename);
       print(request.files);
     }
+    for (int i = 0; i < postingAddController.files.length; i++) {
+      var multipartFile = await http.MultipartFile.fromPath(
+        'file',
+        postingAddController.files[i].path,
+      );
+      request.files.add(multipartFile);
+      print(multipartFile.filename);
+      print(request.files);
+    }
     request.fields['contents'] =
         postingAddController.textcontroller.text.trim();
     for (var tag in tagController.selectedtaglist) {

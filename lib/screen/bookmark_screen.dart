@@ -52,7 +52,7 @@ class BookmarkScreen extends StatelessWidget {
                                   child: SingleChildScrollView(
                                       child: Column(
                                     children: [
-                                      ListView.separated(
+                                      ListView.builder(
                                           primary: false,
                                           shrinkWrap: true,
                                           itemBuilder: ((context, index) {
@@ -60,8 +60,6 @@ class BookmarkScreen extends StatelessWidget {
                                                 item: _controller.posts[index],
                                                 type: PostingWidgetType.normal);
                                           }),
-                                          separatorBuilder: (context, index) =>
-                                              DivideWidget(),
                                           itemCount: _controller.posts.length)
                                     ],
                                   )),

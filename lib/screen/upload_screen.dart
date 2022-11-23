@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/profile_image_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
