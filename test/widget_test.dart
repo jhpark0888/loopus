@@ -9,12 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:loopus/main.dart';
+import 'package:loopus/utils/custom_new_version_plus.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp(
       token: '',
+      newVersionPlus: CustomNewVersionPlus(),
+      status: null,
+      isRequiredUpdate: false,
     ));
 
     // Verify that our counter starts at 0.

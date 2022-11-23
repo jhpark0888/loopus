@@ -74,7 +74,8 @@ dependencies:
   file_picker: ^4.6.0
   flutter_downloader: ^1.7.4
   path_provider: ^2.0.4
-  # upgrader: ^4.8.1
+  new_version_plus: ^0.0.1+4
+  flutter_native_splash: ^2.1.6  
 
   # custom_nested_scroll_view: 
   #   git:
@@ -91,7 +92,6 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
 
-  flutter_native_splash: ^2.1.6
 
   flutter_launcher_icons: ^0.10.0
 
