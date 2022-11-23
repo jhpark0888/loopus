@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/career_board_controller.dart';
@@ -24,6 +26,8 @@ class Post {
       required this.content,
       required this.images,
       required this.links,
+      required this.files,
+      required this.fileCount,
       required this.tags,
       required this.date,
       required this.project,
@@ -40,6 +44,8 @@ class Post {
   RxString content;
   List<String> images;
   List<String> links; //입력값 10개까지
+  List<String> files;
+  int fileCount;
   RxList<Comment> comments; //댓글
   RxList<Tag> tags;
   DateTime date;
@@ -57,6 +63,8 @@ class Post {
     RxString? content,
     List<String>? images,
     List<String>? links,
+    List<String>? files,
+    int? fileCount,
     RxList<Comment>? comments,
     RxList<Tag>? tags,
     DateTime? date,
@@ -74,6 +82,8 @@ class Post {
           content: content ?? "".obs,
           images: images ?? [],
           links: links ?? [],
+          files: files ?? [],
+          fileCount: fileCount ?? 0,
           comments: comments ?? <Comment>[].obs,
           tags: tags ?? <Tag>[].obs,
           date: date ?? DateTime.now(),
@@ -104,6 +114,12 @@ class Post {
                       .map((map) => map['link'].toString())
                       .toList()
                   : [],
+              files: json["contents_file"] != null
+                  ? List<Map<String, dynamic>>.from(json["contents_file"])
+                      .map((map) => map["file"].toString())
+                      .toList()
+                  : [],
+              fileCount: json["file_count"] ?? 0,
               tags: json['post_tag'] != null
                   ? List<Map<String, dynamic>>.from(json['post_tag'])
                       .map((tag) => Tag.fromJson(tag))
@@ -152,6 +168,12 @@ class Post {
             .map((map) => map['link'].toString())
             .toList()
         : links;
+    files = json["contents_file"] != null
+        ? List<Map<String, dynamic>>.from(json["contents_file"])
+            .map((map) => map["file"].toString())
+            .toList()
+        : files;
+    fileCount = json["file_count"] ?? fileCount;
     tags.assignAll(json['post_tag'] != null
         ? List<Map<String, dynamic>>.from(json['post_tag'])
             .map((tag) => Tag.fromJson(tag))

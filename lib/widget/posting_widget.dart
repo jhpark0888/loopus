@@ -3,9 +3,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/api/search_api.dart';
@@ -41,6 +43,7 @@ import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:loopus/widget/user_tile_widget.dart';
+import 'package:path_provider/path_provider.dart';
 
 enum PostingWidgetType { normal, search, detail }
 
@@ -61,6 +64,8 @@ class PostingWidget extends StatelessWidget {
   late int lastIsMaked;
   int marknum = 0;
   final bool isDark;
+  RxBool isFileViewExpand = false.obs;
+  late DateTime downLoadValidPeriod = item.date.add(const Duration(days: 30));
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +115,7 @@ class PostingWidget extends StatelessWidget {
                   ? getAspectRatioinUrl(item.images[0])
                   : null,
             ),
+          if (item.fileCount != 0) _fileView(context),
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -308,6 +314,152 @@ class PostingWidget extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _fileView(BuildContext context) {
+    return type != PostingWidgetType.detail
+        ? Column(
+            children: [
+              DivideWidget(
+                height: 1,
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    SvgPicture.asset('assets/icons/file_icon.svg'),
+                    const SizedBox(width: 8),
+                    Expanded(
+                        child: Text(
+                      "${item.fileCount}개의 파일 업로드",
+                      style: MyTextTheme.main(context),
+                    ))
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              DivideWidget(
+                height: 1,
+              ),
+              const SizedBox(height: 10),
+            ],
+          )
+        : Column(
+            children: [
+              DivideWidget(
+                height: 1,
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  isFileViewExpand.toggle();
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/file_icon.svg'),
+                      const SizedBox(width: 8),
+                      Expanded(
+                          child: Text(
+                        "${item.fileCount}개의 파일 업로드",
+                        style: MyTextTheme.main(context),
+                      )),
+                      Obx(() => isFileViewExpand.value == false
+                          ? SvgPicture.asset('assets/icons/down_arrow.svg')
+                          : RotatedBox(
+                              quarterTurns: 2,
+                              child: SvgPicture.asset(
+                                  'assets/icons/down_arrow.svg'),
+                            )),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              DivideWidget(
+                height: 1,
+              ),
+              Obx(() => isFileViewExpand.value
+                  ? Column(
+                      children: [
+                        ListView.separated(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            primary: false,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) =>
+                                _fileWidget(context, item.files[index]),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                            itemCount: item.files.length),
+                        DivideWidget(
+                          height: 1,
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink()),
+              const SizedBox(height: 10),
+            ],
+          );
+  }
+
+  Widget _fileWidget(BuildContext context, String file) {
+    return GestureDetector(
+      onTap: () async {
+        if (downLoadValidPeriod.isAfter(DateTime.now())) {
+          String dir = (await getApplicationDocumentsDirectory())
+              .path; //path provider로 저장할 경로 가져오기
+          try {
+            await FlutterDownloader.enqueue(
+              url: file, // file url
+              savedDir: '$dir/', // 저장할 dir
+              fileName: Uri.decodeFull(file.split("/").last), // 파일명
+              saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
+            );
+            showCustomDialog("다운로드가 완료 되었습니다", 1000);
+          } catch (e) {
+            showCustomDialog("다운로드가 실패 되었습니다", 1000);
+          }
+        } else {
+          showCustomDialog("다운로드 기간이 만료 되었습니다.", 1000);
+        }
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Container(
+        width: Get.width,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            SvgPicture.asset('assets/icons/file_icon.svg'),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    Uri.decodeFull(file.split("/").last),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: MyTextTheme.main(context),
+                  ),
+                  Text(
+                    "${DateFormat('yyyy년 MM월 dd일').format(downLoadValidPeriod)}까지 다운로드 가능",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: MyTextTheme.main(context)
+                        .copyWith(color: AppColors.dividegray),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -71,6 +71,10 @@ dependencies:
   gradient_borders: ^0.2.0
   flutter_linkify: ^5.0.2
   rich_text_controller: ^1.4.0
+  file_picker: ^4.6.0
+  flutter_downloader: ^1.7.4
+  path_provider: ^2.0.4
+  # upgrader: ^4.8.1
 
   # custom_nested_scroll_view: 
   #   git:

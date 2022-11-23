@@ -28,9 +28,13 @@ class ImageController extends GetxController {
   @override
   void onInit() async {
     permissionState = await PhotoManager.requestPermissionExtend();
-    PhotoManager.addChangeCallback(changeNotify);
-    PhotoManager.startChangeNotify();
-    _loadPhotos();
+    print(permissionState);
+    if (permissionState.isAuth) {
+      PhotoManager.addChangeCallback(changeNotify);
+      PhotoManager.startChangeNotify();
+      loadPhotos();
+    }
+
     super.onInit();
   }
 
@@ -38,8 +42,10 @@ class ImageController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    PhotoManager.removeChangeCallback(changeNotify);
-    PhotoManager.stopChangeNotify();
+    if (permissionState.isAuth) {
+      PhotoManager.removeChangeCallback(changeNotify);
+      PhotoManager.stopChangeNotify();
+    }
   }
 
   void _loadData() async {
@@ -74,8 +80,8 @@ class ImageController extends GetxController {
     }
   }
 
-  void _loadPhotos() async {
-    // permissionState = await PhotoManager.requestPermissionExtend();
+  Future loadPhotos() async {
+    print("loadphoto");
     if (permissionState.isAuth) {
       albums.value = await PhotoManager.getAssetPathList(
           type: RequestType.image,
@@ -112,6 +118,7 @@ class ImageController extends GetxController {
   }
 
   void imagesInit() {
+    print("imagesInit");
     albums.clear();
     albumPageNums.clear();
     imageList.clear();
@@ -125,7 +132,8 @@ class ImageController extends GetxController {
   void changeNotify(MethodCall call) {
     /// Register your callback.
     imagesInit();
-    _loadPhotos();
+    loadPhotos();
+    print("change notify");
   }
 }
 

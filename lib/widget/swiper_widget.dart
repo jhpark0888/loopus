@@ -248,16 +248,17 @@ enum SwiperType { image, link, file }
 // }
 
 class SwiperWidget extends StatelessWidget {
-  SwiperWidget(
-      {Key? key,
-      required this.items,
-      required this.swiperType,
-      this.aspectRatio,
-      child})
-      : super(key: key);
+  SwiperWidget({
+    Key? key,
+    required this.items,
+    required this.swiperType,
+    this.aspectRatio,
+    this.isAdd = false,
+  }) : super(key: key);
   List items;
   SwiperType swiperType;
   double? aspectRatio;
+  bool isAdd;
   // late ImageSizeController imageSizeController = ImageSizeController(
   //     item: items[0], aspectRatio: aspectRatio.obs)
   //     ..getSizeAndPosition();
@@ -327,8 +328,8 @@ class SwiperWidget extends StatelessWidget {
         if (items.length > 1)
           Column(
             children: [
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: isAdd ? 14.5 : 10,
               ),
               SmoothPageIndicator(
                 controller: _pageController,
@@ -343,8 +344,8 @@ class SwiperWidget extends StatelessWidget {
               ),
             ],
           ),
-        const SizedBox(
-          height: 10,
+        SizedBox(
+          height: isAdd ? 14.5 : 10,
         ),
       ],
     );

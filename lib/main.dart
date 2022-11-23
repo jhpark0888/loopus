@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -61,6 +62,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // debugPrintGestureArenaDiagnostics = true;
+  await FlutterDownloader.initialize(debug: true);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -205,11 +207,15 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
         ),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Center(
-        child: Container(
-          width: Get.width / 2,
-          child: Image.asset('assets/illustrations/splash.png'),
-        ),
+      body: Stack(
+        children: [
+          Center(
+            child: Container(
+              width: Get.width / 2,
+              child: Image.asset('assets/illustrations/splash.png'),
+            ),
+          ),
+        ],
       ),
     );
   }
