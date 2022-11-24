@@ -17,6 +17,7 @@
 		9EB16DAB28ACE167008498FF /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB16DAA28ACE167008498FF /* ShareViewController.swift */; };
 		9EB16DAE28ACE167008498FF /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EB16DAC28ACE167008498FF /* MainInterface.storyboard */; };
 		9EB16DB228ACE167008498FF /* Share Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9EB16DA828ACE166008498FF /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9EBD03E5292E8B680043D2C3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EBD03E4292E8B480043D2C3 /* libsqlite3.tbd */; };
 		9ED7F77E2890DAD300EA4FDD /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 9ED7F77D2890DAD300EA4FDD /* GoogleService-Info (1).plist */; };
 		F4C520DA27BD4FBF009FA0B0 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C520D927BD4FBF009FA0B0 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		9EB16DAF28ACE167008498FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9EB16DB728ACE340008498FF /* RunnerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerRelease.entitlements; sourceTree = "<group>"; };
 		9EB16DB828ACE531008498FF /* Share ExtensionRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Share ExtensionRelease.entitlements"; sourceTree = "<group>"; };
+		9EBD03E4292E8B480043D2C3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		9ED7F77D2890DAD300EA4FDD /* GoogleService-Info (1).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (1).plist"; sourceTree = "<group>"; };
 		BFC9DE93F389056287F8E580 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		C993B94A3BE131466C77D7A8 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EBD03E5292E8B680043D2C3 /* libsqlite3.tbd in Frameworks */,
 				F4C520DA27BD4FBF009FA0B0 /* AdSupport.framework in Frameworks */,
 				5E0827FEDF040DF2117983B4 /* Pods_Runner.framework in Frameworks */,
 			);
@@ -178,6 +181,7 @@
 		C22832EAEDD75176F60A5C3D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9EBD03E4292E8B480043D2C3 /* libsqlite3.tbd */,
 				F4C520D927BD4FBF009FA0B0 /* AdSupport.framework */,
 				09E773721195C60FA4737F94 /* Pods_Runner.framework */,
 			);

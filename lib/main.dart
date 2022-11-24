@@ -99,7 +99,7 @@ void main() async {
   );
   VersionStatus? status;
   try {
-    status = await newVersionPlus.getVersionStatus();
+    // status = await newVersionPlus.getVersionStatus();
   } catch (e) {
     status = null;
   }
