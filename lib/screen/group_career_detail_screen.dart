@@ -92,7 +92,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                         joinCompany(context),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 24, horizontal: 30.5),
+                              vertical: 24, horizontal: 16),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -102,34 +102,39 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                 currentId: career.id,
                               ),
                               const SizedBox(width: 24),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                      text: TextSpan(children: [
-                                    TextSpan(
-                                        text: '${fieldList[career.fieldId]} 분야',
-                                        style: MyTextTheme.mainbold(context)),
-                                    TextSpan(
-                                        text: ' 커리어',
-                                        style: MyTextTheme.mainbold(context))
-                                  ])),
-                                  const SizedBox(height: 8),
-                                  RichText(
-                                      text: TextSpan(children: [
-                                    TextSpan(
-                                        text: '$name님의 전체 커리어 중\n',
-                                        style: MyTextTheme.mainheight(context)),
-                                    TextSpan(
-                                        text:
-                                            '${(career.postRatio! * 100).toInt()}%',
-                                        style: MyTextTheme.mainbold(context)),
-                                    TextSpan(
-                                        text: '를 차지하는 커리어에요',
-                                        style: MyTextTheme.mainheight(context))
-                                  ])),
-                                ],
+                              Flexible(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                        text: TextSpan(children: [
+                                      TextSpan(
+                                          text:
+                                              '${fieldList[career.fieldId]} 분야',
+                                          style: MyTextTheme.mainbold(context)),
+                                      TextSpan(
+                                          text: ' 커리어',
+                                          style: MyTextTheme.mainbold(context))
+                                    ])),
+                                    const SizedBox(height: 8),
+                                    RichText(
+                                        text: TextSpan(children: [
+                                      TextSpan(
+                                          text: '$name님의 전체 커리어 중\n',
+                                          style:
+                                              MyTextTheme.mainheight(context)),
+                                      TextSpan(
+                                          text:
+                                              '${(career.postRatio! * 100).toInt()}%',
+                                          style: MyTextTheme.mainbold(context)),
+                                      TextSpan(
+                                          text: '를 차지하는 커리어에요',
+                                          style:
+                                              MyTextTheme.mainheight(context))
+                                    ])),
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -143,7 +148,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
+                                padding: const EdgeInsets.only(left: 16.0),
                                 child: Text(
                                   '함께하는 친구들',
                                   style: MyTextTheme.mainbold(context),

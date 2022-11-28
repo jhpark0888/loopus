@@ -33,6 +33,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/Link_widget.dart';
+import 'package:loopus/widget/file_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -391,8 +392,10 @@ class PostingWidget extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             primary: false,
                             shrinkWrap: true,
-                            itemBuilder: (context, index) =>
-                                _fileWidget(context, item.files[index]),
+                            itemBuilder: (context, index) => FileDownloadWidget(
+                                  file: item.files[index],
+                                  downLoadValidPeriod: downLoadValidPeriod,
+                                ),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(
                                   height: 10,
@@ -421,10 +424,12 @@ class PostingWidget extends StatelessWidget {
               savedDir: '$dir/', // 저장할 dir
               fileName: Uri.decodeFull(file.split("/").last), // 파일명
               saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-            );
-            showCustomDialog("다운로드가 완료 되었습니다", 1000);
+            ).then((value) {
+              print("다운로드: $value");
+            });
+            // showCustomDialog("다운로드가 완료 되었습니다", 1000);
           } catch (e) {
-            showCustomDialog("다운로드가 실패 되었습니다", 1000);
+            showCustomDialog("다운로드에 실패 하였습니다", 1000);
           }
         } else {
           showCustomDialog("다운로드 기간이 만료 되었습니다.", 1000);

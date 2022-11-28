@@ -454,81 +454,6 @@ class PostingScreen extends StatelessWidget {
                                                 type: PostingWidgetType.detail,
                                               ),
                                             ),
-                                            // Obx(() =>
-                                            //     controller.post.value.files
-                                            //             .isEmpty
-                                            //         ? const SizedBox.shrink()
-                                            //         : ListView.separated(
-                                            //             primary: false,
-                                            //             shrinkWrap: true,
-                                            //             padding:
-                                            //                 const EdgeInsets
-                                            //                         .symmetric(
-                                            //                     horizontal: 16),
-                                            //             scrollDirection:
-                                            //                 Axis.vertical,
-                                            //             itemBuilder:
-                                            //                 (context, index) =>
-                                            //                     GestureDetector(
-                                            //                       onTap:
-                                            //                           () async {
-                                            //                         if (controller
-                                            //                             .downLoadValidPeriod
-                                            //                             .isAfter(
-                                            //                                 DateTime.now())) {
-                                            //                           String
-                                            //                               dir =
-                                            //                               (await getApplicationDocumentsDirectory())
-                                            //                                   .path; //path provider로 저장할 경로 가져오기
-                                            //                           try {
-                                            //                             await FlutterDownloader
-                                            //                                 .enqueue(
-                                            //                               url: controller
-                                            //                                   .post
-                                            //                                   .value
-                                            //                                   .files[index], // file url
-                                            //                               savedDir:
-                                            //                                   '$dir/', // 저장할 dir
-                                            //                               fileName: Uri.decodeFull(controller
-                                            //                                   .post
-                                            //                                   .value
-                                            //                                   .files[index]
-                                            //                                   .split("/")
-                                            //                                   .last), // 파일명
-                                            //                               saveInPublicStorage:
-                                            //                                   true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-                                            //                             );
-                                            //                             showCustomDialog(
-                                            //                                 "다운로드가 완료 되었습니다",
-                                            //                                 1000);
-                                            //                           } catch (e) {
-                                            //                             showCustomDialog(
-                                            //                                 "다운로드가 실패 되었습니다",
-                                            //                                 1000);
-                                            //                           }
-                                            //                         } else {
-                                            //                           showCustomDialog(
-                                            //                               "다운로드 기간이 만료 되었습니다.",
-                                            //                               1000);
-                                            //                         }
-                                            //                       },
-                                            //                       child: _fileWidget(
-                                            //                           context,
-                                            //                           controller
-                                            //                               .post
-                                            //                               .value
-                                            //                               .files[index]),
-                                            //                     ),
-                                            //             separatorBuilder:
-                                            //                 (context, index) =>
-                                            //                     const SizedBox(
-                                            //                       height: 8,
-                                            //                     ),
-                                            //             itemCount: controller
-                                            //                 .post
-                                            //                 .value
-                                            //                 .files
-                                            //                 .length)),
                                             const SizedBox(height: 16),
                                             Obx(
                                               () => ListView.separated(
@@ -566,47 +491,6 @@ class PostingScreen extends StatelessWidget {
           )),
     );
   }
-
-  // Widget _fileWidget(BuildContext context, String file) {
-  //   return Container(
-  //     width: Get.width,
-  //     decoration: BoxDecoration(
-  //         border: Border.all(color: AppColors.lightcardgray, width: 2),
-  //         borderRadius: BorderRadius.circular(16)),
-  //     padding: const EdgeInsets.all(8),
-  //     child: Row(
-  //       children: [
-  //         Icon(
-  //           Icons.insert_drive_file_outlined,
-  //           color: AppColors.lightcardgray,
-  //         ),
-  //         const SizedBox(
-  //           width: 8,
-  //         ),
-  //         Expanded(
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 Uri.decodeFull(file.split("/").last),
-  //                 maxLines: 1,
-  //                 overflow: TextOverflow.ellipsis,
-  //                 style: MyTextTheme.main(context),
-  //               ),
-  //               Text(
-  //                 "다운로드 기간: ~${DateFormat('yyyy-MM-dd').format(controller.downLoadValidPeriod)}",
-  //                 maxLines: 1,
-  //                 overflow: TextOverflow.ellipsis,
-  //                 style: MyTextTheme.main(context)
-  //                     .copyWith(color: AppColors.dividegray),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   void tapProfile() {
     if (controller.post.value.user.userType == UserType.student) {

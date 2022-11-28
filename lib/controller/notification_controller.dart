@@ -26,6 +26,7 @@ import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
+import 'package:loopus/main.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -44,6 +45,7 @@ import 'package:loopus/screen/signup_email_pw_screen.dart';
 import 'package:loopus/screen/signup_fail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
+import 'package:loopus/utils/custom_new_version_plus.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/utils/local_notification.dart';
 import 'package:loopus/widget/message_widget.dart';
@@ -77,65 +79,77 @@ class NotificationController extends GetxController {
   void _backgroundMessage(RemoteMessage message) async {
     Map<String, dynamic> json = message.data;
 
-    if (message.data["type"] == "msg") {
-      // Get.put(MessageDetailController(us-erid: id)).firstmessagesload();
-      json["date"] = DateTime.now().toString();
-      json["content"] = message.notification!.body;
-      json["not_read"] = 1;
-      int partnerId = int.parse(message.data['sender']);
-      getUserProfile([partnerId]).then((user) async {
-        print('user.data : ${user.data['profile'].first}');
-        if (user.isError == false) {
-          if (user.data != null) {
-            Get.to(() => MessageDetatilScreen(
-                  partner: Person.fromJson(user.data['profile'].first),
-                  myProfile: HomeController.to.myProfile.value,
-                  enterRoute: EnterRoute.popUp,
-                ));
-            HomeController.to.enterMessageRoom.value =
-                user.data['profile'].first['user_id'];
+    if (Get.isRegistered<UpdateController>()) {
+      if (Get.find<UpdateController>().isRequiredUpdate == false) {
+        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+          if (message.data["type"] == "msg") {
+            // Get.put(MessageDetailController(us-erid: id)).firstmessagesload();
+            json["date"] = DateTime.now().toString();
+            json["content"] = message.notification!.body;
+            json["not_read"] = 1;
+            int partnerId = int.parse(message.data['sender']);
+            getUserProfile([partnerId]).then((user) async {
+              print('user.data : ${user.data['profile'].first}');
+              if (user.isError == false) {
+                if (user.data != null) {
+                  Get.to(() => MessageDetatilScreen(
+                        partner: Person.fromJson(user.data['profile'].first),
+                        myProfile: HomeController.to.myProfile.value,
+                        enterRoute: EnterRoute.popUp,
+                      ));
+                  if (Get.isRegistered<HomeController>()) {
+                    HomeController.to.enterMessageRoom.value =
+                        user.data['profile'].first['user_id'];
+                  }
 
-            await SQLController.to.findMessageRoom(
-                roomid: int.parse(json['room_id']),
-                chatRoom: ChatRoom.fromMsg(json).toJson());
-          }
-        }
-      });
-    } else {
-      int id = int.parse(json['id']);
-      int type = int.parse(json['type'].toString());
-      int senderId = int.parse(json['sender_id']);
-      if (type == 4 || type == 7 || type == 9 || type == 11) {
-        Get.to(() => PostingScreen(postid: id), preventDuplicates: false);
-      } else if (type == 5 || type == 6 || type == 8) {
-        int? postId =
-            json['post_id'] != null ? int.parse(json['post_id']) : null;
-        Get.to(() => PostingScreen(postid: postId!), preventDuplicates: false);
-      } else if (type == 2) {
-        Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'),
-            preventDuplicates: false);
-      } else if (type == 3) {
-        String? userId = await FlutterSecureStorage().read(key: 'id');
-        getproject(id, int.parse(userId!)).then((value) {
-          if (value.isError != true) {
-            Project career = Project.fromJson(value.data);
-            String name = career.members
-                .where((element) => element.userId == int.parse(userId))
-                .first
-                .name;
-            Get.to(
-                () => GroupCareerDetailScreen(
-                      career: career,
-                      name: name,
-                    ),
-                preventDuplicates: false);
+                  if (Get.isRegistered<SQLController>()) {
+                    await SQLController.to.findMessageRoom(
+                        roomid: int.parse(json['room_id']),
+                        chatRoom: ChatRoom.fromMsg(json).toJson());
+                  }
+                }
+              }
+            });
+          } else if (int.parse(json['type'].toString()) == 10) {
+            AppController.to.changeBottomNav(4);
+          } else {
+            int id = int.parse(json['id']);
+            int type = int.parse(json['type'].toString());
+            int senderId = int.parse(json['sender_id']);
+            if (type == 4 || type == 7 || type == 9 || type == 11) {
+              Get.to(() => PostingScreen(postid: id), preventDuplicates: false);
+            } else if (type == 5 || type == 6 || type == 8) {
+              int? postId =
+                  json['post_id'] != null ? int.parse(json['post_id']) : null;
+              Get.to(() => PostingScreen(postid: postId!),
+                  preventDuplicates: false);
+            } else if (type == 2) {
+              Get.to(() => OtherProfileScreen(userid: senderId, realname: ''),
+                  preventDuplicates: false);
+            } else if (type == 3) {
+              String? userId = await FlutterSecureStorage().read(key: 'id');
+              getproject(id, int.parse(userId!)).then((value) {
+                if (value.isError != true) {
+                  Project career = Project.fromJson(value.data);
+                  String name = career.members
+                      .where((element) => element.userId == int.parse(userId))
+                      .first
+                      .name;
+                  Get.to(
+                      () => GroupCareerDetailScreen(
+                            career: career,
+                            name: name,
+                          ),
+                      preventDuplicates: false);
+                }
+              });
+            }
+            isNotiRead(id);
           }
         });
-      } else if (type == 10) {
-        AppController.to.changeBottomNav(4);
       }
-      isNotiRead(id);
     }
+
     print("message: ${message.data["type"]}");
   }
 

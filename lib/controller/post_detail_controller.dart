@@ -115,6 +115,7 @@ class PostingDetailController extends GetxController {
     selectedCommentId(0);
   }
 
+  @pragma('vm:entry-point')
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
     print(

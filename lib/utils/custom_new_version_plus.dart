@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 
@@ -41,12 +42,12 @@ class CustomNewVersionPlus extends NewVersionPlus {
   }) async {
     final dialogTitleWidget = Text(
       dialogTitle,
-      style: MyTextTheme.title(context),
+      style: MyTextTheme.mainbold(context),
     );
     final dialogTextWidget = Text(
       dialogText ??
           'You can now update this app from ${versionStatus.localVersion} to ${versionStatus.storeVersion}',
-      style: MyTextTheme.mainbold(context),
+      style: MyTextTheme.main(context),
     );
 
     final updateButtonTextWidget = Text(
@@ -110,5 +111,34 @@ class CustomNewVersionPlus extends NewVersionPlus {
             onWillPop: () => Future.value(allowDismissal));
       },
     );
+  }
+}
+
+class UpdateController extends GetxController {
+  static UpdateController get to => Get.find();
+  bool isRequiredUpdate = false;
+  final newVersionPlus = CustomNewVersionPlus(
+    androidId: "com.loopus.loopus",
+    iOSId: "com.loopus.loopusfrontend",
+  );
+  VersionStatus? status;
+
+  Future checkRequiredUpdate() async {
+    try {
+      status = await newVersionPlus.getVersionStatus();
+    } catch (e) {
+      status = null;
+    }
+    if (status != null) {
+      //ex) localVersion: 1.0.0 , storeVersion: 1.0.1  isRequiredUpdate = true
+      if (int.parse(status!.localVersion.split(".")[0]) <
+              int.parse(status!.storeVersion.split(".")[0]) ||
+          int.parse(status!.localVersion.split(".")[1]) <
+              int.parse(status!.storeVersion.split(".")[1]) ||
+          int.parse(status!.localVersion.split(".")[2]) <
+              int.parse(status!.storeVersion.split(".")[2])) {
+        isRequiredUpdate = true;
+      }
+    }
   }
 }

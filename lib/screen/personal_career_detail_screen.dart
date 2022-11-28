@@ -93,7 +93,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                           currentId: career.id,
                         ),
                         const SizedBox(width: 24),
-                        Expanded(
+                        Flexible(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +128,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Divider(
                         height: 1,
                         thickness: 0.5,

@@ -16,9 +16,6 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp(
       token: '',
-      newVersionPlus: CustomNewVersionPlus(),
-      status: null,
-      isRequiredUpdate: false,
     ));
 
     // Verify that our counter starts at 0.

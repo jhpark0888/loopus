@@ -66,7 +66,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // debugPrintGestureArenaDiagnostics = true;
-  await FlutterDownloader.initialize(debug: true);
+  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -92,24 +92,8 @@ void main() async {
   String? temptoken = await const FlutterSecureStorage().read(key: 'token');
 
   // 업데이트 여부 확인
-  bool isRequiredUpdate = false;
-  final newVersionPlus = CustomNewVersionPlus(
-    androidId: "com.loopus.loopus",
-    iOSId: "com.loopus.loopusfrontend",
-  );
-  VersionStatus? status;
-  try {
-    status = await newVersionPlus.getVersionStatus();
-  } catch (e) {
-    status = null;
-  }
-  if (status != null) {
-    if (Platform.isIOS
-        ? status.localVersion != status.appStoreLink
-        : status.localVersion != status.storeVersion) {
-      isRequiredUpdate = true;
-    }
-  }
+  final UpdateController updateController = Get.put(UpdateController());
+  await updateController.checkRequiredUpdate();
 
   await GetStorage.init();
 
@@ -119,9 +103,6 @@ void main() async {
     // builder: (context) =>
     MyApp(
       token: temptoken,
-      newVersionPlus: newVersionPlus,
-      status: status,
-      isRequiredUpdate: isRequiredUpdate,
     ), // Wrap your app
     // )
   );
@@ -130,19 +111,14 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final String? token;
-  MyApp(
-      {Key? key,
-      required this.token,
-      required this.newVersionPlus,
-      required this.status,
-      required this.isRequiredUpdate})
-      : super(key: key);
+  MyApp({
+    Key? key,
+    required this.token,
+  }) : super(key: key);
   final GAController _gaController = Get.put(GAController());
   final NotificationController notificationController =
       Get.put(NotificationController());
-  CustomNewVersionPlus newVersionPlus;
-  VersionStatus? status;
-  bool isRequiredUpdate;
+  final UpdateController _updateController = Get.find<UpdateController>();
 
   @override
   Widget build(BuildContext context) {
@@ -163,8 +139,8 @@ class MyApp extends StatelessWidget {
         Locale('ko'),
       ],
       navigatorObservers: [_gaController.getAnalyticsObserver()],
-      home: isRequiredUpdate
-          ? UpdateScreen(newVersionPlus: newVersionPlus, status: status)
+      home: _updateController.isRequiredUpdate
+          ? UpdateScreen()
           : token == null
               ? StartScreen()
               : App(),
@@ -182,8 +158,8 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: "/",
-          page: () => isRequiredUpdate
-              ? UpdateScreen(newVersionPlus: newVersionPlus, status: status)
+          page: () => _updateController.isRequiredUpdate
+              ? UpdateScreen()
               : token != null
                   ? App()
                   : StartScreen(),
@@ -219,31 +195,6 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
     //     androidId: "com.loopus.loopus",
     //     iOSId: "com.loopus.loopusfrontend",
     //   );
-
-    //   final status = await newVersionPlus.getVersionStatus();
-
-    //   if (status != null) {
-    //     if (Platform.isIOS
-    //         ? status.localVersion != status.appStoreLink
-    //         : status.localVersion != status.storeVersion) {
-    //       newVersionPlus.showUpdateDialog(
-    //           context: context,
-    //           versionStatus: status,
-    //           dialogText: "루프어스의 새로운 업데이트가 준비되어 있습니다.",
-    //           dialogTitle: "새로운 업데이트",
-    //           allowDismissal: false,
-    //           updateButtonText: "업데이트");
-    //     } else {
-    //       Navigator.pushReplacement(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: token == null
-    //               ? (context) => StartScreen()
-    //               : (context) => App(),
-    //         ),
-    //       );
-    //     }
-    //   }
     // });
   }
 
@@ -286,16 +237,16 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
 }
 
 class UpdateScreen extends StatefulWidget {
-  UpdateScreen({Key? key, required this.newVersionPlus, required this.status})
-      : super(key: key);
-  CustomNewVersionPlus newVersionPlus;
-  VersionStatus? status;
+  UpdateScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<UpdateScreen> createState() => _UpdateScreenState();
 }
 
 class _UpdateScreenState extends State<UpdateScreen> {
+  final UpdateController _updateController = Get.find<UpdateController>();
   @override
   void initState() {
     // TODO: implement initState
@@ -303,9 +254,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
     WidgetsBinding.instance?.addPostFrameCallback(
       (_) {
         // Execute callback if page is mounted
-        widget.newVersionPlus.showUpdateDialog(
+        _updateController.newVersionPlus.showUpdateDialog(
             context: context,
-            versionStatus: widget.status!,
+            versionStatus: _updateController.status!,
             dialogText: "루프어스의 새로운 업데이트가 준비되어 있습니다.",
             dialogTitle: "새로운 업데이트",
             allowDismissal: false,

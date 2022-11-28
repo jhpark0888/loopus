@@ -34,8 +34,11 @@ class HTTPResponse {
       return HTTPResponse.serverError();
     } on SocketException {
       return HTTPResponse.serverError();
+    } on Exception catch (e) {
+      print("${e.runtimeType}: $e");
+      return HTTPResponse.unexpectedError(e);
     } catch (e) {
-      print(e);
+      print("${e.runtimeType}: $e");
       return HTTPResponse.unexpectedError(e);
     }
   }
