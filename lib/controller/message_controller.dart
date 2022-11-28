@@ -80,7 +80,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
   }
 
   void onChattingRefresh() async {
-    // chattingRoomList.value = [];
+    chattingRoomList.value = [];
     // String? userId = await const FlutterSecureStorage().read(key: "id");
     // await getChatroomlist(int.parse(userId!));
     // chatroomscreenstate(ScreenState.success);

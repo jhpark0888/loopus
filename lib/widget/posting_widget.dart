@@ -415,6 +415,7 @@ class PostingWidget extends StatelessWidget {
   Widget _fileWidget(BuildContext context, String file) {
     return GestureDetector(
       onTap: () async {
+        //final status = await Permission.storage.request();
         if (downLoadValidPeriod.isAfter(DateTime.now())) {
           String dir = (await getApplicationDocumentsDirectory())
               .path; //path provider로 저장할 경로 가져오기
