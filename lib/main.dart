@@ -66,7 +66,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // debugPrintGestureArenaDiagnostics = true;
-  await FlutterDownloader.initialize(debug: true);
+  await FlutterDownloader.initialize(debug: true, ignoreSsl: false);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -94,19 +94,17 @@ void main() async {
   // 업데이트 여부 확인
   bool isRequiredUpdate = false;
   final newVersionPlus = CustomNewVersionPlus(
-    androidId: "com.loopus.loopus",
-    iOSId: "com.loopus.loopusfrontend",
-  );
+      androidId: "com.loopus.loopus",
+      iOSId: "com.loopus.loopusfrontend",
+      iOSAppStoreCountry: "KR");
   VersionStatus? status;
   try {
-    // status = await newVersionPlus.getVersionStatus();
+    status = await newVersionPlus.getVersionStatus();
   } catch (e) {
     status = null;
   }
   if (status != null) {
-    if (Platform.isIOS
-        ? status.localVersion != status.appStoreLink
-        : status.localVersion != status.storeVersion) {
+    if (status.localVersion != status.storeVersion) {
       isRequiredUpdate = true;
     }
   }

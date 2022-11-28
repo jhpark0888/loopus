@@ -12,6 +12,7 @@ import flutter_downloader
   UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
 }
     GeneratedPluginRegistrant.register(with: self)
+    FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

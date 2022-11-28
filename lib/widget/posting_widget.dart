@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:extended_text/extended_text.dart';
 import 'package:flutter/gestures.dart';
@@ -412,16 +414,18 @@ class PostingWidget extends StatelessWidget {
   Widget _fileWidget(BuildContext context, String file) {
     return GestureDetector(
       onTap: () async {
+        //final status = await Permission.storage.request();
         if (downLoadValidPeriod.isAfter(DateTime.now())) {
           String dir = (await getApplicationDocumentsDirectory())
               .path; //path provider로 저장할 경로 가져오기
           try {
             await FlutterDownloader.enqueue(
-              url: file, // file url
-              savedDir: '$dir/', // 저장할 dir
-              fileName: Uri.decodeFull(file.split("/").last), // 파일명
-              saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-            );
+                url: file, // file url
+                savedDir: '$dir/', // 저장할 dir
+                fileName: Uri.decodeFull(file.split("/").last), // 파일명
+                saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
+                showNotification: true,
+                openFileFromNotification: true);
             showCustomDialog("다운로드가 완료 되었습니다", 1000);
           } catch (e) {
             showCustomDialog("다운로드가 실패 되었습니다", 1000);
