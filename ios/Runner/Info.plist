@@ -2,6 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSUbiquitousContainers</key>
+    	<dict>
+        	<key>iCloud.[YOUR_IDENTIFIER]</key>
+        	<dict>
+            	<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+            	<true/>
+            	<key>NSUbiquitousContainerName</key>
+            	<string>[YOUR_IDENTIFIER]</string>
+            	<key>NSUbiquitousContainerSupportedFolderLevels</key>
+            	<string>Any</string>
+        	</dict>
+    	</dict>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>UISupportsDocumentBrowser</key> 
+	<true/>
 	<key>FDAllFilesDownloadedMessage</key>
 	<string>All files have been downloaded</string>
 	<!-- changes this number to configure the maximum number of concurrent tasks -->

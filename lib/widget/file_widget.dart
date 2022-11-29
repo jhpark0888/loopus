@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -9,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FileDownloadWidget extends StatefulWidget {
   FileDownloadWidget(
@@ -63,22 +65,25 @@ class _FileDownloadWidgetState extends State<FileDownloadWidget> {
     return GestureDetector(
       onTap: () async {
         if (widget.downLoadValidPeriod.isAfter(DateTime.now())) {
-          String dir = (await getApplicationDocumentsDirectory())
-              .path; //path provider로 저장할 경로 가져오기
-          print("저장 주소: $dir");
-          try {
-            await FlutterDownloader.enqueue(
-              url: widget.file, // file url
-              savedDir: '$dir/', // 저장할 dir
-              fileName: Uri.decodeFull(widget.file.split("/").last), // 파일명
-              saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-            ).then((value) {
-              print("다운로드: $value");
-            });
-            // showCustomDialog("다운로드가 완료 되었습니다", 1000);
-          } catch (e) {
-            showCustomDialog("다운로드에 실패 하였습니다", 1000);
+          if (await canLaunchUrlString(widget.file)) {
+            launchUrlString(widget.file, mode: LaunchMode.externalApplication);
           }
+          // String dir = (await getApplicationDocumentsDirectory())
+          //     .path; //path provider로 저장할 경로 가져오기
+          // print("저장 주소: $dir");
+          // try {
+          //   await FlutterDownloader.enqueue(
+          //     url: widget.file, // file url
+          //     savedDir: dir + Platform.pathSeparator, // 저장할 dir
+          //     fileName: Uri.decodeFull(widget.file.split("/").last), // 파일명
+          //     saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
+          //   ).then((value) {
+          //     print("다운로드: $value");
+          //   });
+          //   showCustomDialog("저장주소: $dir", 1000);
+          // } catch (e) {
+          //   showCustomDialog("다운로드에 실패 하였습니다", 1000);
+          // }
         } else {
           showCustomDialog("다운로드 기간이 만료 되었습니다.", 1000);
         }
