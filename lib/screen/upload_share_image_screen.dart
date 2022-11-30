@@ -174,6 +174,7 @@ class ShareImageUploadScreen extends StatelessWidget {
               return true;
             },
             child: GridView.builder(
+                controller: scrollController,
                 physics: const NeverScrollableScrollPhysics(),
                 addAutomaticKeepAlives: true,
                 addRepaintBoundaries: false,
