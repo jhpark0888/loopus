@@ -77,6 +77,8 @@ dependencies:
   new_version_plus: ^0.0.1+4
   flutter_native_splash: ^2.1.6 
   permission_handler: ^10.2.0
+  # share_plus: ^4.5.3
+  open_file: ^3.2.1
   
   # custom_nested_scroll_view: 
   #   git:

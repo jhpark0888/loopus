@@ -14,6 +14,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/model/post_model.dart';
@@ -21,6 +22,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
+import 'package:loopus/screen/upload_share_image_screen.dart';
 import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -32,6 +34,7 @@ import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import '../controller/modal_controller.dart';
 
 class PostingAddScreen extends StatelessWidget {
@@ -97,7 +100,28 @@ class PostingAddScreen extends StatelessWidget {
                                   ),
                                   Positioned(
                                       child: GestureDetector(
-                                          onTap: () => _imageChange(),
+                                          onTap: () {
+                                            if (Get.isRegistered<
+                                                ShareIntentController>()) {
+                                              if (ShareIntentController
+                                                  .to.sharedFiles.isNotEmpty) {
+                                                if (ShareIntentController
+                                                        .to
+                                                        .sharedFiles
+                                                        .first
+                                                        .type ==
+                                                    SharedMediaType.IMAGE) {
+                                                  _shareImageChange();
+                                                } else {
+                                                  _imageChange();
+                                                }
+                                              } else {
+                                                _imageChange();
+                                              }
+                                            } else {
+                                              _imageChange();
+                                            }
+                                          },
                                           child: Text('사진 수정하기',
                                               style: MyTextTheme.main(context)
                                                   .copyWith(
@@ -403,10 +427,32 @@ class PostingAddScreen extends StatelessWidget {
   }
 
   void _imagePermissionAllow() {
-    if (_imageController.albums.isNotEmpty) {
-      Get.to(() => UploadScreen());
+    if (Get.isRegistered<ShareIntentController>()) {
+      if (ShareIntentController.to.sharedFiles.isNotEmpty) {
+        if (ShareIntentController.to.sharedFiles.first.type ==
+            SharedMediaType.IMAGE) {
+          ShareIntentController.to.imagesInit();
+          Get.to(() => ShareImageUploadScreen());
+        } else {
+          if (_imageController.albums.isNotEmpty) {
+            Get.to(() => UploadScreen());
+          } else {
+            showCustomDialog("이미지가 없습니다", 1000);
+          }
+        }
+      } else {
+        if (_imageController.albums.isNotEmpty) {
+          Get.to(() => UploadScreen());
+        } else {
+          showCustomDialog("이미지가 없습니다", 1000);
+        }
+      }
     } else {
-      showCustomDialog("이미지가 없습니다", 1000);
+      if (_imageController.albums.isNotEmpty) {
+        Get.to(() => UploadScreen());
+      } else {
+        showCustomDialog("이미지가 없습니다", 1000);
+      }
     }
   }
 
@@ -418,23 +464,7 @@ class PostingAddScreen extends StatelessWidget {
     if (result != null) {
       files = result.paths.map((path) => File(path!)).toList();
 
-      int filesSize = files
-          .map((file) => file.lengthSync())
-          .reduce((total, bytes) => total + bytes);
-
-      double filesSizeToMB =
-          double.parse((filesSize / pow(1024, 2)).toStringAsFixed(2));
-
-      print("fileSize: $filesSizeToMB MB");
-
-      if (filesSizeToMB <= 30) {
-        postingAddController.files.addAll(files);
-      } else {
-        showPopUpDialog(
-          "최대 업로드 용량 초과",
-          "파일은 총 합 30MB의 크기를 넘을 수 없어요",
-        );
-      }
+      postingAddController.fileSizeCheck(files);
     } else {
       // User canceled the picker
     }
@@ -585,13 +615,6 @@ class PostingAddScreen extends StatelessWidget {
   }
 
   void _imageChange() async {
-    // print(postingAddController.selectedImageList);
-    // print(postingAddController.selectedCropWidgetList);
-    // print(postingAddController.selectedCropKeyList);
-    // print("-----------");
-    // print(_imageController.selectedImages);
-    // print(_imageController.cropWidgetList);
-    // print(_imageController.cropKeyList);
     _imageController
         .cropAspectRatio(postingAddController.cropAspectRatio.value);
     _imageController.cropKeyList
@@ -611,6 +634,36 @@ class PostingAddScreen extends StatelessWidget {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       await Future.delayed(const Duration(milliseconds: 600)).then((value) {
         _imageController.cropKeyList.asMap().forEach((key, value) {
+          int index = key;
+          GlobalKey<CustomCropState> cropKey = value;
+
+          cropKey.currentState!.scale =
+              postingAddController.selectedScaleList[index];
+          cropKey.currentState!.view =
+              postingAddController.selectedViewList[index];
+        });
+      });
+    });
+  }
+
+  void _shareImageChange() async {
+    ShareIntentController.to
+        .cropAspectRatio(postingAddController.cropAspectRatio.value);
+    ShareIntentController.to.cropKeyList
+        .assignAll(postingAddController.selectedCropKeyList);
+    ShareIntentController.to.cropWidgetList
+        .assignAll(postingAddController.selectedCropWidgetList);
+    ShareIntentController.to.selectedImages
+        .assignAll(postingAddController.selectedShareImageList);
+
+    ShareIntentController.to.selectedIndex(0);
+
+    Get.to(() => ShareImageUploadScreen(),
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      await Future.delayed(const Duration(milliseconds: 600)).then((value) {
+        ShareIntentController.to.cropKeyList.asMap().forEach((key, value) {
           int index = key;
           GlobalKey<CustomCropState> cropKey = value;
 

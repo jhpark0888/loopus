@@ -42,7 +42,7 @@ class CustomNewVersionPlus extends NewVersionPlus {
   }) async {
     final dialogTitleWidget = Text(
       dialogTitle,
-      style: MyTextTheme.mainbold(context),
+      style: MyTextTheme.main(context),
     );
     final dialogTextWidget = Text(
       dialogText ??

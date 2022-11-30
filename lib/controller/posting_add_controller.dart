@@ -1,18 +1,23 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
+import 'package:loopus/screen/upload_share_image_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 
 class PostingAddController extends GetxController {
@@ -47,19 +52,13 @@ class PostingAddController extends GetxController {
   List<double> selectedScaleList = [];
   List<Rect> selectedViewList = [];
   List<AssetEntity> selectedImageList = [];
+  List<File> selectedShareImageList = [];
   List<GlobalKey<CustomCropState>> selectedCropKeyList = [];
   List<Widget> selectedCropWidgetList = [];
 
   KeyController keyController = Get.put(KeyController(isTextField: false.obs));
   @override
   void onInit() {
-    if (Get.isRegistered<ShareIntentController>()) {
-      scrapList.add(LinkWidget(
-          url: changeUrl(ShareIntentController.to.shareText),
-          widgetType: "add"));
-      isAddLink(true);
-    }
-
     textcontroller.addListener(() {
       if (textcontroller.text.trim().isEmpty) {
         isPostingTitleEmpty.value = true;
@@ -108,6 +107,46 @@ class PostingAddController extends GetxController {
       }
     }));
 
+    WidgetsBinding.instance!.scheduleFrameCallback((timeStamp) {
+      if (Get.isRegistered<ShareIntentController>()) {
+        if (ShareIntentController.to.shareText != "") {
+          String text = ShareIntentController.to.shareText;
+
+          if (CheckValidate.urlRegExp.hasMatch(text)) {
+            //받아온 텍스트가 url일 때
+            scrapList.add(LinkWidget(
+                url: changeUrl(ShareIntentController.to.shareText),
+                widgetType: "add"));
+            isAddLink(true);
+          } else {
+            //받아온 텍스트가 단순한 문자열일 때
+            textcontroller.text = text;
+          }
+        } else if (ShareIntentController.to.sharedFiles.isNotEmpty) {
+          if (ShareIntentController.to.sharedFiles.first.type ==
+              SharedMediaType.IMAGE) {
+            //     MultiImageController _imageController =
+            // Get.put((MultiImageController()));
+            //받아온 데이터가 이미지일 때
+
+            ShareIntentController.to.shareImages = ShareIntentController
+                .to.sharedFiles
+                .map((image) => File(image.path))
+                .toList();
+            ShareIntentController.to.imagesInit();
+            Get.to(() => ShareImageUploadScreen());
+          } else {
+            //받아온 데이터가 파일일 때
+            List<File> tempFiles = ShareIntentController.to.sharedFiles
+                .map((file) => File(file.path))
+                .toList();
+
+            fileSizeCheck(tempFiles);
+          }
+        }
+      }
+    });
+
     super.onInit();
   }
 
@@ -121,5 +160,25 @@ class PostingAddController extends GetxController {
       }
     }
     super.onClose();
+  }
+
+  void fileSizeCheck(List<File> tempFiles) {
+    int filesSize = tempFiles
+        .map((file) => file.lengthSync())
+        .reduce((total, bytes) => total + bytes);
+
+    double filesSizeToMB =
+        double.parse((filesSize / pow(1024, 2)).toStringAsFixed(2));
+
+    print("fileSize: $filesSizeToMB MB");
+
+    if (filesSizeToMB <= 30) {
+      files.addAll(tempFiles);
+    } else {
+      showPopUpDialog(
+        "최대 업로드 용량 초과",
+        "파일은 총 합 30MB의 크기를 넘을 수 없어요",
+      );
+    }
   }
 }

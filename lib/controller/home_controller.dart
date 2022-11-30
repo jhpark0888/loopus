@@ -63,7 +63,8 @@ class HomeController extends GetxController
 
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
-  StreamSubscription? _dataStreamSubscription;
+  StreamSubscription? _shareStreamSubscription;
+  // StreamSubscription? _fileStreamSubscription;
 
   late String? myId;
   @override
@@ -78,27 +79,52 @@ class HomeController extends GetxController
     print("기기 저장 변수들 $allValues");
     getUserProfile();
 
-    _dataStreamSubscription =
+    _shareStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String text) {
+      print("텍스트 받음: $text");
       Get.put(ShareIntentController()).shareText = text;
-      if (AppController.to.userType == UserType.student) {
-        Get.to(() => SelectProjectScreen());
-      } else if (AppController.to.userType == UserType.company) {
-        Get.to(() => PostingAddScreen(
-            project_id: companyCareerId, route: PostaddRoute.bottom));
-      }
+      _addContentsFromBottom();
+    }, onError: (err) {
+      print("getIntentDataStream error: $err");
     });
 
     //Receive text data when app is closed
     ReceiveSharingIntent.getInitialText().then((String? text) {
-      if (text != null) {
+      if (text != null && text != "") {
         Get.put(ShareIntentController()).shareText = text;
-        Get.to(() => SelectProjectScreen());
+        _addContentsFromBottom();
+      }
+    });
+
+    _shareStreamSubscription = ReceiveSharingIntent.getMediaStream().listen(
+        (List<SharedMediaFile> value) {
+      print("파일 받음: $value");
+
+      Get.put(ShareIntentController()).sharedFiles = value;
+      _addContentsFromBottom();
+    }, onError: (err) {
+      print("getIntentDataStream error: $err");
+    });
+
+    // For sharing images coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
+      if (value.isNotEmpty) {
+        Get.put(ShareIntentController()).sharedFiles = value;
+        _addContentsFromBottom();
       }
     });
 
     postloadItem();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    if (_shareStreamSubscription != null) {
+      _shareStreamSubscription!.cancel();
+    }
   }
 
   void getUserProfile() async {
@@ -241,47 +267,20 @@ class HomeController extends GetxController
     });
   }
 
-  // void tapBookmark(int postid) {
-  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
-  //     Post post = posts.where((post) => post.id == postid).first;
-  //     post.isMarked(1);
-  //   }
-  // }
-
-  // void tapunBookmark(int postid) {
-  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
-  //     Post post = posts.where((post) => post.id == postid).first;
-  //     post.isMarked(0);
-  //   }
-  // }
-
-  // void tapLike(int postid, int likecount) {
-  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
-  //     Post post = posts.where((post) => post.id == postid).first;
-  //     post.isLiked(1);
-  //     post.likeCount(likecount);
-  //   }
-  //   if (Get.isRegistered<BookmarkController>()) {
-  //     BookmarkController.to.tapLike(postid, likecount);
-  //   }
-  // }
-
-  // void tapunLike(int postid, int likecount) {
-  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
-  //     Post post = posts.where((post) => post.id == postid).first;
-  //     post.isLiked(0);
-  //     post.likeCount(likecount);
-  //   }
-  //   if (Get.isRegistered<BookmarkController>()) {
-  //     BookmarkController.to.tapunLike(postid, likecount);
-  //   }
-  // }
-
   void goMyProfile() {
     if (HomeController.to.myProfile.value.userType == UserType.student) {
       Get.to(() => MyProfileScreen(), transition: Transition.rightToLeft);
     } else {
       Get.to(() => MyCompanyScreen(), transition: Transition.rightToLeft);
+    }
+  }
+
+  void _addContentsFromBottom() {
+    if (AppController.to.userType == UserType.student) {
+      Get.to(() => SelectProjectScreen());
+    } else if (AppController.to.userType == UserType.company) {
+      Get.to(() => PostingAddScreen(
+          project_id: companyCareerId, route: PostaddRoute.bottom));
     }
   }
 }

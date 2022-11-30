@@ -257,8 +257,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
         _updateController.newVersionPlus.showUpdateDialog(
             context: context,
             versionStatus: _updateController.status!,
-            dialogText: "루프어스의 새로운 업데이트가 준비되어 있습니다.",
-            dialogTitle: "새로운 업데이트",
+            dialogText: "루프어스를 이용하기 위해서 필수 업데이트가 필요합니다.",
+            dialogTitle: "업데이트 알림",
             allowDismissal: false,
             updateButtonText: "업데이트");
       },

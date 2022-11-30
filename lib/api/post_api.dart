@@ -488,3 +488,23 @@ Future<HTTPResponse> commentListGet(int id, contentType type, int last) async {
     }
   });
 }
+
+Future<HTTPResponse> fileDownload(String fileUrl) async {
+  final fileUri = Uri.parse(fileUrl);
+
+  return HTTPResponse.httpErrorHandling(() async {
+    final response = await http.get(
+      fileUri,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    ).timeout(Duration(milliseconds: HTTPResponse.timeout));
+    // var responseBody = utf8.decode(response.bodyBytes);
+    print('파일 다운 : ${response.statusCode}');
+    if (response.statusCode == 200) {
+      return HTTPResponse.success(response);
+    } else {
+      return HTTPResponse.apiError('', response.statusCode);
+    }
+  });
+}

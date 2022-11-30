@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,10 +8,13 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/utils/error_control.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:http/http.dart' as http;
 
 class FileDownloadWidget extends StatefulWidget {
   FileDownloadWidget(
@@ -60,30 +64,52 @@ class _FileDownloadWidgetState extends State<FileDownloadWidget> {
     send.send([id, status, progress]);
   }
 
+  void _iosFileDownload() async {
+    await fileDownload(widget.file).then((value) async {
+      if (value.isError == false) {
+        try {
+          Uint8List uint8list = (value.data as http.Response).bodyBytes;
+          var buffer = uint8list.buffer;
+          ByteData byteData = ByteData.view(buffer);
+          var tempDir = await getTemporaryDirectory();
+          File file = await File(
+                  '${tempDir.path}/${Uri.decodeFull(widget.file.split("/").last)}')
+              .writeAsBytes(buffer.asUint8List(
+                  byteData.offsetInBytes, byteData.lengthInBytes));
+
+          OpenFile.open(file.path);
+        } catch (e) {}
+      } else {
+        errorSituation(value);
+      }
+    });
+  }
+
+  void _androidFileDownload() async {
+    String dir = (await getExternalStorageDirectory())!
+        .path; //path provider로 저장할 경로 가져오기
+    try {
+      await FlutterDownloader.enqueue(
+        url: widget.file, // file url
+        savedDir: "$dir/", // 저장할 dir
+        fileName: Uri.decodeFull(widget.file.split("/").last), // 파일명
+        saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
+      );
+    } catch (e) {
+      showCustomDialog("다운로드에 실패 하였습니다", 1000);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
         if (widget.downLoadValidPeriod.isAfter(DateTime.now())) {
-          if (await canLaunchUrlString(widget.file)) {
-            launchUrlString(widget.file, mode: LaunchMode.externalApplication);
+          if (Platform.isAndroid) {
+            _androidFileDownload();
+          } else if (Platform.isIOS) {
+            _iosFileDownload();
           }
-          // String dir = (await getApplicationDocumentsDirectory())
-          //     .path; //path provider로 저장할 경로 가져오기
-          // print("저장 주소: $dir");
-          // try {
-          //   await FlutterDownloader.enqueue(
-          //     url: widget.file, // file url
-          //     savedDir: dir + Platform.pathSeparator, // 저장할 dir
-          //     fileName: Uri.decodeFull(widget.file.split("/").last), // 파일명
-          //     saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-          //   ).then((value) {
-          //     print("다운로드: $value");
-          //   });
-          //   showCustomDialog("저장주소: $dir", 1000);
-          // } catch (e) {
-          //   showCustomDialog("다운로드에 실패 하였습니다", 1000);
-          // }
         } else {
           showCustomDialog("다운로드 기간이 만료 되었습니다.", 1000);
         }
