@@ -569,15 +569,21 @@ class GroupCareerScreen extends StatelessWidget {
           ])
         : controller.career.value.members.any(
                 (member) => member.userId == int.parse(HomeController.to.myId!))
-            ? GestureDetector(
-                onTap: () {
-                  Get.to(() => PostingAddScreen(
-                        project_id: careerId,
-                        route: PostaddRoute.career,
-                      ));
-                },
-                child: EmptyPostWidget(),
-              )
+            ? Padding(
+                  padding: const EdgeInsets.only(top: 24),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Get.to(() => PostingAddScreen(
+                                  project_id: careerId,
+                                  route: PostaddRoute.career,
+                                ));
+                          },
+                          child: EmptyPostWidget()),
+                    ],
+                  ),
+                )
             : EmptyContentWidget(text: "아직 포스트가 없어요"));
   }
 }
@@ -623,14 +629,21 @@ class MyCareerScreen extends StatelessWidget {
                 ]))
               ])
             : HomeController.to.myId == userId.toString()
-                ? GestureDetector(
-                    onTap: () {
-                      Get.to(() => PostingAddScreen(
-                            project_id: careerId,
-                            route: PostaddRoute.career,
-                          ));
-                    },
-                    child: EmptyPostWidget())
+                ? Padding(
+                  padding: const EdgeInsets.only(top: 24),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Get.to(() => PostingAddScreen(
+                                  project_id: careerId,
+                                  route: PostaddRoute.career,
+                                ));
+                          },
+                          child: EmptyPostWidget()),
+                    ],
+                  ),
+                )
                 : EmptyContentWidget(text: "아직 포스트가 없어요"));
   }
 }

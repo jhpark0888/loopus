@@ -39,31 +39,28 @@ class CareerBoardScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: false,
         titleSpacing: 16,
-        title: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 24, 0, 14),
-          child: Row(
-            children: [
-              Text(
-                '커리어 보드',
-                style: MyTextTheme.title(context),
-              ),
-              const SizedBox(width: 8),
-              SizedBox(
-                height: 21,
-                width: 20,
-                child: IconButton(
-                    padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
-                    // padding: EdgeInsets.zero,
-                    onPressed: () {
-                      showPopUpDialog(
-                        '커리어보드',
-                        '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요',
-                      );
-                    },
-                    icon: SvgPicture.asset('assets/icons/information.svg')),
-              )
-            ],
-          ),
+        title: Row(
+          children: [
+            Text(
+              '커리어 보드',
+              style: MyTextTheme.title(context),
+            ),
+            const SizedBox(width: 8),
+            SizedBox(
+              height: 21,
+              width: 20,
+              child: IconButton(
+                  padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                  // padding: EdgeInsets.zero,
+                  onPressed: () {
+                    showPopUpDialog(
+                      '커리어보드',
+                      '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요',
+                    );
+                  },
+                  icon: SvgPicture.asset('assets/icons/information.svg')),
+            )
+          ],
         ),
         excludeHeaderSemantics: false,
         actions: [
@@ -74,16 +71,13 @@ class CareerBoardScreen extends StatelessWidget {
                   onTap: () => HomeController.to.goMyProfile(),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 16.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Obx(
-                        () => UserImageWidget(
-                          imageUrl:
-                              HomeController.to.myProfile.value.profileImage,
-                          height: 36,
-                          width: 36,
-                          userType: HomeController.to.myProfile.value.userType,
-                        ),
+                    child: Obx(
+                      () => UserImageWidget(
+                        imageUrl:
+                            HomeController.to.myProfile.value.profileImage,
+                        height: 36,
+                        width: 36,
+                        userType: HomeController.to.myProfile.value.userType,
                       ),
                     ),
                   ))
