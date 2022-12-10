@@ -99,7 +99,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              width: 24,
+              width: 20,
             ),
             Center(
               child: Stack(
@@ -138,28 +138,25 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              width: 24,
+              width: 20,
             ),
             Center(
               child: GestureDetector(
                 onTap: () => _homeController.goMyProfile(),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Obx(
-                    () => UserImageWidget(
-                      imageUrl: HomeController.to.myProfile.value.profileImage
-                      // ProfileController.to.myUserInfo.value.profileImage ??
-                      ,
-                      width: 36,
-                      height: 36,
-                      userType: HomeController.to.myProfile.value.userType,
-                    ),
+                child: Obx(
+                  () => UserImageWidget(
+                    imageUrl: HomeController.to.myProfile.value.profileImage
+                    // ProfileController.to.myUserInfo.value.profileImage ??
+                    ,
+                    width: 36,
+                    height: 36,
+                    userType: HomeController.to.myProfile.value.userType,
                   ),
                 ),
               ),
             ),
             const SizedBox(
-              width: 20,
+              width: 16,
             ),
           ],
         ),
