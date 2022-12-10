@@ -552,7 +552,14 @@ class PostingAddScreen extends StatelessWidget {
 
               showCustomDialog('포스팅을 업로드했어요', 1000);
             } else {
-              errorSituation(value);
+              if (value.errorData!["statusCode"] == 406) {
+                showPopUpDialog(
+                  "최대 업로드 용량 초과",
+                  "유저 당 최대 파일 용량(300MG)을 초과하셨습니다.",
+                );
+              } else {
+                errorSituation(value);
+              }
             }
           });
         }

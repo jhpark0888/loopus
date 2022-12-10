@@ -394,7 +394,7 @@ class PostingWidget extends StatelessWidget {
                             shrinkWrap: true,
                             itemBuilder: (context, index) => FileDownloadWidget(
                                   file: item.files[index],
-                                  downLoadValidPeriod: downLoadValidPeriod,
+                                  // downLoadValidPeriod: downLoadValidPeriod,
                                 ),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(
@@ -410,64 +410,6 @@ class PostingWidget extends StatelessWidget {
               const SizedBox(height: 10),
             ],
           );
-  }
-
-  Widget _fileWidget(BuildContext context, String file) {
-    return GestureDetector(
-      onTap: () async {
-        //final status = await Permission.storage.request();
-        if (downLoadValidPeriod.isAfter(DateTime.now())) {
-          String dir = (await getApplicationDocumentsDirectory())
-              .path; //path provider로 저장할 경로 가져오기
-          try {
-            await FlutterDownloader.enqueue(
-              url: file, // file url
-              savedDir: '$dir/', // 저장할 dir
-              fileName: Uri.decodeFull(file.split("/").last), // 파일명
-              saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-            ).then((value) {
-              print("다운로드: $value");
-            });
-            // showCustomDialog("다운로드가 완료 되었습니다", 1000);
-          } catch (e) {
-            showCustomDialog("다운로드에 실패 하였습니다", 1000);
-          }
-        } else {
-          showCustomDialog("다운로드 기간이 만료 되었습니다.", 1000);
-        }
-      },
-      behavior: HitTestBehavior.translucent,
-      child: Container(
-        width: Get.width,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            SvgPicture.asset('assets/icons/file_icon.svg'),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Uri.decodeFull(file.split("/").last),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: MyTextTheme.main(context),
-                  ),
-                  Text(
-                    "${DateFormat('yyyy년 MM월 dd일').format(downLoadValidPeriod)}까지 다운로드 가능",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: MyTextTheme.main(context)
-                        .copyWith(color: AppColors.dividegray),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   void tapPosting({bool autoFocus = false}) {

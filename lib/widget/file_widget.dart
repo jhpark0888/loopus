@@ -17,11 +17,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
 class FileDownloadWidget extends StatefulWidget {
-  FileDownloadWidget(
-      {Key? key, required this.file, required this.downLoadValidPeriod})
-      : super(key: key);
+  FileDownloadWidget({
+    Key? key,
+    required this.file,
+  }) : super(key: key);
   String file;
-  DateTime downLoadValidPeriod;
+  // DateTime downLoadValidPeriod;
 
   @override
   State<FileDownloadWidget> createState() => _FileDownloadWidgetState();
@@ -104,15 +105,15 @@ class _FileDownloadWidgetState extends State<FileDownloadWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        if (widget.downLoadValidPeriod.isAfter(DateTime.now())) {
-          if (Platform.isAndroid) {
-            _androidFileDownload();
-          } else if (Platform.isIOS) {
-            _iosFileDownload();
-          }
-        } else {
-          showCustomDialog("다운로드 기간이 만료 되었습니다.", 1000);
+        // if (widget.downLoadValidPeriod.isAfter(DateTime.now())) {
+        if (Platform.isAndroid) {
+          _androidFileDownload();
+        } else if (Platform.isIOS) {
+          _iosFileDownload();
         }
+        // } else {
+        //   showCustomDialog("다운로드 기간이 만료 되었습니다.", 1000);
+        // }
       },
       behavior: HitTestBehavior.translucent,
       child: Container(
@@ -132,13 +133,13 @@ class _FileDownloadWidgetState extends State<FileDownloadWidget> {
                     overflow: TextOverflow.ellipsis,
                     style: MyTextTheme.main(context),
                   ),
-                  Text(
-                    "${DateFormat('yyyy년 MM월 dd일').format(widget.downLoadValidPeriod)}까지 다운로드 가능",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: MyTextTheme.main(context)
-                        .copyWith(color: AppColors.dividegray),
-                  ),
+                  // Text(
+                  //   "${DateFormat('yyyy년 MM월 dd일').format(widget.downLoadValidPeriod)}까지 다운로드 가능",
+                  //   maxLines: 1,
+                  //   overflow: TextOverflow.ellipsis,
+                  //   style: MyTextTheme.main(context)
+                  //       .copyWith(color: AppColors.dividegray),
+                  // ),
                 ],
               ),
             ),
