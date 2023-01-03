@@ -7,7 +7,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/user_model.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../constant.dart';
 
 Future<HTTPResponse> addproject() async {
@@ -19,7 +19,7 @@ Future<HTTPResponse> addproject() async {
     int userId = projectAddController.selectCompany.value.userId;
     String? token = await const FlutterSecureStorage().read(key: "token");
     Uri uri = Uri.parse(
-        '$serverUri/project_api/project${userId != 0 ? "?company_id=$userId" : ""}');
+        '${Environment.apiUrl}/project_api/project${userId != 0 ? "?company_id=$userId" : ""}');
     return HTTPResponse.httpErrorHandling(() async {
       print(projectAddController.selectCompany.value.userId);
       var body = {
@@ -64,7 +64,7 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
-          "$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
+          "${Environment.apiUrl}/project_api/project?project_id=$projectId&user_id=$userId");
       http.Response response = await http.get(uri, headers: {
         "Authorization": "Token $token"
       }).timeout(Duration(milliseconds: HTTPResponse.timeout));
@@ -94,7 +94,7 @@ Future<HTTPResponse> updateCareer(int projectId, ProjectUpdateType updateType,
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     final uri = Uri.parse(
-        "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 && companyName != null ? "&company_id=$companyId" : ""}");
+        "${Environment.apiUrl}/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 && companyName != null ? "&company_id=$companyId" : ""}");
     var request = http.MultipartRequest('PUT', uri);
     request.headers.addAll({
       "Authorization": "Token $token",
@@ -137,7 +137,7 @@ Future<HTTPResponse> deleteProject(int projectId, DeleteType type) async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
-          "$serverUri/project_api/project?id=$projectId&type=${type.name}"); //type exit del
+          "${Environment.apiUrl}/project_api/project?id=$projectId&type=${type.name}"); //type exit del
       http.Response response = await http.delete(uri, headers: {
         "Authorization": "Token $token"
       }).timeout(Duration(milliseconds: HTTPResponse.timeout));

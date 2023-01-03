@@ -14,7 +14,7 @@ import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../constant.dart';
 
 enum FollowListType { follower, following }
@@ -28,7 +28,7 @@ Future<HTTPResponse> getfollowlist(
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     final uri = Uri.parse(
-        "$serverUri/loop_api/get_list/${describeEnum(followtype)}/$userid");
+        "${Environment.apiUrl}/loop_api/get_list/${describeEnum(followtype)}/$userid");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -54,8 +54,8 @@ Future<void> postfollowRequest(int friendid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   int isStudent = AppController.to.userType == UserType.student ? 1 : 0;
 
-  final uri =
-      Uri.parse("$serverUri/loop_api/loop/$friendid?is_student=$isStudent");
+  final uri = Uri.parse(
+      "${Environment.apiUrl}/loop_api/loop/$friendid?is_student=$isStudent");
 
   http.Response response =
       await http.post(uri, headers: {"Authorization": "Token $token"});
@@ -72,7 +72,7 @@ Future<void> postfollowRequest(int friendid) async {
 Future<void> deletefollow(int friendid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("$serverUri/loop_api/unloop/$friendid");
+  final uri = Uri.parse("${Environment.apiUrl}/loop_api/unloop/$friendid");
 
   http.Response response =
       await http.delete(uri, headers: {"Authorization": "Token $token"});

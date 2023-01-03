@@ -33,8 +33,8 @@ class SignupController extends GetxController {
 
   Rx<UserType> selectedType = UserType.student.obs;
 
-  Rx<Dept> selectDept = Dept.defalut().obs;
-  Rx<Univ> selectUniv = Univ.defalut().obs;
+  Rx<Dept> selectDept = Dept.defaultDept().obs;
+  Rx<Univ> selectUniv = Univ.defaultUniv().obs;
 
   RxList<Univ> searchUnivList = <Univ>[].obs;
   RxList<Dept> searchDeptList = <Dept>[].obs;
@@ -152,7 +152,7 @@ class SignupController extends GetxController {
   }
 
   void deptInit() {
-    selectDept(Dept.defalut());
+    selectDept(Dept.defaultDept());
     searchDeptList.clear();
     departmentcontroller.clear();
   }

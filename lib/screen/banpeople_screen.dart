@@ -10,7 +10,7 @@ import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
-import 'package:loopus/widget/user_tile_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 
 class BanPeopleScreen extends StatelessWidget {
   BanPeopleScreen({

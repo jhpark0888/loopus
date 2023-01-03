@@ -95,6 +95,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
     _controller.interestedCompanies.clear();
     _controller.loadotherProfile(widget.userid);
     _otherprofilerefreshController.refreshCompleted();
+    _otherpostLoadingController.loadComplete();
   }
 
   void onLoading() async {

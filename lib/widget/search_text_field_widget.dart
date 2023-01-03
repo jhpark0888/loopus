@@ -15,7 +15,9 @@ class SearchTextFieldWidget extends StatelessWidget {
     this.autofocus,
     this.focusNode,
     this.onSubmitted,
+    this.fillColor,
   }) : super(key: key);
+
   void Function()? ontap;
   void Function(String)? onchanged;
   String hinttext;
@@ -26,6 +28,8 @@ class SearchTextFieldWidget extends StatelessWidget {
   TextInputAction? textInputAction;
   Function()? onEditingComplete;
   Function(String)? onSubmitted;
+  Color? fillColor;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -46,7 +50,7 @@ class SearchTextFieldWidget extends StatelessWidget {
         focusNode: focusNode,
         decoration: InputDecoration(
           filled: true,
-          fillColor: AppColors.cardGray,
+          fillColor: fillColor ?? AppColors.cardGray,
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(8)),

@@ -19,7 +19,7 @@ import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
-import 'package:loopus/widget/user_tile_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../constant.dart';
 

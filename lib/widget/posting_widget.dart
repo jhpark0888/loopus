@@ -43,7 +43,7 @@ import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/widget/user_image_widget.dart';
-import 'package:loopus/widget/user_tile_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 import 'package:path_provider/path_provider.dart';
 
 enum PostingWidgetType { normal, search, detail }

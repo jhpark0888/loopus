@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
+import 'package:loopus/model/environment_model.dart';
 
 Future<HTTPResponse> tagsearch(String searchWord) async {
   ConnectivityResult result = await initConnectivity();
@@ -62,7 +63,7 @@ Future<HTTPResponse> search(
     print("검색어: $searchword");
 
     final url = Uri.parse(
-        "$serverUri/search_api/search/${searchType.name}?query=$searchword&page=$pagenumber");
+        "${Environment.apiUrl}/search_api/search/${searchType.name}?query=$searchword&page=$pagenumber");
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.get(url, headers: {
         "Authorization": "Token $token"
@@ -92,7 +93,7 @@ Future<HTTPResponse> companySearch(String searchtext, int pagenumber) async {
     print("검색어: $searchword");
 
     final url = Uri.parse(
-        "$serverUri/search_api/search_company?query=$searchword&page=$pagenumber");
+        "${Environment.apiUrl}/search_api/search_company?query=$searchword&page=$pagenumber");
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.get(url, headers: {
         "Authorization": "Token $token"
@@ -117,7 +118,7 @@ Future<HTTPResponse> getResentSearches() async {
   } else {
     String? token = await FlutterSecureStorage().read(key: 'token');
 
-    final url = Uri.parse("$serverUri/search_api/search_log");
+    final url = Uri.parse("${Environment.apiUrl}/search_api/search_log");
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.get(url, headers: {
         "Authorization": "Token $token"
@@ -142,8 +143,8 @@ Future<HTTPResponse> addRecentSearch(int type, String query) async {
   } else {
     String? token = await FlutterSecureStorage().read(key: 'token');
 
-    final url =
-        Uri.parse("$serverUri/search_api/search_log?type=$type&query=$query");
+    final url = Uri.parse(
+        "${Environment.apiUrl}/search_api/search_log?type=$type&query=$query");
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.post(url, headers: {
         "Authorization": "Token $token"
@@ -171,7 +172,8 @@ Future<HTTPResponse> deleteResentSearch(String type, int id) async {
   } else {
     String? token = await FlutterSecureStorage().read(key: 'token');
 
-    final url = Uri.parse("$serverUri/search_api/search_log?type=$type&id=$id");
+    final url = Uri.parse(
+        "${Environment.apiUrl}/search_api/search_log?type=$type&id=$id");
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.delete(url, headers: {
         "Authorization": "Token $token"
@@ -200,7 +202,7 @@ Future<HTTPResponse> deleteResentSearch(String type, int id) async {
 //     String? token = await FlutterSecureStorage().read(key: 'token');
 //     // 수정
 
-//     final url = Uri.parse("$serverUri/search_api/recommend?page=$page");
+//     final url = Uri.parse("${Environment.apiUrl}/search_api/recommend?page=$page");
 
 //     try {
 //       final response =

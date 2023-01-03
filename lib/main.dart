@@ -30,6 +30,7 @@ import 'package:loopus/utils/no_scroll_behavior.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'controller/notification_controller.dart';
 import 'package:loopus/utils/custom_new_version_plus.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //백그라운드 메세지 왔을 때
 @pragma('vm:entry-point')
@@ -62,7 +63,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load();
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // debugPrintGestureArenaDiagnostics = true;

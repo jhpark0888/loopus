@@ -17,7 +17,7 @@ import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
-import 'package:loopus/widget/user_tile_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 
 class CareerBoardPostWidget extends StatelessWidget {
   CareerBoardPostWidget({Key? key, required this.post}) : super(key: key);

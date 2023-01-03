@@ -5,6 +5,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 
 class HotUserWidget extends StatelessWidget {
   HotUserWidget({Key? key, required this.person}) : super(key: key);
@@ -40,22 +41,11 @@ class HotUserWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                UserImageWidget(
-                    imageUrl: person.profileImage,
-                    width: 36,
-                    height: 36,
-                    userType: UserType.student),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  person.name,
-                  style: MyTextTheme.main(context),
-                )
-              ],
+            UserVerticalWidget(
+              user: person,
+              imageHeight: 36,
+              imageWidth: 36,
+              emptyHeight: 4,
             ),
             const SizedBox(
               width: 24,

@@ -16,7 +16,7 @@ import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../constant.dart';
 
 Future<HTTPResponse> loginRequest(String email, String pw) async {
@@ -24,7 +24,7 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    Uri uri = Uri.parse('$serverUri/user_api/login');
+    Uri uri = Uri.parse('${Environment.apiUrl}/user_api/login');
 
     final user = {
       'username': email.trim(),
@@ -65,7 +65,7 @@ Future<HTTPResponse> postpwfindemailcheck(
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    Uri uri = Uri.parse('$serverUri/user_api/password');
+    Uri uri = Uri.parse('${Environment.apiUrl}/user_api/password');
 
     final checkemail = {
       'email': email.trim(),
@@ -100,7 +100,7 @@ Future<HTTPResponse> putpwfindchange() async {
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    Uri uri = Uri.parse('$serverUri/user_api/password?type=find');
+    Uri uri = Uri.parse('${Environment.apiUrl}/user_api/password?type=find');
 
     final user = {
       "email": logInController.idcontroller.text,

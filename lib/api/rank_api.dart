@@ -10,6 +10,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/environment_model.dart';
 
 //type: main(포스팅 및 사람), school or group(사람 순위 100명까지)
 Future<HTTPResponse> getCareerBoardRequest(
@@ -24,7 +25,8 @@ Future<HTTPResponse> getCareerBoardRequest(
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     // print(userid);
-    final topPostUrl = Uri.parse("$serverUri/rank/ranking?id=16&type=$type");
+    final topPostUrl =
+        Uri.parse("${Environment.apiUrl}/rank/ranking?id=16&type=$type");
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(topPostUrl, headers: {
         "Authorization": "Token $token"
@@ -54,7 +56,8 @@ Future<HTTPResponse> getPostingTrend(String id) async {
     String? userid = await FlutterSecureStorage().read(key: "id");
 
     // print(userid);
-    final topPostUrl = Uri.parse("$serverUri/rank/posting_trends?id=$id");
+    final topPostUrl =
+        Uri.parse("${Environment.apiUrl}/rank/posting_trends?id=$id");
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(topPostUrl, headers: {
         "Authorization": "Token $token"
@@ -83,7 +86,7 @@ Future<HTTPResponse> getHotUsers() async {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     // print(userid);
-    final url = Uri.parse("$serverUri/rank/hot_user?group=16");
+    final url = Uri.parse("${Environment.apiUrl}/rank/hot_user?group=16");
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(url, headers: {
         "Authorization": "Token $token"

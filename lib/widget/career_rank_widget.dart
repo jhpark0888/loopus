@@ -15,6 +15,7 @@ import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/widget/follow_button_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 
 class CareerRankWidget extends StatelessWidget {
   CareerRankWidget(
@@ -116,22 +117,11 @@ class PersonRankWidget extends StatelessWidget {
         SizedBox(
           width: 50,
           height: 64,
-          child: Column(
-            children: [
-              UserImageWidget(
-                imageUrl: user.profileImage,
-                width: 36,
-                height: 36,
-                userType: user.userType,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                user.name,
-                style: MyTextTheme.main(context),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              )
-            ],
+          child: UserVerticalWidget(
+            user: user,
+            emptyHeight: 4,
+            imageHeight: 36,
+            imageWidth: 36,
           ),
         ),
         const SizedBox(width: 10),

@@ -18,6 +18,7 @@ import 'package:loopus/model/sns_model.dart';
 import 'package:loopus/model/user_model.dart';
 import '../constant.dart';
 import '../controller/home_controller.dart';
+import 'package:loopus/model/environment_model.dart';
 
 Future<HTTPResponse> getProfile(int userId) async {
   ConnectivityResult result = await initConnectivity();
@@ -29,7 +30,7 @@ Future<HTTPResponse> getProfile(int userId) async {
     print('user token: $token');
 
     var uri = Uri.parse(
-        "$serverUri/user_api/profile?id=$userId&is_student=$isStudent");
+        "${Environment.apiUrl}/user_api/profile?id=$userId&is_student=$isStudent");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -60,7 +61,7 @@ Future<HTTPResponse> getCorpProfile(int userId) async {
     print('user token: $token');
 
     var uri = Uri.parse(
-        "$serverUri/user_api/corp_profile?id=$userId&is_student=$isStudent");
+        "${Environment.apiUrl}/user_api/corp_profile?id=$userId&is_student=$isStudent");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -90,7 +91,8 @@ Future<HTTPResponse> getCompShowUsers(String type, int page) async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     print('user token: $token');
 
-    var uri = Uri.parse("$serverUri/user_api/view_list?type=$type&page=$page");
+    var uri = Uri.parse(
+        "${Environment.apiUrl}/user_api/view_list?type=$type&page=$page");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -117,7 +119,7 @@ Future<HTTPResponse> getProjectlist(int userId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
+    var uri = Uri.parse("${Environment.apiUrl}/user_api/project?id=$userId");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -150,7 +152,7 @@ Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
     return HTTPResponse.networkError();
   } else {
     var uri = Uri.parse(
-        "$serverUri/user_api/posting?id=$careerId&page=$page&type=career");
+        "${Environment.apiUrl}/user_api/posting?id=$careerId&page=$page&type=career");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -181,8 +183,8 @@ Future<HTTPResponse> getAllPosting(int userId, int page) async {
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    var uri =
-        Uri.parse("$serverUri/user_api/posting?id=$userId&page=$page&type=all");
+    var uri = Uri.parse(
+        "${Environment.apiUrl}/user_api/posting?id=$userId&page=$page&type=all");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -208,7 +210,7 @@ Future<HTTPResponse> postProjectArrange(List<Project> careerList) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    var uri = Uri.parse("$serverUri/user_api/project");
+    var uri = Uri.parse("${Environment.apiUrl}/user_api/project");
 
     return HTTPResponse.httpErrorHandling(() async {
       Map<String, int> body = {};
@@ -254,8 +256,8 @@ Future<HTTPResponse> updateProfile(
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    final uri =
-        Uri.parse("$serverUri/user_api/profile?type=${updateType.name}");
+    final uri = Uri.parse(
+        "${Environment.apiUrl}/user_api/profile?type=${updateType.name}");
 
     var request = http.MultipartRequest('PUT', uri);
 
@@ -327,7 +329,7 @@ Future<HTTPResponse> getInterestedCompany(int userId, int page) async {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     var uri = Uri.parse(
-        "$serverUri/user_api/interest_companies?id=$userId&page=$page");
+        "${Environment.apiUrl}/user_api/interest_companies?id=$userId&page=$page");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -355,7 +357,8 @@ Future<HTTPResponse> deleteSNS(int snsId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    Uri uri = Uri.parse('$serverUri/user_api/profile?type=sns&id=$snsId');
+    Uri uri =
+        Uri.parse('${Environment.apiUrl}/user_api/profile?type=sns&id=$snsId');
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.delete(
@@ -384,7 +387,7 @@ Future<HTTPResponse> putpwchange() async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     PwChangeController pwChangeController = Get.find();
 
-    Uri uri = Uri.parse('$serverUri/user_api/password?type=change');
+    Uri uri = Uri.parse('${Environment.apiUrl}/user_api/password?type=change');
 
     //이메일 줘야 됨
     final password = {
@@ -421,7 +424,7 @@ Future<HTTPResponse> deleteuser(String pw, String reason) async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     print('user token: $token');
 
-    var uri = Uri.parse("$serverUri/user_api/resign");
+    var uri = Uri.parse("${Environment.apiUrl}/user_api/resign");
 
     // for (var reasonwidget in WithDrawalController.to.reasonlist) {
     //   if (reasonwidget.isSelected.value == true) {
@@ -468,7 +471,7 @@ Future<HTTPResponse> userreport(int userid) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
 
-    final Uri uri = Uri.parse("$serverUri/user_api/report");
+    final Uri uri = Uri.parse("${Environment.apiUrl}/user_api/report");
 
     var body = {"id": userid, "reason": ""};
 
@@ -505,7 +508,8 @@ Future<HTTPResponse> inquiryRequest(
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    final Uri uri = Uri.parse("$serverUri/user_api/ask?type=${type.name}");
+    final Uri uri =
+        Uri.parse("${Environment.apiUrl}/user_api/ask?type=${type.name}");
     Map body = {};
 
     if (type == InquiryType.normal) {

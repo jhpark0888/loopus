@@ -32,6 +32,7 @@ import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/tabbar_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 class GroupCareerDetailScreen extends StatelessWidget {
@@ -288,67 +289,34 @@ class GroupCareerDetailScreen extends StatelessWidget {
 
   Widget joinPeople(BuildContext context, User user, int manager) {
     return GestureDetector(
-      onTap: () {
-        Get.to(
-            () => OtherProfileScreen(userid: user.userId, realname: user.name));
-      },
-      child: manager == user.userId
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 11),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(36),
-                          color: AppColors.rankred),
-                      width: 5,
-                      height: 5),
-                ),
-                const SizedBox(width: 3),
-                Column(
-                  children: [
-                    UserImageWidget(
-                      width: 50,
-                      height: 50,
-                      imageUrl: user.profileImage,
-                      userType: UserType.student,
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      user.name,
-                      style: MyTextTheme.main(context),
-                      maxLines: 1,
-                    )
-                  ],
-                ),
-              ],
-            )
-          : Column(
-              children: [
-                UserImageWidget(
-                  width: 50,
-                  height: 50,
-                  imageUrl: user.profileImage,
-                  userType: UserType.student,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      user.name,
-                      style: MyTextTheme.main(context),
-                      maxLines: 1,
-                    ),
-                  ],
-                )
-              ],
-            ),
-    );
+        onTap: () {
+          Get.to(() =>
+              OtherProfileScreen(userid: user.userId, realname: user.name));
+        },
+        child: manager == user.userId
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 11),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(36),
+                            color: AppColors.rankred),
+                        width: 5,
+                        height: 5),
+                  ),
+                  const SizedBox(width: 3),
+                  UserVerticalWidget(
+                    user: user,
+                    emptyHeight: 4,
+                  )
+                ],
+              )
+            : UserVerticalWidget(
+                user: user,
+                emptyHeight: 4,
+              ));
   }
 
   Widget addPeople(BuildContext context) {
@@ -570,20 +538,20 @@ class GroupCareerScreen extends StatelessWidget {
         : controller.career.value.members.any(
                 (member) => member.userId == int.parse(HomeController.to.myId!))
             ? Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                            Get.to(() => PostingAddScreen(
-                                  project_id: careerId,
-                                  route: PostaddRoute.career,
-                                ));
-                          },
-                          child: EmptyPostWidget()),
-                    ],
-                  ),
-                )
+                padding: const EdgeInsets.only(top: 24),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          Get.to(() => PostingAddScreen(
+                                project_id: careerId,
+                                route: PostaddRoute.career,
+                              ));
+                        },
+                        child: EmptyPostWidget()),
+                  ],
+                ),
+              )
             : EmptyContentWidget(text: "아직 포스트가 없어요"));
   }
 }
@@ -630,20 +598,20 @@ class MyCareerScreen extends StatelessWidget {
               ])
             : HomeController.to.myId == userId.toString()
                 ? Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                            Get.to(() => PostingAddScreen(
-                                  project_id: careerId,
-                                  route: PostaddRoute.career,
-                                ));
-                          },
-                          child: EmptyPostWidget()),
-                    ],
-                  ),
-                )
+                    padding: const EdgeInsets.only(top: 24),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              Get.to(() => PostingAddScreen(
+                                    project_id: careerId,
+                                    route: PostaddRoute.career,
+                                  ));
+                            },
+                            child: EmptyPostWidget()),
+                      ],
+                    ),
+                  )
                 : EmptyContentWidget(text: "아직 포스트가 없어요"));
   }
 }

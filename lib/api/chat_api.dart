@@ -14,7 +14,7 @@ import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../constant.dart';
 import '../controller/error_controller.dart';
 
@@ -28,7 +28,7 @@ import '../controller/error_controller.dart';
 //     String? token = await const FlutterSecureStorage().read(key: 'token');
 //     String? myid = await const FlutterSecureStorage().read(key: 'id');
 
-//     final url = Uri.parse("$serverUri/chat/get_list");
+//     final url = Uri.parse("${Environment.apiUrl}/chat/get_list");
 //     try {
 //       http.Response response = await http.get(
 //         url,
@@ -75,7 +75,8 @@ Future<HTTPResponse> getChatroomlist(int id) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
-    final url = Uri.parse("http://$chatServerUri/chat/chat_list?id=${id}");
+    final url =
+        Uri.parse("http://${Environment.chatApiUrl}/chat/chat_list?id=${id}");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
@@ -111,8 +112,9 @@ Future<HTTPResponse> getUserProfile(List<int> membersId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
-    final url = Uri.parse("$serverUri/chat/get_profile?members=$membersId");
-    
+    final url =
+        Uri.parse("${Environment.apiUrl}/chat/get_profile?members=$membersId");
+
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
         url,
@@ -152,7 +154,7 @@ Future<HTTPResponse> getPartnerToken(int memberId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
-    final url = Uri.parse("$serverUri/chat/get_token?id=$memberId");
+    final url = Uri.parse("${Environment.apiUrl}/chat/get_token?id=$memberId");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
@@ -189,7 +191,8 @@ Future<HTTPResponse> deleteChatRoom(int roomId, int myId, int msgId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
-    final url = Uri.parse("http://$chatServerUri/chat/chat_list?id=$myId");
+    final url =
+        Uri.parse("http://${Environment.chatApiUrl}/chat/chat_list?id=$myId");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.delete(
@@ -216,7 +219,7 @@ Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    final uri = Uri.parse("$serverUri/post_api/posting?id=$postid");
+    final uri = Uri.parse("${Environment.apiUrl}/post_api/posting?id=$postid");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response =
@@ -241,7 +244,8 @@ Future<HTTPResponse> updateNotreadMsg(int userId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    final uri = Uri.parse("http://$chatServerUri/chat/check_msg?id=$userId");
+    final uri =
+        Uri.parse("http://${Environment.chatApiUrl}/chat/check_msg?id=$userId");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri);
@@ -266,7 +270,7 @@ Future<HTTPResponse> roomAlarmStatus(int userId, int roomId, int type) async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     type = type == 1 ? 0 : 1;
     final uri = Uri.parse(
-        "http://$chatServerUri/chat/chat_list?id=${userId.toString()}");
+        "http://${Environment.chatApiUrl}/chat/chat_list?id=${userId.toString()}");
     Map<String, dynamic> body = {
       'room_id': roomId.toString(),
       'type': type.toString()

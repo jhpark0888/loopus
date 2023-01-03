@@ -20,7 +20,7 @@ import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../app.dart';
 import '../constant.dart';
 
@@ -33,24 +33,25 @@ Future<HTTPResponse> emailRequest(
     return HTTPResponse.networkError();
   } else {
     Uri uri = Uri.parse(
-        '$serverUri/user_api/check_email?is_create=${isCreate ? 1 : 0}');
+        '${Environment.apiUrl}/user_api/check_email?is_create=${isCreate ? 1 : 0}');
 
     var checkemail = {
       //TODO: 학교 도메인 확인
       "email": email,
     };
-return HTTPResponse.httpErrorHandling(() async {
+    return HTTPResponse.httpErrorHandling(() async {
       emailcertification(Emailcertification.waiting);
       // showBottomSnackbar("$email로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
 
-      http.Response response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(checkemail),
-      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
-      
+      http.Response response = await http
+          .post(
+            uri,
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode(checkemail),
+          )
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       // response.
       print("이메일 체크 : ${response.statusCode}");
@@ -60,7 +61,6 @@ return HTTPResponse.httpErrorHandling(() async {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
     });
-   
   }
 }
 
@@ -69,21 +69,23 @@ Future<HTTPResponse> certfyNumRequest(String email, String number) async {
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    Uri uri = Uri.parse('$serverUri/user_api/activate');
+    Uri uri = Uri.parse('${Environment.apiUrl}/user_api/activate');
 
     var _body = {
       "email": email,
       "certify_num": number,
     };
-    
+
     return HTTPResponse.httpErrorHandling(() async {
-      http.Response response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(_body),
-      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      http.Response response = await http
+          .post(
+            uri,
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode(_body),
+          )
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       // response.
       print("인증번호 체크 : ${response.statusCode}");
@@ -93,7 +95,6 @@ Future<HTTPResponse> certfyNumRequest(String email, String number) async {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
     });
-  
   }
 }
 
@@ -105,7 +106,7 @@ Future<HTTPResponse> certfyNumRequest(String email, String number) async {
 //     return HTTPResponse.networkError();
 //   } else {
 //     Uri uri = Uri.parse(
-//         '$serverUri/user_api/valid?email=${signupController.emailidcontroller.text}@${signupController.selectUniv.value.email}');
+//         '${Environment.apiUrl}/user_api/valid?email=${signupController.emailidcontroller.text}@${signupController.selectUniv.value.email}');
 
 //     // var checkemail = {
 //     //   //TODO: 학교 도메인 확인
@@ -137,7 +138,6 @@ Future<HTTPResponse> certfyNumRequest(String email, String number) async {
 //   }
 // }
 
-
 Future<HTTPResponse> signupRequest() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -146,7 +146,7 @@ Future<HTTPResponse> signupRequest() async {
   } else {
     final SignupController signupController = Get.find();
 
-    Uri uri = Uri.parse('$serverUri/user_api/signup');
+    Uri uri = Uri.parse('${Environment.apiUrl}/user_api/signup');
     const FlutterSecureStorage storage = FlutterSecureStorage();
     //todo : @inu.ac.kr
     var user = {
@@ -162,13 +162,15 @@ Future<HTTPResponse> signupRequest() async {
       "department": signupController.selectDept.value.id,
     };
     return HTTPResponse.httpErrorHandling(() async {
-      http.Response response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(user),
-      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      http.Response response = await http
+          .post(
+            uri,
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+            },
+            body: json.encode(user),
+          )
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("회원가입: ${response.statusCode}");
       if (response.statusCode == 201) {
@@ -179,7 +181,6 @@ Future<HTTPResponse> signupRequest() async {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
     });
-   
   }
 }
 
@@ -189,12 +190,14 @@ Future<HTTPResponse> searchUniv(String text) async {
     return HTTPResponse.networkError();
   } else {
     // print(userid);
-    final searchUnivUri =
-        Uri.parse("$serverUri/search_api/search_uni?type=school&query=$text");
+    final searchUnivUri = Uri.parse(
+        "${Environment.apiUrl}/search_api/search_uni?type=school&query=$text");
     return HTTPResponse.httpErrorHandling(() async {
-       http.Response response = await http.get(
-        searchUnivUri,
-      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      http.Response response = await http
+          .get(
+            searchUnivUri,
+          )
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -204,7 +207,6 @@ Future<HTTPResponse> searchUniv(String text) async {
         return HTTPResponse.apiError('', response.statusCode);
       }
     });
-    
   }
 }
 
@@ -215,11 +217,13 @@ Future<HTTPResponse> searchDept(int univId, String text) async {
   } else {
     // print(userid);
     final searchDeptUri = Uri.parse(
-        "$serverUri/search_api/search_uni?type=department&id=$univId&query=$text");
+        "${Environment.apiUrl}/search_api/search_uni?type=department&id=$univId&query=$text");
     return HTTPResponse.httpErrorHandling(() async {
-        http.Response response = await http.get(
-        searchDeptUri,
-      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      http.Response response = await http
+          .get(
+            searchDeptUri,
+          )
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));

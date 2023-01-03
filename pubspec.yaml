@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: "none"
 
-version: 2.0.2
+version: 2.0.2+10
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -79,6 +79,9 @@ dependencies:
   permission_handler: ^10.2.0
   # share_plus: ^4.5.3
   open_file: ^3.2.1
+  carousel_slider: ^4.2.1
+  sliding_up_panel: ^2.0.0+1
+  flutter_dotenv: ^5.0.2
   
   # custom_nested_scroll_view: 
   #   git:
@@ -124,6 +127,7 @@ flutter:
     - assets/icons/
     - assets/illustrations/
     - assets/lotties/
+    - .env
 
   fonts:
     - family: Nanum

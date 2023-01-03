@@ -18,7 +18,7 @@ import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/posting_update_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../constant.dart';
 import '../controller/modal_controller.dart';
 
@@ -35,7 +35,7 @@ Future<HTTPResponse> addposting(int projectId, double aspectRatio) async {
     final String? token = await const FlutterSecureStorage().read(key: 'token');
 
     Uri postingUploadUri =
-        Uri.parse('$serverUri/post_api/posting?id=$projectId');
+        Uri.parse('${Environment.apiUrl}/post_api/posting?id=$projectId');
 
     var request = http.MultipartRequest('POST', postingUploadUri);
 
@@ -125,7 +125,7 @@ Future<HTTPResponse> getposting(int postingid) async {
 
     // print(userid);
     final specificPostingLoadUri =
-        Uri.parse("$serverUri/post_api/posting?id=$postingid");
+        Uri.parse("${Environment.apiUrl}/post_api/posting?id=$postingid");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(specificPostingLoadUri, headers: {
@@ -160,7 +160,7 @@ Future<HTTPResponse> updateposting(
     TagController tagController = Get.find(tag: Tagtype.Posting.toString());
 
     String? token = await const FlutterSecureStorage().read(key: "token");
-    Uri uri = Uri.parse('$serverUri/post_api/posting?id=$postid');
+    Uri uri = Uri.parse('${Environment.apiUrl}/post_api/posting?id=$postid');
 
     var request = http.MultipartRequest('PUT', uri);
 
@@ -206,7 +206,7 @@ Future<HTTPResponse> deleteposting(int postid, int projectid) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    final uri = Uri.parse("$serverUri/post_api/posting?id=$postid");
+    final uri = Uri.parse("${Environment.apiUrl}/post_api/posting?id=$postid");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.delete(uri, headers: {
@@ -236,7 +236,7 @@ Future<HTTPResponse> mainload(int lastindex) async {
     });
 
     final mainloadUri =
-        Uri.parse("$serverUri/post_api/main_load?last=$lastindex");
+        Uri.parse("${Environment.apiUrl}/post_api/main_load?last=$lastindex");
 
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.get(mainloadUri, headers: {
@@ -265,8 +265,8 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
       token = value;
     });
 
-    final bookmarkListUri =
-        Uri.parse("$serverUri/post_api/bookmark_list?page=$pageNumber");
+    final bookmarkListUri = Uri.parse(
+        "${Environment.apiUrl}/post_api/bookmark_list?page=$pageNumber");
 
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.get(bookmarkListUri, headers: {
@@ -295,7 +295,8 @@ Future<HTTPResponse> bookmarkpost(int postId) async {
       token = value;
     });
 
-    final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark?id=$postId");
+    final bookmarkUri =
+        Uri.parse("${Environment.apiUrl}/post_api/bookmark?id=$postId");
 
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.post(bookmarkUri, headers: {
@@ -326,7 +327,7 @@ Future<HTTPResponse> likepost(int id, contentType type) async {
     int isStudent = AppController.to.userType == UserType.student ? 1 : 0;
 
     final likeUri = Uri.parse(
-        "$serverUri/post_api/like?id=$id&type=${type.name}&is_student=$isStudent");
+        "${Environment.apiUrl}/post_api/like?id=$id&type=${type.name}&is_student=$isStudent");
 
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.post(likeUri, headers: {
@@ -351,8 +352,8 @@ Future<HTTPResponse> getlikepeoele(int postid, contentType type) async {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     final uri = Uri.parse(
-        "$serverUri/post_api/like_list_load?id=$postid&type=${type.name}");
-    //"$serverUri/post_api/like_list_load/$postid"
+        "${Environment.apiUrl}/post_api/like_list_load?id=$postid&type=${type.name}");
+    //"${Environment.apiUrl}/post_api/like_list_load/$postid"
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -380,7 +381,8 @@ Future<HTTPResponse> contentreport(int id, contentType type) async {
       token = value;
     });
 
-    final Uri uri = Uri.parse("$serverUri/post_api/report?type=${type.name}");
+    final Uri uri =
+        Uri.parse("${Environment.apiUrl}/post_api/report?type=${type.name}");
 
     var body = {"id": id, "reason": ""};
 
@@ -411,7 +413,7 @@ Future<HTTPResponse> commentPost(
   int isStudent = AppController.to.userType == UserType.student ? 1 : 0;
 
   final CommentUri = Uri.parse(
-      "$serverUri/post_api/comment?id=$id&type=${type.name}&is_student=$isStudent");
+      "${Environment.apiUrl}/post_api/comment?id=$id&type=${type.name}&is_student=$isStudent");
 
   final content = {"content": text.trim(), "tagged_user": tagUserId};
 
@@ -442,8 +444,8 @@ Future<HTTPResponse> commentPost(
 Future<HTTPResponse> commentDelete(int id, contentType type) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  final CommentUri =
-      Uri.parse("$serverUri/post_api/comment?id=$id&type=${type.name}");
+  final CommentUri = Uri.parse(
+      "${Environment.apiUrl}/post_api/comment?id=$id&type=${type.name}");
 
   return HTTPResponse.httpErrorHandling(() async {
     final response = await http.delete(
@@ -468,7 +470,7 @@ Future<HTTPResponse> commentListGet(int id, contentType type, int last) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
   final CommentUri = Uri.parse(
-      "$serverUri/post_api/comment?id=$id&type=${type.name}&last=$last");
+      "${Environment.apiUrl}/post_api/comment?id=$id&type=${type.name}&last=$last");
 
   return HTTPResponse.httpErrorHandling(() async {
     final response = await http.get(

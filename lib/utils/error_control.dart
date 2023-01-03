@@ -8,7 +8,6 @@ void errorSituation(HTTPResponse httpresponse, {Rx<ScreenState>? screenState}) {
   if (httpresponse.errorData!['statusCode'] == 59) {
     showdisconnectdialog();
     if (screenState != null) {
-      print("ddd");
       screenState.value = ScreenState.disconnect;
     }
   } else if (httpresponse.errorData!['statusCode'] == 404) {

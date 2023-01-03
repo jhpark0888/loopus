@@ -10,6 +10,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/issue_model.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/screen/spec_screen.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/mycompany_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
@@ -83,7 +84,8 @@ class HomeScreen extends StatelessWidget {
                     onTap: () {
                       // ProfileController.to.isnewalarm(false);
                       // Get.to(() => DatabaseList());
-                      Get.to(() => NotificationScreen());
+                      // Get.to(() => NotificationScreen());
+                      Get.to(() => SpecScreen());
                     },
                     child: Obx(
                       () => SvgPicture.asset(

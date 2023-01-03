@@ -17,3 +17,15 @@ class DivideWidget extends StatelessWidget {
     );
   }
 }
+
+class NewDivider extends StatelessWidget {
+  const NewDivider({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Divider(
+      thickness: 8,
+      color: Color(0xFFDDDDDD),
+    );
+  }
+}

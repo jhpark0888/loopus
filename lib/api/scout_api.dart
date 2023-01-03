@@ -11,6 +11,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/environment_model.dart';
 
 Future<HTTPResponse> getScoutCompanySearch({
   required int page,
@@ -25,7 +26,7 @@ Future<HTTPResponse> getScoutCompanySearch({
 
     // print(userid);
     final _url = Uri.parse(
-        "$serverUri/scout_api/company_group?type=$fieldId&page=$page");
+        "${Environment.apiUrl}/scout_api/company_group?type=$fieldId&page=$page");
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(_url, headers: {
         "Authorization": "Token $token"
@@ -51,10 +52,10 @@ Future<HTTPResponse> getRecommandCompanys() async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     int isCorp = AppController.to.userType == UserType.company ? 1 : 0;
-    // final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
+    // final _url = Uri.parse("${Environment.apiUrl}/scout_api/recommendation_company");
     // int isCorp = AppController.to.userType == UserType.company ? 1 : 0;
-    final _url =
-        Uri.parse("$serverUri/scout_api/recommendation_company?type=$isCorp");
+    final _url = Uri.parse(
+        "${Environment.apiUrl}/scout_api/recommendation_company?type=$isCorp");
     print(_url);
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(_url, headers: {

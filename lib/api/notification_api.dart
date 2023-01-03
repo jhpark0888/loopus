@@ -14,7 +14,7 @@ import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/widget/notification_widget.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../controller/error_controller.dart';
 
 Future<HTTPResponse> getNotificationlist(String type, int lastindex) async {
@@ -24,7 +24,8 @@ Future<HTTPResponse> getNotificationlist(String type, int lastindex) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    var uri = Uri.parse("$serverUri/user_api/alarm?type=$type&last=$lastindex");
+    var uri = Uri.parse(
+        "${Environment.apiUrl}/user_api/alarm?type=$type&last=$lastindex");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -49,7 +50,7 @@ Future<HTTPResponse> deleteNotification(int noticeid) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    var uri = Uri.parse("$serverUri/user_api/alarm?id=$noticeid");
+    var uri = Uri.parse("${Environment.apiUrl}/user_api/alarm?id=$noticeid");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.delete(uri, headers: {
@@ -75,7 +76,7 @@ Future<HTTPResponse> isNotiRead(int notiId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     final isReadURI =
-        Uri.parse("$serverUri/user_api/alarm?type=read&id=$notiId");
+        Uri.parse("${Environment.apiUrl}/user_api/alarm?type=read&id=$notiId");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(isReadURI, headers: {

@@ -81,3 +81,71 @@ class UserTileWidget extends StatelessWidget {
     );
   }
 }
+
+class UserVerticalWidget extends StatelessWidget {
+  UserVerticalWidget({
+    Key? key,
+    required this.user,
+    this.imageWidth,
+    this.imageHeight,
+    this.emptyHeight,
+    this.isDark = false,
+    this.isTap = false,
+  }) : super(key: key);
+
+  User user;
+  double? imageWidth;
+  double? imageHeight;
+  double? emptyHeight;
+  bool isDark;
+  bool isTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (user.userType == UserType.student) {
+          Get.to(
+            () => OtherProfileScreen(
+              user: user as Person,
+              userid: user.userId,
+              realname: user.name,
+            ),
+            preventDuplicates: false,
+          );
+        } else {
+          if (user.userId != 0) {
+            Get.to(
+                () => OtherCompanyScreen(
+                      company: user as Company,
+                      companyId: user.userId,
+                      companyName: user.name,
+                    ),
+                preventDuplicates: false);
+          }
+        }
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          UserImageWidget(
+              width: imageWidth,
+              height: imageHeight,
+              imageUrl: user.profileImage,
+              userType: user.userType),
+          SizedBox(
+            height: emptyHeight ?? 7,
+          ),
+          Text(
+            user.name,
+            style: MyTextTheme.main(context)
+                .copyWith(color: isDark ? AppColors.mainWhite : null),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
+      ),
+    );
+  }
+}

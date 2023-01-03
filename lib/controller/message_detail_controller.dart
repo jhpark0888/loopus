@@ -15,7 +15,7 @@ import 'package:loopus/model/socket_message_model.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:web_socket_channel/io.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../model/httpresponse_model.dart';
 
 class MessageDetailController extends GetxController
@@ -359,7 +359,8 @@ class MessageDetailController extends GetxController
   Future<void> connectWebSocket() async {
     await Future.delayed(const Duration(milliseconds: 300));
     channel = IOWebSocketChannel.connect(
-        Uri.parse('ws://$chatServerUri/ws/chat/${partnerId.toString()}/'),
+        Uri.parse(
+            'ws://${Environment.chatApiUrl}/ws/chat/${partnerId.toString()}/'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'id': '$myId'

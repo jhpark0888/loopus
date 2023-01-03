@@ -16,7 +16,7 @@ import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
-import 'package:loopus/widget/user_tile_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LikePeopleScreen extends StatelessWidget {

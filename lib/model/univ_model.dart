@@ -10,13 +10,16 @@ class Univ {
   String email;
   String univlogo;
 
+  String get shortUnivName => univname.replaceAll("학교", "");
+
   factory Univ.fromJson(Map<String, dynamic> json) => Univ(
       id: json["id"] ?? 0,
       univname: json["school"] ?? "",
       email: json["email"] ?? "",
       univlogo: json["logo"] ?? "");
 
-  factory Univ.defalut() => Univ(id: 0, univname: "", email: "", univlogo: '');
+  factory Univ.defaultUniv() =>
+      Univ(id: 0, univname: "", email: "", univlogo: '');
 }
 
 class Dept {
@@ -30,5 +33,5 @@ class Dept {
         deptname: json["department"] ?? "",
       );
 
-  factory Dept.defalut() => Dept(id: 0, deptname: "");
+  factory Dept.defaultDept() => Dept(id: 0, deptname: "");
 }

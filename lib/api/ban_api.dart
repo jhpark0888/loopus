@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/model/environment_model.dart';
 
 Future<HTTPResponse> getbanlist() async {
   ConnectivityResult result = await initConnectivity();
@@ -22,7 +23,7 @@ Future<HTTPResponse> getbanlist() async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    final uri = Uri.parse("$serverUri/user_api/ban");
+    final uri = Uri.parse("${Environment.apiUrl}/user_api/ban");
 
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri, headers: {
@@ -52,7 +53,7 @@ Future<HTTPResponse> userban(int userid) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
 
-    final Uri uri = Uri.parse("$serverUri/user_api/ban?id=$userid");
+    final Uri uri = Uri.parse("${Environment.apiUrl}/user_api/ban?id=$userid");
 
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.post(
@@ -83,7 +84,7 @@ Future<HTTPResponse> userbancancel(int userid) async {
       token = value;
     });
 
-    final Uri uri = Uri.parse("$serverUri/user_api/ban?id=$userid");
+    final Uri uri = Uri.parse("${Environment.apiUrl}/user_api/ban?id=$userid");
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.delete(
         uri,
@@ -105,7 +106,7 @@ Future<HTTPResponse> userbancancel(int userid) async {
   }
 }
 
-enum BanType {ban,resign}
+enum BanType { ban, resign }
 
 Future<HTTPResponse> userResign(int userid, BanType type, int? otherId) async {
   ConnectivityResult result = await initConnectivity();
@@ -114,7 +115,8 @@ Future<HTTPResponse> userResign(int userid, BanType type, int? otherId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
 
-    final Uri uri = Uri.parse("$chatServerUri/user_api/ban?id=$userid&type=${type.name}${otherId != null ?"&other_id=$otherId":""}");
+    final Uri uri = Uri.parse(
+        "${Environment.chatApiUrl}/user_api/ban?id=$userid&type=${type.name}${otherId != null ? "&other_id=$otherId" : ""}");
 
     return HTTPResponse.httpErrorHandling(() async {
       final response = await http.delete(
@@ -132,7 +134,5 @@ Future<HTTPResponse> userResign(int userid, BanType type, int? otherId) async {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
     });
-
-  
   }
 }

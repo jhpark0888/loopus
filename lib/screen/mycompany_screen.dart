@@ -31,7 +31,7 @@ import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
 import 'package:loopus/widget/tabbar_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
-import 'package:loopus/widget/user_tile_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart' as sr;
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
@@ -270,9 +270,12 @@ class MyCompanyScreen extends StatelessWidget {
                       child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemBuilder: (context, index) => interestingUser(
-                              context,
-                              _controller.myCompanyInfo.value.itrUsers[index]),
+                          itemBuilder: (context, index) => UserVerticalWidget(
+                                user: _controller
+                                    .myCompanyInfo.value.itrUsers[index],
+                                emptyHeight: 4,
+                                isDark: true,
+                              ),
                           separatorBuilder: (context, index) => const SizedBox(
                                 width: 16,
                               ),
@@ -641,23 +644,6 @@ class MyCompanyScreen extends StatelessWidget {
             child: Text("전체보기",
                 style: MyTextTheme.main(context)
                     .copyWith(color: AppColors.mainblue))),
-      ],
-    );
-  }
-
-  Widget interestingUser(BuildContext context, User user) {
-    return Column(
-      children: [
-        GestureDetector(
-            child: UserImageWidget(
-                imageUrl: user.profileImage, userType: user.userType)),
-        const SizedBox(
-          height: 4,
-        ),
-        Text(
-          user.name,
-          style: MyTextTheme.main(context).copyWith(color: AppColors.mainWhite),
-        )
       ],
     );
   }

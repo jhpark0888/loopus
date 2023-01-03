@@ -36,6 +36,7 @@ import 'package:loopus/widget/news_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/widget/user_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart' as sr;
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
@@ -718,18 +719,10 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                 ),
             preventDuplicates: false);
       },
-      child: Column(
-        children: [
-          UserImageWidget(imageUrl: user.profileImage, userType: user.userType),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            user.name,
-            style:
-                MyTextTheme.main(context).copyWith(color: AppColors.mainWhite),
-          )
-        ],
+      child: UserVerticalWidget(
+        user: user,
+        emptyHeight: 4,
+        isDark: true,
       ),
     );
   }

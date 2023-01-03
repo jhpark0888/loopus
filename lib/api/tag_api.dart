@@ -12,8 +12,9 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
-
+import 'package:loopus/model/environment_model.dart';
 import '../constant.dart';
+
 Future<HTTPResponse> getTagPosting(int tagId, int page, String type) async {
   ConnectivityResult result = await initConnectivity();
 
@@ -26,10 +27,12 @@ Future<HTTPResponse> getTagPosting(int tagId, int page, String type) async {
     // print(userid);
     //type: new, pop
     final specificPostingLoadUri = Uri.parse(
-        "$serverUri/tag_api/tagged_post?id=$tagId&page=$page&type=$type");
-return HTTPResponse.httpErrorHandling(() async {
-      http.Response response = await http.get(specificPostingLoadUri,
-          headers: {"Authorization": "Token $token"}).timeout(Duration(milliseconds: HTTPResponse.timeout));;
+        "${Environment.apiUrl}/tag_api/tagged_post?id=$tagId&page=$page&type=$type");
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(specificPostingLoadUri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      ;
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -45,4 +48,3 @@ return HTTPResponse.httpErrorHandling(() async {
     });
   }
 }
-
