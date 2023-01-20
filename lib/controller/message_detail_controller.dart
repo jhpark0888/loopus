@@ -11,6 +11,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
+import 'package:loopus/model/environment_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';

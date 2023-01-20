@@ -8,7 +8,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';

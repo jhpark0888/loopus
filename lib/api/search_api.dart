@@ -19,7 +19,7 @@ Future<HTTPResponse> tagsearch(String searchWord) async {
     String? token = await FlutterSecureStorage().read(key: 'token');
 
     Uri uri = Uri.parse(
-        'http://3.35.253.151:8000/tag_api/search_tag?query=${searchWord}');
+        '${Environment.apiUrl}/tag_api/search_tag?query=${searchWord}');
     return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
         uri,

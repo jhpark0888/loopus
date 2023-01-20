@@ -21,6 +21,7 @@ import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/environment_model.dart';
 import '../constant.dart';
 import '../controller/modal_controller.dart';
+import 'package:loopus/model/environment_model.dart';
 
 Future<HTTPResponse> addposting(int projectId, double aspectRatio) async {
   ConnectivityResult result = await initConnectivity();
